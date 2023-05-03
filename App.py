@@ -1,3 +1,7 @@
+import pygame
+from Screen import *
+
+
 class App:
     running: bool = True
 

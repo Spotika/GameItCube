@@ -21,9 +21,3 @@ class Screen:
         """init display and other"""
         cls.display = pygame.display.set_mode((cls.width, cls.height))
         pygame.display.set_caption(cls.title)
-
-    @classmethod
-    def render(cls):
-        """render method"""
-        cls.allSprites.draw(cls.display)
-        pygame.display.update()

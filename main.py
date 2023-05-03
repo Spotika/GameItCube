@@ -2,12 +2,12 @@ import pygame
 from Interface import *
 from App import *
 from Screen import *
-from MainMenu import *
+from Apps.MainMenuApp import *
 
 
 def main():
     Screen.begin()  # init
-    MainMenu.begin()
+    MainMenuApp.begin()
 
 
 if __name__ == '__main__':
