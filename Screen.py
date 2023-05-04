@@ -2,9 +2,9 @@ import pygame
 
 
 class Screen:
-    width: int = 1600
+    width: int = 800 # 1600
 
-    height: int = 1000
+    height: int = 500 # 1000
 
     display: pygame.Surface
 

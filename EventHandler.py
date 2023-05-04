@@ -17,6 +17,7 @@ class EventHandler:
             if event.type == pygame.QUIT:
                 exit(0)  # выход
 
+
     @classmethod
     def get_events(cls):
         return cls._events
