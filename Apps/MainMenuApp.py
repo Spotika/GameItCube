@@ -4,7 +4,8 @@ from Screen import *
 from EventHandler import *
 from Sprites.BackGroundSprite import *
 import Config
-
+from Sprites.Button import *
+from Group import *
 
 class MainMenuApp(App):
 
@@ -18,6 +19,12 @@ class MainMenuApp(App):
 
         cls.allSprites.add(BackGroundSprite(Config.BACK_GROUND_IMG_FILE_PATH))  # Back ground image
 
+        cls.buttonGroup = Group()
+        cls.buttonGroup.add(Button((200, 100), (100, 100), lambda x: None, Config.START_BUTTON_IMG_FILE_PATH))
+        cls.buttonGroup.add(Button((200, 100), (300, 200), lambda x: None, Config.START_BUTTON_IMG_FILE_PATH))
+        cls.buttonGroup.add(Button((200, 100), (500, 300), lambda x: None, Config.START_BUTTON_IMG_FILE_PATH))
+
+        cls.buttonGroup.link_to_sprites(cls.allSprites)
 
         while cls.running:
             """main loop of app"""
