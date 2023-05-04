@@ -25,7 +25,7 @@ class MainMenuApp(App):
 
             cls.check_events()
 
-            cls.render()  # app update
+            cls.render()  # app render
 
     @classmethod
     def check_events(cls):

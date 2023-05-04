@@ -11,6 +11,8 @@ class Interface:
 
     layer: int = 0
 
+    group_function = lambda: None
+
     def get_data_for_blit(self):
         """returns a tuple of surface and position for blitting"""
         return pygame.Surface((0, 0))
