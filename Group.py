@@ -1,11 +1,13 @@
 import pygame
+from EventHandler import *
 
 
 class Group:
-    
+    """Хрень которая объеденяет объекты в группы и позволяет с помощью EventHandler обновлять из состояние"""
 
     def __init__(self):
         self.objects = []
+        EventHandler.add_group(self)  # добавление новой группы в обработку
 
     def add(self, obj):
         self.objects.append(obj)
@@ -17,3 +19,6 @@ class Group:
     def call(self, *args, **kwargs):
         for obj in self.objects:
             obj.group_function(*args, **kwargs)
+
+    def __dell__(self):
+        EventHandler.del_group(self)

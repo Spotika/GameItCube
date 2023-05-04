@@ -9,6 +9,9 @@ from Group import *
 
 class MainMenuApp(App):
 
+    @classmethod
+    def redirect_button(cls):
+        ...
 
     @classmethod
     def begin(cls):
@@ -20,9 +23,7 @@ class MainMenuApp(App):
         cls.allSprites.add(BackGroundSprite(Config.BACK_GROUND_IMG_FILE_PATH))  # Back ground image
 
         cls.buttonGroup = Group()
-        cls.buttonGroup.add(Button((200, 100), (100, 100), lambda x: None, Config.START_BUTTON_IMG_FILE_PATH))
-        cls.buttonGroup.add(Button((200, 100), (300, 200), lambda x: None, Config.START_BUTTON_IMG_FILE_PATH))
-        cls.buttonGroup.add(Button((200, 100), (500, 300), lambda x: None, Config.START_BUTTON_IMG_FILE_PATH))
+        cls.buttonGroup.add(Button((200, 100), (100, 100), cls.redirect_button, Config.START_BUTTON_IMG_FILE_PATH))
 
         cls.buttonGroup.link_to_sprites(cls.allSprites)
 
