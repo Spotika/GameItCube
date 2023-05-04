@@ -9,6 +9,7 @@ def main():
     Screen.begin()  # init
     MainMenuApp.begin()
 
+
 if __name__ == '__main__':
     main()
     exit(0)

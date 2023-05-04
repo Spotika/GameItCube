@@ -7,11 +7,14 @@ import Config
 from Sprites.Button import *
 from Group import *
 
+
 class MainMenuApp(App):
+
 
     @classmethod
     def redirect_button(cls):
-        ...
+        cls.end()
+
 
     @classmethod
     def begin(cls):
@@ -45,8 +48,8 @@ class MainMenuApp(App):
     @classmethod
     def end(cls):
         cls.running = False
-        Screen.display.fill((0, 0, 0))
         pygame.display.update()
+        Screen.display.fill((0, 0, 0))
 
 
     @classmethod
