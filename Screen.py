@@ -12,9 +12,12 @@ class Screen:
 
     allSprites = pygame.sprite.LayeredUpdates()
 
+
     def __new__(cls, *args, **kwargs):
         # Нельзя создать объект этого класса
         return None
+
+
 
     @classmethod
     def begin(cls):

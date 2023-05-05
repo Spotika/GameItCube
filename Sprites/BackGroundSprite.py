@@ -4,15 +4,71 @@ from Screen import *
 import Config
 
 
-class BackGroundSprite(pygame.sprite.Sprite, Interface):
+# FIXME
+# class BackGroundSprite(pygame.sprite.Sprite, Interface):
 
-    def __init__(self, texture_path):
+#     def __init__(self, layers):
+        # super().__init__()
+        # self.width = Screen.width
+        # self.height = Screen.height
+#         self.layers = layers
+
+        
+#         self._layer = Config.BACK_GROUND_SPRITE_LAYER
+
+
+        # self.image = pygame.transform.scale(pygame.image.load(self.texture_path),
+        #                                     (self.width, self.height))
+#         # self.rect = self.image.get_rect()
+
+#     def set_rect():
+#         ...
+
+#     def set_image():
+#         ...
+
+class BackGroundParallaxSprite(pygame.sprite.Sprite, Interface):
+
+
+    def __init__(self, layers, speed_begin = 2, speed_difference = 0.8):
         super().__init__()
         self.width = Screen.width
         self.height = Screen.height
-        self.texture_path = texture_path
-        self._layer = Config.BACK_GROUND_SPRITE_LAYER
 
-        self.image = pygame.transform.scale(pygame.image.load(self.texture_path),
-                                            (self.width, self.height))
+        self.firstLayerSpeed = speed_begin
+        self.speedDiff = speed_difference
+
+        self.renderedLayers = []
+        self.layersCoordinates = [0] * len(layers)
+
+        # инициализация пустыми поверхностями размером с экран
+        self.image = pygame.Surface((self.width, self.height))
         self.rect = self.image.get_rect()
+
+        self.load_layers(layers)
+
+    def set_image(self):
+        self.image.fill((0, 0, 0))
+        for i in range(len(self.renderedLayers) - 1, 0, -1):
+            self.image.blit(self.renderedLayers[i], (self.layersCoordinates[i], 0))
+            self.image.blit(self.renderedLayers[i], (self.layersCoordinates[i] - self.width, 0))
+
+    def load_layers(self, layers: list[str]):
+        """render the layers to renderedLayers"""
+
+        for layer in layers:
+            renderedLayer = pygame.transform.scale(pygame.image.load(layer),
+                                            (self.width, self.height))
+            self.renderedLayers.append(renderedLayer)
+
+
+    def update(self):
+        for i in range(len(self.renderedLayers)):
+            self.layersCoordinates[i] -= self.firstLayerSpeed * (self.speedDiff ** i)
+            self.layersCoordinates[i] = self.layersCoordinates[i] % self.width
+
+        self.set_image()
+            
+        
+        
+
