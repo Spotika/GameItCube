@@ -1,30 +1,22 @@
 import pygame
-from App import *
-from Screen import *
-from EventHandler import *
-from Sprites.BackGroundSprite import *
+from App import App
+from Screen import Screen
+from EventHandler import EventHandler
+from Sprites.BackGrounds import BackGroundParallaxSprite
 import Config
-from Sprites.Button import *
-from Group import *
-from Sprites.Mask import *
+from Sprites.Button import Button
+from Group import Group
+from Sprites.Mask import Mask
+from Designs.MainMenuDesign import MainMenuDesign
 
 
-class MainMenuApp(App):
+class MainMenuApp(App, MainMenuDesign):
+    """
+    Должен быть атрибут all_sprites: pygame.sprite.LayeredUpdates
 
-
+    """
     @classmethod
-    def redirect_button(cls):
-        cls.end()
-
-
-    @classmethod
-    def begin(cls):
-        cls.running = True
-
-
-        cls.allSprites = pygame.sprite.LayeredUpdates()
-        """контейнер для спрайтов"""
-
+    def loop(cls):
 
         backGround = BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_FOREST_LAYERS,
                             speed_begin=50,
@@ -54,19 +46,5 @@ class MainMenuApp(App):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     cls.end()
-
-    @classmethod
-    def end(cls):
-        cls.running = False
-        pygame.display.update()
-        Screen.display.fill((0, 0, 0))
-
-
-    @classmethod
-    def render(cls):
-        Screen.display.fill((0, 0, 0))
-        cls.allSprites.update()
-        cls.allSprites.draw(Screen.display)
-        pygame.display.update()
 
 App.link(MainMenuApp)

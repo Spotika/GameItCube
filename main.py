@@ -1,8 +1,8 @@
 import pygame
-from Interface import *
-from App import *
-from Screen import *
-from Apps.MainMenuApp import *
+from Interface import Interface
+from App import App
+from Screen import Screen
+from Apps.MainMenuApp import MainMenuApp
 
 
 def main():

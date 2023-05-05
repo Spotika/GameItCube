@@ -1,8 +1,8 @@
 import pygame
-from Interface import *
-from Screen import *
+from Interface import Interface
+from Screen import Screen
 import Config
-from EventHandler import *
+from EventHandler import EventHandler
 
 
 # FIXME

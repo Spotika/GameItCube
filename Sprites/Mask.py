@@ -1,6 +1,6 @@
 import pygame
-from Interface import *
-from Colors import *
+from Interface import Interface
+from Colors import Colors
 import Config
 
 
