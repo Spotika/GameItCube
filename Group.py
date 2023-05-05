@@ -3,7 +3,7 @@ from EventHandler import *
 
 
 class Group:
-    """Хрень которая объеденяет объекты в группы и позволяет с помощью EventHandler обновлять из состояние"""
+    """Хрень которая объеденяет объекты в группы и позволяет с помощью EventHandler обновлять их состояние"""
 
     def __init__(self):
         self.objects = []
@@ -20,5 +20,5 @@ class Group:
         for obj in self.objects:
             obj.group_function(*args, **kwargs)
 
-    def __dell__(self):
+    def __del__(self):
         EventHandler.del_group(self)

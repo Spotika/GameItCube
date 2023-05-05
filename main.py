@@ -1,12 +1,13 @@
 import pygame
-from Interface import *
-from App import *
-from Screen import *
-from Apps.MainMenuApp import *
+from Screen import Screen
+Screen.begin() # for init video sustem
+
+from Interface import Interface
+from App import App
+from Apps.MainMenuApp import MainMenuApp
 
 
 def main():
-    Screen.begin()  # init
     MainMenuApp.begin()
 
 

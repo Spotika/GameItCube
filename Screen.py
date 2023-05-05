@@ -2,9 +2,9 @@ import pygame
 
 
 class Screen:
-    width: int = 800 # 1600
+    width: int = 1600  # 1600
 
-    height: int = 500 # 1000
+    height: int = 1000  # 1000
 
     display: pygame.Surface
 
@@ -21,3 +21,5 @@ class Screen:
         """init display and other"""
         cls.display = pygame.display.set_mode((cls.width, cls.height))
         pygame.display.set_caption(cls.title)
+
+

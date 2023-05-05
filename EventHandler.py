@@ -1,5 +1,7 @@
 import pygame
 
+import Config
+
 
 class EventHandler:
     _events = None
@@ -7,6 +9,11 @@ class EventHandler:
     _mousePos = None
 
     groups = []
+
+    clock = pygame.time.Clock()
+
+    dt = 0
+    """Время между тиками в милисекундах"""
 
     def __new__(cls, *args, **kwargs):
         return None
@@ -46,3 +53,11 @@ class EventHandler:
     @classmethod
     def del_group(cls, group):
         cls.groups.remove(group)
+
+    @classmethod
+    def tick(cls):
+        cls.dt = cls.clock.tick(Config.FPS)
+
+    @classmethod
+    def get_dt(cls):
+        return cls.dt
