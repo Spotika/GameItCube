@@ -20,5 +20,5 @@ class Group:
         for obj in self.objects:
             obj.group_function(*args, **kwargs)
 
-    def __dell__(self):
+    def __del__(self):
         EventHandler.del_group(self)
