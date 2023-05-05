@@ -2,9 +2,9 @@ import pygame
 
 
 class Screen:
-    width: int = 800 # 1600
+    width: int = 800  # 1600
 
-    height: int = 500 # 1000
+    height: int = 500  # 1000
 
     display: pygame.Surface
 
@@ -12,12 +12,9 @@ class Screen:
 
     allSprites = pygame.sprite.LayeredUpdates()
 
-
     def __new__(cls, *args, **kwargs):
         # Нельзя создать объект этого класса
         return None
-
-
 
     @classmethod
     def begin(cls):

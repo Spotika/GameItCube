@@ -31,17 +31,19 @@ class MainMenuApp(App):
                             speed_difference=0.8
                             )
         cls.allSprites.add(backGround)
+
         # cls.allSprites.add(pygame.Surface((Screen.width, Screen.height)).fill((0, 0, 0).set_alpha(50)))
-
-
-        cls.buttonGroup = Group()
-        cls.buttonGroup.add(Button((100, 100), (100, 100), lambda: print(123), Config.START_BUTTON_IMG_FILE_PATH))
-        cls.buttonGroup.link_to_sprites(cls.allSprites)
+        #
+        #
+        # cls.buttonGroup = Group()
+        # cls.buttonGroup.add(Button((100, 100), (100, 100), lambda: print(123), Config.START_BUTTON_IMG_FILE_PATH))
+        # cls.buttonGroup.link_to_sprites(cls.allSprites)
 
         while cls.running:
             """main loop of app"""
 
             clock.tick(Config.FPS) # clock tick
+            print(clock.get_fps())
 
             EventHandler.update()  # events update
 
