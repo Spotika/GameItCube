@@ -1,11 +1,14 @@
 import pygame
+from App import App
 
 
 class Design:
-    elements: list[pygame.sprite.Sprite]
+    """
+    Наследовать он него только классы Apps
+    """
+    elements: dict
 
     @classmethod
-    def link_to_all_sprites(cls, all_sprites):
-        for elem in cls.elements:
-            all_sprites.add(elem)
-
+    def link_to_all_sprites(cls):
+        for elem in cls.elements.values():
+            cls.allSprites.add(elem)

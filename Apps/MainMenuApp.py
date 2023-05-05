@@ -12,18 +12,13 @@ from Designs.MainMenuDesign import MainMenuDesign
 
 class MainMenuApp(App, MainMenuDesign):
     """
-    Должен быть атрибут all_sprites: pygame.sprite.LayeredUpdates
+    Должен быть атрибут allSprites: pygame.sprite.LayeredUpdates
 
     """
     @classmethod
     def loop(cls):
 
-        backGround = BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_FOREST_LAYERS,
-                            speed_begin=50,
-                            speed_difference=0.8
-                            )
-        cls.allSprites.add(backGround)
-
+        cls.link_to_all_sprites()
 
         # colorMask = Mask((Screen.width, Screen.height))
         # cls.allSprites.add(colorMask)

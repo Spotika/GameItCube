@@ -4,7 +4,7 @@ from Screen import *
 
 class App:
     """
-    Должен быть атрибут all_sprites: pygame.sprite.LayeredUpdates \n
+    Должен быть атрибут allSprites: pygame.sprite.LayeredUpdates \n
     каждый потомок должен линкаться в файле определения
     """
 
