@@ -5,6 +5,7 @@ from Screen import *
 from Apps.MainMenuApp import *
 
 
+
 def main():
     Screen.begin()  # init
     MainMenuApp.begin()

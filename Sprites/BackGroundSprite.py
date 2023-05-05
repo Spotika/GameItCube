@@ -5,27 +5,22 @@ import Config
 
 
 # FIXME
-# class BackGroundSprite(pygame.sprite.Sprite, Interface):
+class BackGroundSprite(pygame.sprite.Sprite, Interface):
 
-#     def __init__(self, layers):
-        # super().__init__()
-        # self.width = Screen.width
-        # self.height = Screen.height
-#         self.layers = layers
+    def __init__(self, texture_path):
+        super().__init__()
+        self.width = Screen.width
+        self.height = Screen.height
+        self.texture_path = texture_path
 
         
-#         self._layer = Config.BACK_GROUND_SPRITE_LAYER
+        self._layer = Config.BACK_GROUND_SPRITE_LAYER
 
 
-        # self.image = pygame.transform.scale(pygame.image.load(self.texture_path),
-        #                                     (self.width, self.height))
-#         # self.rect = self.image.get_rect()
+        self.image = pygame.transform.scale(pygame.image.load(self.texture_path),
+                                            (self.width, self.height)).convert_alpha()
+        self.rect = self.image.get_rect()
 
-#     def set_rect():
-#         ...
-
-#     def set_image():
-#         ...
 
 class BackGroundParallaxSprite(pygame.sprite.Sprite, Interface):
 
@@ -52,13 +47,14 @@ class BackGroundParallaxSprite(pygame.sprite.Sprite, Interface):
         for i in range(len(self.renderedLayers) - 1, 0, -1):
             self.image.blit(self.renderedLayers[i], (self.layersCoordinates[i], 0))
             self.image.blit(self.renderedLayers[i], (self.layersCoordinates[i] - self.width, 0))
+        self.image.convert_alpha()
 
     def load_layers(self, layers: list[str]):
         """render the layers to renderedLayers"""
 
         for layer in layers:
             renderedLayer = pygame.transform.scale(pygame.image.load(layer),
-                                            (self.width, self.height))
+                                            (self.width, self.height)).convert_alpha()
             self.renderedLayers.append(renderedLayer)
 
 

@@ -20,25 +20,32 @@ class MainMenuApp(App):
     def begin(cls):
         cls.running = True
         clock = pygame.time.Clock()
+        """Часы программы"""
+
         cls.allSprites = pygame.sprite.LayeredUpdates()
         """контейнер для спрайтов"""
 
 
-        backGround = BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_FOREST_LAYERS) # Back ground image
+        backGround = BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_FOREST_LAYERS,
+                            speed_begin=1.4,
+                            speed_difference=0.8
+                            )
         cls.allSprites.add(backGround)
-        # cls.buttonGroup = Group()
-        # cls.buttonGroup.add(Button((200, 100), (100, 100), cls.redirect_button, Config.START_BUTTON_IMG_FILE_PATH))
+        # cls.allSprites.add(pygame.Surface((Screen.width, Screen.height)).fill((0, 0, 0).set_alpha(50)))
 
-        # cls.buttonGroup.link_to_sprites(cls.allSprites)
+
+        cls.buttonGroup = Group()
+        cls.buttonGroup.add(Button((100, 100), (100, 100), lambda: print(123), Config.START_BUTTON_IMG_FILE_PATH))
+        cls.buttonGroup.link_to_sprites(cls.allSprites)
 
         while cls.running:
             """main loop of app"""
-            clock.tick(Config.FPS)
+
+            clock.tick(Config.FPS) # clock tick
+
             EventHandler.update()  # events update
 
-            cls.allSprites.update()
-
-            cls.check_events()
+            cls.check_events() # local events check
 
             cls.render()  # app update
 
@@ -59,6 +66,7 @@ class MainMenuApp(App):
     @classmethod
     def render(cls):
         Screen.display.fill((0, 0, 0))
+        cls.allSprites.update()
         cls.allSprites.draw(Screen.display)
         pygame.display.update()
 
