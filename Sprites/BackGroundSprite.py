@@ -2,6 +2,7 @@ import pygame
 from Interface import *
 from Screen import *
 import Config
+from EventHandler import *
 
 
 # FIXME
@@ -22,7 +23,7 @@ class BackGroundSprite(pygame.sprite.Sprite, Interface):
 
 class BackGroundParallaxSprite(pygame.sprite.Sprite, Interface):
 
-    def __init__(self, layers, speed_begin=2, speed_difference=0.8):
+    def __init__(self, layers, speed_begin=1, speed_difference=0.8):
         super().__init__()
         self.width = Screen.width
         self.height = Screen.height
@@ -38,6 +39,8 @@ class BackGroundParallaxSprite(pygame.sprite.Sprite, Interface):
         self.rect = self.image.get_rect()
 
         self.load_layers(layers)
+
+        self._layer = Config.BACK_GROUND_SPRITE_LAYER
 
     def set_image(self):
         self.image = pygame.Surface((self.width, self.height))
@@ -56,7 +59,7 @@ class BackGroundParallaxSprite(pygame.sprite.Sprite, Interface):
 
     def update(self):
         for i in range(len(self.renderedLayers)):
-            self.layersCoordinates[i] -= self.firstLayerSpeed * (self.speedDiff ** i)
+            self.layersCoordinates[i] -= self.firstLayerSpeed * (self.speedDiff ** i) * EventHandler.get_dt() / 1000
             self.layersCoordinates[i] = self.layersCoordinates[i] % self.width
 
         self.set_image()

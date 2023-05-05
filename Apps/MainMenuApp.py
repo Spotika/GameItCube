@@ -6,6 +6,7 @@ from Sprites.BackGroundSprite import *
 import Config
 from Sprites.Button import *
 from Group import *
+from Sprites.Mask import *
 
 
 class MainMenuApp(App):
@@ -19,33 +20,29 @@ class MainMenuApp(App):
     @classmethod
     def begin(cls):
         cls.running = True
-        clock = pygame.time.Clock()
-        """Часы программы"""
+
 
         cls.allSprites = pygame.sprite.LayeredUpdates()
         """контейнер для спрайтов"""
 
 
         backGround = BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_FOREST_LAYERS,
-                            speed_begin=1.4,
+                            speed_begin=50,
                             speed_difference=0.8
                             )
         cls.allSprites.add(backGround)
 
-        # cls.allSprites.add(pygame.Surface((Screen.width, Screen.height)).fill((0, 0, 0).set_alpha(50)))
-        #
-        #
-        # cls.buttonGroup = Group()
-        # cls.buttonGroup.add(Button((100, 100), (100, 100), lambda: print(123), Config.START_BUTTON_IMG_FILE_PATH))
-        # cls.buttonGroup.link_to_sprites(cls.allSprites)
+
+        # colorMask = Mask((Screen.width, Screen.height))
+        # cls.allSprites.add(colorMask)
+
 
         while cls.running:
             """main loop of app"""
 
-            clock.tick(Config.FPS) # clock tick
-            print(clock.get_fps())
+            EventHandler.tick() # clock update
 
-            EventHandler.update()  # events update
+            EventHandler.update() # events update
 
             cls.check_events() # local events check
 

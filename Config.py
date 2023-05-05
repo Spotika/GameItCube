@@ -5,9 +5,11 @@ PLATFORM_LEFT_CORNER = "media/img/platformLeftCorner.png"
 PLATFORM_RIGHT_CORNER = "media/img/platformRightCorner.png"
 PLATFORM_CENTER = "media/img/platformCenter.png"
 
+
 # Layers
 BACK_GROUND_SPRITE_LAYER = -50
 BUTTON_SPRITE_LAYER = 50
+MASK_LAYER = 100
 
 # misc
 FPS = 120
