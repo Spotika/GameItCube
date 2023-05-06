@@ -12,16 +12,35 @@ BACK_GROUND_SPRITE_LAYER = -50
 BUTTON_SPRITE_LAYER = 50
 MASK_LAYER = 100
 
+
 # misc
 FPS = 120
 DESIGN_WIDTH = 1600
 """ширина дизайна"""
-DESIGN_HEIGHT = 1000
+DESIGN_HEIGHT = 800
 """высота дизайна"""
+
+
 NORMALIZE = True
+"""будут ли элементы маштабироваться"""
+
+
+INSTALLED_APPS = [
+    "Apps.MainGameApp",
+    "Apps.MainMenuApp"
+]
+"""Добавбь сюда свое приложение и оно будет доступно для редиректа в него \n(!) сувать путь до модуля относительно
+main.py"""
 
 
 class BackGroundTextures:
+    BACKGROUND_JUNGLE_LAYERS = [
+        "media/img/background/jungle/plx-5.png",
+        "media/img/background/jungle/plx-4.png",
+        "media/img/background/jungle/plx-3.png",
+        "media/img/background/jungle/plx-2.png",
+        "media/img/background/jungle/plx-1.png",
+    ]
     BACKGROUND_FOREST_LAYERS = [
         "media/img/background/forest/Layer_0000_9.png",
         "media/img/background/forest/Layer_0001_8.png",

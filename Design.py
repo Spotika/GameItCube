@@ -19,3 +19,10 @@ class Design:
             cls.allSprites.add(elem)
         for elem in cls.GROUPS.values():
             elem.link_to_sprites(cls.allSprites)
+
+    @classmethod
+    def link_function_to_button(cls, button_name, function):
+        if button_name not in cls.ELEMENTS.keys():
+            return
+        cls.ELEMENTS[button_name].set_on_click(function)
+

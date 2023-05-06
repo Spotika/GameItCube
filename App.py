@@ -52,3 +52,10 @@ class App:
     @classmethod
     def check_events(cls):
         """Обработка локальных эвентов"""
+
+    @classmethod
+    def redirect(cls, app_name):
+        if app_name not in cls.instances.keys():
+            raise ValueError("Не подключено приложение " + str(app_name))
+            return
+        cls.instances[app_name].begin()
