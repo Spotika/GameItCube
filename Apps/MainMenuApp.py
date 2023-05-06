@@ -6,18 +6,24 @@ from Sprites.BackGrounds import BackGroundParallaxSprite
 import Config
 from Sprites.Button import Button
 from Group import Group
-from Sprites.Mask import Mask
+from Sprites.Label import Label
 from Designs.MainMenuDesign import MainMenuDesign
 
 
 class MainMenuApp(App, MainMenuDesign):
-    """
-    Должен быть атрибут allSprites: pygame.sprite.LayeredUpdates
+    """Главное меню"""
 
-    """
+    """Ниже события кнопок"""
+    @classmethod
+    def escape_button(cls):
+        ...
 
     @classmethod
-    def loop(cls):
+    def enter_button(cls):
+        ...
+
+    @classmethod
+    def loop(cls, *args, **kwargs):
 
         cls.link_to_all_sprites()
 
@@ -38,6 +44,4 @@ class MainMenuApp(App, MainMenuDesign):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     cls.end()
-
-
-App.link(MainMenuApp)
+                    cls.redirect("MainGameApp")

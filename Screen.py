@@ -4,7 +4,7 @@ import pygame
 class Screen:
     width: int = 1600 # 1600
 
-    height: int = 1000 # 1000
+    height: int = 800 # 1000
 
     display: pygame.Surface
 

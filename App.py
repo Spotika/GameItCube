@@ -23,19 +23,19 @@ class App:
         cls.instances[str(instance.__name__)] = instance
 
     @classmethod
-    def begin(cls):
+    def begin(cls, *args, **kwargs):
         """Старт работы и инициализация всех переменных"""
         cls.running = True
         cls.allSprites = pygame.sprite.LayeredUpdates()
-        cls.loop()
+        cls.loop(*args, **kwargs)
 
     @classmethod
-    def loop(cls):
+    def loop(cls, *args, **kwargs):
         """Основной движок приложения"""
-        cls.end()
+        cls.end(*args, **kwargs)
 
     @classmethod
-    def end(cls):
+    def end(cls, *args, **kwargs):
         """Окончание работы"""
         cls.running = False
         pygame.display.update()
@@ -52,3 +52,10 @@ class App:
     @classmethod
     def check_events(cls):
         """Обработка локальных эвентов"""
+
+    @classmethod
+    def redirect(cls, app_name):
+        if app_name not in cls.instances.keys():
+            raise ValueError("Не подключено приложение " + str(app_name))
+            return
+        cls.instances[app_name].begin()
