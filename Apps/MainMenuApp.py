@@ -21,12 +21,13 @@ class MainMenuApp(App, MainMenuDesign):
 
     @classmethod
     def enter_button(cls):
-        ...
+        cls.redirect("MainGameApp")
 
     @classmethod
     def loop(cls, *args, **kwargs):
 
         cls.link_function_to_button("exitButton", cls.exit_button)
+        cls.link_function_to_button("enterButton", cls.enter_button)
 
         cls.link_to_all_sprites()
 

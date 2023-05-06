@@ -11,6 +11,8 @@ class MainGameApp(App, MainGameDesign):
     def loop(cls, *args, **kwargs):
         cls.link_to_all_sprites()
 
+        cls.ELEMENTS["platform"].set_all_sprites(cls.allSprites)
+
         while cls.running:
             EventHandler.tick()
 
@@ -27,4 +29,5 @@ class MainGameApp(App, MainGameDesign):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    cls.redirect("MainMenuApp")
                     cls.end()

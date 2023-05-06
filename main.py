@@ -20,4 +20,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+    time.sleep(0.2)
     exit(0)
