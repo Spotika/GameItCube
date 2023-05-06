@@ -3,9 +3,8 @@ import random
 from Interface import Interface
 from EventHandler import EventHandler
 from Screen import Screen
-# global x
-# x = 0
 
+# FIXME блять сука нахуй рефакторить это говно надо иниче игре пизда
 
 class Platform(Interface, pygame.sprite.Sprite):
     # global x

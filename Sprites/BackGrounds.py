@@ -5,7 +5,6 @@ import Config
 from EventHandler import EventHandler
 
 
-# FIXME
 class BackGroundSprite(pygame.sprite.Sprite, Interface):
 
     def __init__(self, texture_path):

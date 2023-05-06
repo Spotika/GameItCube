@@ -14,6 +14,7 @@ class MainMenuApp(App, MainMenuDesign):
     """Главное меню"""
 
     """Ниже события кнопок"""
+
     @classmethod
     def exit_button(cls):
         """Выход из игры"""
@@ -22,6 +23,7 @@ class MainMenuApp(App, MainMenuDesign):
     @classmethod
     def enter_button(cls):
         cls.redirect("MainGameApp")
+        cls.end()
 
     @classmethod
     def loop(cls, *args, **kwargs):
@@ -29,23 +31,23 @@ class MainMenuApp(App, MainMenuDesign):
         cls.link_function_to_button("exitButton", cls.exit_button)
         cls.link_function_to_button("enterButton", cls.enter_button)
 
-        cls.link_to_all_sprites()
+        cls.init_sprites_and_groups()
 
         while cls.running:
             """main loop of app"""
 
             EventHandler.tick()  # clock update
 
-            EventHandler.update()  # events update
-
-            cls.check_events()  # local events check
+            EventHandler.update(cls)  # events and groups update
 
             cls.render()  # app update
+
+            cls.check_events()  # local events check
 
     @classmethod
     def check_events(cls):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    cls.end()
                     cls.redirect("MainGameApp")
+                    cls.end()

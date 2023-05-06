@@ -1,6 +1,6 @@
 import pygame
 from Screen import *
-
+from QueryDeque import QueryDeque
 
 class App:
     """
@@ -54,8 +54,17 @@ class App:
         """Обработка локальных эвентов"""
 
     @classmethod
-    def redirect(cls, app_name):
+    def redirect(cls, app_name: str, use_deque=True, *args, **kwargs):
+        """Отправляет запрос на переключение приложения в очередь при этом приложение должно завершиться.\n\n
+        Если требуется прервать приложение на работу другого, а потом вернуться, например пауза, то аргумент
+        *use_deque* должен равняться False, однако ВАЖНО: при использовании значения False следует опасаться рекурсии
+        """
+        """проверка на подключенность"""
         if app_name not in cls.instances.keys():
             raise ValueError("Не подключено приложение " + str(app_name))
             return
-        cls.instances[app_name].begin()
+
+        if use_deque:
+            QueryDeque.add(cls.instances[app_name], *args, **kwargs)
+        else:
+            cls.instances[app_name].begin(*args, **kwargs)

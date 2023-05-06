@@ -19,17 +19,19 @@ class EventHandler:
         return None
 
     @classmethod
-    def update(cls):
+    def update(cls, instance):
         cls._events = pygame.event.get()
         cls._mousePressed = pygame.mouse.get_pressed(3)
         cls._mousePos = pygame.mouse.get_pos()
+        """обновление состояний"""
 
-        """обновление групп"""
-        for group in cls.groups:
+        """Обновление групп в конкретном приложении"""
+        for group in instance.GROUPS.values():
+            # group.link_to_sprites(instance.allSprites)
             group.call()
 
         for event in cls._events:
-            """ТУТ ОБРАБОТКА ЭВЕНТОВ"""
+            """ТУТ ОБЩАЯ ОБРАБОТКА ЭВЕНТОВ"""
 
             if event.type == pygame.QUIT:
                 exit(0)  # выход
@@ -45,14 +47,6 @@ class EventHandler:
     @classmethod
     def get_mouse_pos(cls):
         return cls._mousePos
-
-    @classmethod
-    def add_group(cls, group):
-        cls.groups.append(group)
-
-    @classmethod
-    def del_group(cls, group):
-        cls.groups.remove(group)
 
     @classmethod
     def tick(cls):

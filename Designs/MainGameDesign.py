@@ -12,5 +12,5 @@ class MainGameDesign(Design):
         "backGround": BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_JUNGLE_LAYERS,
                                                speed_begin=40,
                                                speed_difference=0.8),
-        "platform": Platform(random.randint(1, 5))
+        # "platform": Platform(random.randint(1, 5))
     }

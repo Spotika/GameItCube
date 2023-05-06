@@ -2,6 +2,7 @@ import pygame
 from App import App
 from Designs.MainGameDesign import MainGameDesign
 from EventHandler import EventHandler
+from QueryDeque import QueryDeque
 
 
 class MainGameApp(App, MainGameDesign):
@@ -9,14 +10,14 @@ class MainGameApp(App, MainGameDesign):
 
     @classmethod
     def loop(cls, *args, **kwargs):
-        cls.link_to_all_sprites()
+        cls.init_sprites_and_groups()
 
-        cls.ELEMENTS["platform"].set_all_sprites(cls.allSprites)
+        # FIXME cls.ELEMENTS["platform"].set_all_sprites(cls.allSprites) - костыль для платформ
 
         while cls.running:
             EventHandler.tick()
 
-            EventHandler.update()
+            EventHandler.update(cls)
 
             cls.check_events()
 
