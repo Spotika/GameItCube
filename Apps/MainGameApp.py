@@ -8,8 +8,7 @@ class MainGameApp(App, MainGameDesign):
     """Сама игра"""
 
     @classmethod
-    def loop(cls):
-
+    def loop(cls, *args, **kwargs):
         cls.link_to_all_sprites()
 
         while cls.running:
@@ -17,6 +16,15 @@ class MainGameApp(App, MainGameDesign):
 
             EventHandler.update()
 
+            cls.check_events()
+
             cls.render()
 
         cls.end()
+
+    @classmethod
+    def check_events(cls):
+        for event in EventHandler.get_events():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    cls.end()

@@ -13,8 +13,17 @@ from Designs.MainMenuDesign import MainMenuDesign
 class MainMenuApp(App, MainMenuDesign):
     """Главное меню"""
 
+    """Ниже события кнопок"""
     @classmethod
-    def loop(cls):
+    def escape_button(cls):
+        ...
+
+    @classmethod
+    def enter_button(cls):
+        ...
+
+    @classmethod
+    def loop(cls, *args, **kwargs):
 
         cls.link_to_all_sprites()
 
