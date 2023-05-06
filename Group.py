@@ -1,5 +1,5 @@
 import pygame
-from EventHandler import *
+from EventHandler import EventHandler
 
 
 class Group:

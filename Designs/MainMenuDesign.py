@@ -15,11 +15,15 @@ class MainMenuDesign(Design):
     }
 
     ELEMENTS = {
-        "BackGround": BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_FOREST_LAYERS,
-                                               speed_begin=50,
+        "backGround": BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_FOREST_LAYERS,
+                                               speed_begin=75,
                                                speed_difference=0.8
                                                ),
-        "Mask": Mask((30, 30), (Config.DESIGN_WIDTH - 60, Config.DESIGN_HEIGHT - 60)),
-        # "Button": Button((0, 0), (100, 100), group=GROUPS["ButtonGroup"]),
+
+        "blackout": Mask((30, 30), (Config.DESIGN_WIDTH - 60, Config.DESIGN_HEIGHT - 60)),
+        "SettingsButton": Button((50, 66), (92, 92), group=GROUPS["ButtonGroup"]),
     }
-    a = ELEMENTS["Mask"]
+
+    @classmethod
+    def link_function_to_button(cls, button_name, function):
+        cls.ELEMENTS[button_name].set_on_click(function)

@@ -15,23 +15,20 @@ class MainMenuApp(App, MainMenuDesign):
     Должен быть атрибут allSprites: pygame.sprite.LayeredUpdates
 
     """
+
     @classmethod
     def loop(cls):
 
         cls.link_to_all_sprites()
 
-        # colorMask = Mask((Screen.width, Screen.height))
-        # cls.allSprites.add(colorMask)
-
-
         while cls.running:
             """main loop of app"""
 
-            EventHandler.tick() # clock update
+            EventHandler.tick()  # clock update
 
-            EventHandler.update() # events update
+            EventHandler.update()  # events update
 
-            cls.check_events() # local events check
+            cls.check_events()  # local events check
 
             cls.render()  # app update
 
@@ -41,5 +38,6 @@ class MainMenuApp(App, MainMenuDesign):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     cls.end()
+
 
 App.link(MainMenuApp)

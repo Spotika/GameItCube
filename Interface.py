@@ -23,12 +23,17 @@ class Interface:
         if self.normalize:
             self.do_normalize()
 
+        if group is not None:
+            group.add(self)
+
         # дальше вызов всех родительских инитов, ВАЖНО
         super().__init__()
+
+    def set_group_function(self, function):
+        self.group_function = function
 
     def do_normalize(self):
         self.width = (Screen.width / Config.DESIGN_WIDTH) * self.width
         self.height = (Screen.height / Config.DESIGN_HEIGHT) * self.height
         self.position = (Screen.width / Config.DESIGN_WIDTH) * self.position[0], \
-            (Screen.height / Config.DESIGN_HEIGHT) * self.position[1]
-
+                        (Screen.height / Config.DESIGN_HEIGHT) * self.position[1]

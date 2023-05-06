@@ -22,7 +22,6 @@ class Button(Interface, pygame.sprite.Sprite):
 
         self.group_function = self.event_update
 
-
     def event_update(self):
         """Проверка на нажатие и хитбокс"""
         for event in EventHandler.get_events():
@@ -31,3 +30,6 @@ class Button(Interface, pygame.sprite.Sprite):
                 if EventHandler.get_mouse_pressed()[0]:
                     if self.rect.collidepoint(*EventHandler.get_mouse_pos()):
                         self.on_click()  # вызов целевой функции
+
+    def set_on_click(self, function):
+        self.on_click = function
