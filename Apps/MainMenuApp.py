@@ -15,8 +15,9 @@ class MainMenuApp(App, MainMenuDesign):
 
     """Ниже события кнопок"""
     @classmethod
-    def escape_button(cls):
-        ...
+    def exit_button(cls):
+        """Выход из игры"""
+        cls.end()
 
     @classmethod
     def enter_button(cls):
@@ -24,6 +25,8 @@ class MainMenuApp(App, MainMenuDesign):
 
     @classmethod
     def loop(cls, *args, **kwargs):
+
+        cls.link_function_to_button("exitButton", cls.exit_button)
 
         cls.link_to_all_sprites()
 

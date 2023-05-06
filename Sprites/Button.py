@@ -7,12 +7,16 @@ from EventHandler import *
 class Button(Interface, pygame.sprite.Sprite):
 
     def __init__(self, position, dims, on_click=lambda: None, texture_path=Config.SOLID_WHITE_TEXTURE,
-                 layer=Config.BUTTON_SPRITE_LAYER, **kwargs):
+                 layer=Config.BUTTON_SPRITE_LAYER, sfx_on_click=Config.Audio.BUTTON_CLICKED_SFX, **kwargs):
         self._layer = layer
         self.width, self.height = dims
         self.position = position
         self.on_click = on_click
         self.texture_path = texture_path
+        self.sfx_on_click = None
+
+        if sfx_on_click is not None:
+            self.sfx_on_click = pygame.mixer.Sound(sfx_on_click)
 
         super().__init__(**kwargs)
 
@@ -29,7 +33,12 @@ class Button(Interface, pygame.sprite.Sprite):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if EventHandler.get_mouse_pressed()[0]:
                     if self.rect.collidepoint(*EventHandler.get_mouse_pos()):
+                        self.play_sound()  # проигрование музыки
                         self.on_click()  # вызов целевой функции
+
+    def play_sound(self):
+        if self.sfx_on_click is not None:
+            self.sfx_on_click.play()
 
     def set_on_click(self, function):
         self.on_click = function

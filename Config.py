@@ -57,5 +57,9 @@ class BackGroundTextures:
     ]
 
 
+class Audio:
+    BUTTON_CLICKED_SFX = "media/audio/minecraftButtonSfx.mp3"
+
+
 class ButtonTextures:
     ...
