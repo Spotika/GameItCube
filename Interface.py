@@ -1,4 +1,6 @@
 import pygame
+import Config
+from Screen import Screen
 
 
 class Interface:
@@ -13,6 +15,20 @@ class Interface:
 
     group_function = lambda: None
 
-    def get_data_for_blit(self):
-        """returns a tuple of surface and position for blitting"""
-        return pygame.Surface((0, 0))
+    group = None
+
+    normalize = Config.NORMALIZE
+
+    def __init__(self, group=None):
+        if self.normalize:
+            self.do_normalize()
+
+        # дальше вызов всех родительских инитов, ВАЖНО
+        super().__init__()
+
+    def do_normalize(self):
+        self.width = (Screen.width / Config.DESIGN_WIDTH) * self.width
+        self.height = (Screen.height / Config.DESIGN_HEIGHT) * self.height
+        self.position = (Screen.width / Config.DESIGN_WIDTH) * self.position[0], \
+            (Screen.height / Config.DESIGN_HEIGHT) * self.position[1]
+

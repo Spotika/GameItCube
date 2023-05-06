@@ -4,6 +4,7 @@ START_BUTTON_IMG_FILE_PATH = "media/img/StarButton.png"
 PLATFORM_LEFT_CORNER = "media/img/platformLeftCorner.png"
 PLATFORM_RIGHT_CORNER = "media/img/platformRightCorner.png"
 PLATFORM_CENTER = "media/img/platformCenter.png"
+SOLID_WHITE_TEXTURE = "media/img/solidWhite.png"
 
 
 # Layers
@@ -13,6 +14,11 @@ MASK_LAYER = 100
 
 # misc
 FPS = 120
+DESIGN_WIDTH = 1600
+"""ширина дизайна"""
+DESIGN_HEIGHT = 1000
+"""высота дизайна"""
+NORMALIZE = True
 
 
 class BackGroundTextures:
@@ -30,3 +36,7 @@ class BackGroundTextures:
         "media/img/background/forest/Layer_0010_1.png",
         "media/img/background/forest/Layer_0011_0.png"
     ]
+
+
+class ButtonTextures:
+    ...
