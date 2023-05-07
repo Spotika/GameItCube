@@ -7,10 +7,14 @@ import random
 
 
 class MainGameDesign(Design):
-    GROUPS = {}
-    ELEMENTS = {
-        "backGround": BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_JUNGLE_LAYERS,
-                                               speed_begin=40,
-                                               speed_difference=0.8),
-        # "platform": Platform(random.randint(1, 5))
-    }
+
+    @classmethod
+    def init_textures(cls):
+        cls.set_groups({})
+        ELEMENTS = {
+            "backGround": BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_JUNGLE_LAYERS,
+                                                   speed_begin=40,
+                                                   speed_difference=0.8),
+            # "platform": Platform(random.randint(1, 5))
+        }
+        cls.set_elements(ELEMENTS)

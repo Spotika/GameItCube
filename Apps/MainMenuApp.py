@@ -28,6 +28,8 @@ class MainMenuApp(App, MainMenuDesign):
     @classmethod
     def loop(cls, *args, **kwargs):
 
+        cls.init_textures()
+
         cls.link_function_to_button("exitButton", cls.exit_button)
         cls.link_function_to_button("enterButton", cls.enter_button)
 
@@ -48,6 +50,5 @@ class MainMenuApp(App, MainMenuDesign):
     def check_events(cls):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    cls.redirect("MainGameApp")
+                if event.key == pygame.K_UP:
                     cls.end()

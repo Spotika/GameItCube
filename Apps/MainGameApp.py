@@ -10,6 +10,7 @@ class MainGameApp(App, MainGameDesign):
 
     @classmethod
     def loop(cls, *args, **kwargs):
+        cls.init_textures()
         cls.init_sprites_and_groups()
 
         # FIXME cls.ELEMENTS["platform"].set_all_sprites(cls.allSprites) - костыль для платформ
