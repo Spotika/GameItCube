@@ -12,11 +12,7 @@ from Colors import Colors
 
 # ! платформы не маштабируются
 
-# FIXME блять сука нахуй рефакторить это говно надо иниче игре пизда
-
 class Platform(Interface, pygame.sprite.Sprite):
-    # global x
-
     normalize = True
 
     def __init__(self, rand_pos: tuple[int, int], platform_rand_lenth: int, textures: dict[str, pygame.Surface]):
@@ -74,7 +70,7 @@ class PlatformGenerator(Interface):
     PLATFORM_LEFT_CORNER_IMAGE = pygame.image.load('media/img/platformLeftCorner.png')  # 6
     PLATFORM_RIGHT_CORNER_IMAGE = pygame.image.load('media/img/platformRightCorner.png')  # 6
 
-    TIME_DELAY_MAX = 1000  # милисекунды
+    TIME_DELAY_MAX = 1500  # милисекунды
     TIME_DELAY_MIN = 500
 
     # подгрузка текстур и их увеличение
@@ -106,7 +102,63 @@ class PlatformGenerator(Interface):
 
         super().__init__()
 
-    def update(self):
+    def update(self) -> None:
+        """"""
+        # TODO антону
+        """
+        придумай и реализуя нормальную генерацию платформ
+        
+        Требования к коду: 
+        1) Пиши коментарии к каждому методу, который создаешь
+        
+        2) желательно пиши методы, функция self.update() не должна быть сложной, она лишь только собирает весь 
+        функционал во едино
+            
+        3) если переменная константа или что-то фундаментальное пиши заглавными буквами
+        
+        4) если не очень ясно из названия переменной что конкретно она делает и для чего нужна, то пиши под ней 
+        комментарий, состоящий из тройных скобочек, в котором объясни значение переменной в коде
+        Пример:
+        K_MAX = None
+        '''что то о переменной'''
+        
+        Требования по задаче:
+        0) Платформы должны генерироваться по случайной координате Y от MIN_Y_GEN до MAX_Y_GEN, X - ширина экрана.
+        MIN_Y_GEN и MAX_Y_GEN - атрибуты класса которые нужно создать 
+        
+        1) платформы разной случайной длины, должны быть атрибуты, задающие макс и мин длину
+        
+        2) следующая платформа должна генерироваться только если её конец находится на каком-то случайном расстоянии от
+        края экрана в диапозоне от MIN_GEN_DIST до MAX_GEN_DIST - атрибуты класса, которое нужно создать
+        
+        3) Назовём родительнской платформой ту которая на момент события генерации является последней
+        (имеет наибольшую координату X), тогда первая, сгенерированная платформа не должна отличаться от
+        родительской по координате Y больше чем на MAX_PARENT_Y_DIFF (атрибут класса), но быть
+        
+        4) Когда происходит событие генерации со 100% вероятностью генерируется 1 платформа, далее каждая платформа 
+        может сгенерироваться с вероянтостью GEN_NEXT_PLATFORM_CHANCE. Каждая сгенерированая в одно событие генерации
+        платформа не должна быть ближе к другим платформам чем на (MAX_Y_GEN - MIN_Y_GEN) / кол-во сгенерированых 
+        платформ. 
+        ^
+        4.1) То есть тебе нужно сначала сгенерировать первую платформу по правилим пункта 3, затем
+        определить кол-во платформ которые сгенерятся дополнительно, а потом как-то хитро распределить координаты между 
+        ними так чтоб пункт 4 выполнился
+        
+        
+        Ну и некоторые полезные функции:
+        1) Ты сам видел, что в классе Platform есть нужные тебе атрибуты, так что пользуйся ими
+        2) В классе PlatformGenerator есть атрибут platformDeque - это очередь платформ, так вот что бы получить
+        последнюю сгенерированую (родительскую) платформу напиши self.platformDeque[-1], если есть вопросы по ней
+        загугли 'collections.deque python'
+        
+        ну тут вроде всё, а сам в ахуе, сколько написал, если что задавай вопросы в дс, тг, или ватсап 
+        (дс не желательно, тк могу не ответить в срок)
+        
+        !если не получется то переходи по следующим ссылкам, они тебе обязательно помогут)))!
+        1) https://youtu.be/bDHk0gwymqk
+        2) https://www.youtube.com/watch?v=xvFZjo5PgG0
+        
+        """
         self.platformGroup.update()
         self.check_for_delete()
         self.tick()
@@ -114,16 +166,14 @@ class PlatformGenerator(Interface):
         if self.timer >= self.delay:
             self.timer = 0
             self.set_delay()
-            self.generate()
+            self.generate_platform()
 
-        # print(len(self.platformDeque))
-
-    def generate(self):
+    def generate_platform(self):
         newPlatform = Platform((self.width, random.randint(0, self.height)), platform_rand_lenth=1, textures={
             "leftCorner": self.PLATFORM_LEFT_CORNER_IMAGE,
             "rightCorner": self.PLATFORM_RIGHT_CORNER_IMAGE,
             "center": self.PLATFORM_CENTER_IMAGE,
-        })  # FIXME
+        })  # FIXME тут переделай длину платформы
 
         self.platformDeque.append(newPlatform)
         self.platformGroup.add(newPlatform)

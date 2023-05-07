@@ -14,7 +14,6 @@ class FpsShow(pygame.sprite.Sprite):
 
         super().__init__()
 
-
     def update(self):
         font = pygame.font.Font(*self.initFont)
         self.image = font.render(f"{self.fps}", True, self.initColor)
