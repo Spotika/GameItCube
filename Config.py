@@ -1,11 +1,10 @@
 # files
 BACK_GROUND_IMG_FILE_PATH = "media/img/BackGround.png"
-START_BUTTON_IMG_FILE_PATH = "media/img/StarButton.png"
 PLATFORM_LEFT_CORNER = "media/img/platformLeftCorner.png"
 PLATFORM_RIGHT_CORNER = "media/img/platformRightCorner.png"
 PLATFORM_CENTER = "media/img/platformCenter.png"
 SOLID_WHITE_TEXTURE = "media/img/solidWhite.png"
-
+GAME_LOGO = "media/img/gameLogo.png"
 
 # Layers
 BACK_GROUND_SPRITE_LAYER = -50
@@ -62,4 +61,10 @@ class Audio:
 
 
 class ButtonTextures:
-    ...
+    START_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/startButton.png"
+    EXIT_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/exitButton.png"
+    SETTINGS_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/settingsButton.png"
+
+
+class PlayerTextures:
+    PLAYER1_TEXTURE = "media/img/playerTextures/playerTexture1.png"

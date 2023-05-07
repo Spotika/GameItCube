@@ -16,8 +16,6 @@ class MainGameApp(App, MainGameDesign):
 
         platformGenerator = PlatformGenerator(cls.allSprites)
 
-        # FIXME cls.ELEMENTS["platform"].set_all_sprites(cls.allSprites)
-
         while cls.running:
             EventHandler.tick()
 
