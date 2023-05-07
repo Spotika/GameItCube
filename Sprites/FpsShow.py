@@ -2,7 +2,6 @@ import pygame
 from EventHandler import EventHandler
 
 
-# FIXME
 class FpsShow(pygame.sprite.Sprite):
     def __init__(self, dims, position, initColor=(100, 255, 100), initFont=(None, 50)):
         self.width, self.height = dims
