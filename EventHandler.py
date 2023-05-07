@@ -56,3 +56,8 @@ class EventHandler:
     def get_dt(cls):
         """возвращает милисекунды"""
         return cls.dt
+
+    @classmethod
+    def get_fps(cls) -> float:
+        """возвращает кол во фпс"""
+        return cls.clock.get_fps()

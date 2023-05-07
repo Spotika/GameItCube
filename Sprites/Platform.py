@@ -77,7 +77,6 @@ class PlatformGenerator(Interface):
     TIME_DELAY_MAX = 1000  # милисекунды
     TIME_DELAY_MIN = 500
 
-
     # подгрузка текстур и их увеличение
     PLATFORM_LEFT_CORNER_IMAGE = pygame.transform.scale(
         PLATFORM_LEFT_CORNER_IMAGE,
