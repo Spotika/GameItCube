@@ -54,4 +54,5 @@ class EventHandler:
 
     @classmethod
     def get_dt(cls):
+        """возвращает милисекунды"""
         return cls.dt

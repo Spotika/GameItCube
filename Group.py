@@ -2,13 +2,14 @@ import pygame
 from EventHandler import EventHandler
 
 
-class Group:
+class Group(pygame.sprite.Group):
     """Хрень которая объеденяет объекты в группы и позволяет с помощью приложения обновлять их состояние"""
 
     def __init__(self):
+        super().__init__()
         self.objects = []
 
-    def add(self, obj: object | list):
+    def add_elem(self, obj: object | list):
         """Добавляет в группу объект или список объектов"""
         if isinstance(obj, list):
             self.objects.extend(obj)
@@ -19,7 +20,7 @@ class Group:
     def link_to_sprites(self, sprites):
         """Каждый объект в группе подгружает в allsprites приложения"""
         for obj in self.objects:
-            sprites.add(obj)
+            sprites.add_elem(obj)
 
     def call(self, *args, **kwargs):
         """Вызывает групповую функцию у участников группы"""

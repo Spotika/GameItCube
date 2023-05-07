@@ -24,7 +24,8 @@ class Design:
         """Добавляет все элементы и группы в allSprites
         """
         for elem in cls.ELEMENTS.values():
-            cls.allSprites.add(elem)
+            if isinstance(elem, pygame.sprite.Sprite):
+                cls.allSprites.add(elem)
 
     @classmethod
     def link_function_to_button(cls, button_name, function):

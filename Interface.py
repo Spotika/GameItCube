@@ -24,7 +24,7 @@ class Interface:
             self.do_normalize()
 
         if group is not None:
-            group.add(self)
+            group.add_elem(self)
 
         # дальше вызов всех родительских инитов, ВАЖНО
         super().__init__()

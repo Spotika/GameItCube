@@ -3,6 +3,7 @@ from App import App
 from Designs.MainGameDesign import MainGameDesign
 from EventHandler import EventHandler
 from QueryDeque import QueryDeque
+from Sprites.Platform import PlatformGenerator
 
 
 class MainGameApp(App, MainGameDesign):
@@ -13,12 +14,16 @@ class MainGameApp(App, MainGameDesign):
         cls.init_textures()
         cls.init_sprites_and_groups()
 
-        # FIXME cls.ELEMENTS["platform"].set_all_sprites(cls.allSprites) - костыль для платформ
+        platformGenerator = PlatformGenerator(cls.allSprites)
+
+        # FIXME cls.ELEMENTS["platform"].set_all_sprites(cls.allSprites)
 
         while cls.running:
             EventHandler.tick()
 
             EventHandler.update(cls)
+
+            platformGenerator.update()
 
             cls.check_events()
 
