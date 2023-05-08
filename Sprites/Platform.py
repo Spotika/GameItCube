@@ -169,7 +169,8 @@ class PlatformGenerator(Interface):
             self.generate_platform()
 
     def generate_platform(self):
-        newPlatform = Platform((self.width, random.randint(0, self.height)), platform_rand_lenth=1, textures={
+        newPlatform = Platform((self.width, random.randint(0, self.height)), platform_rand_lenth=random.randint(1, 3),
+                               textures={
             "leftCorner": self.PLATFORM_LEFT_CORNER_IMAGE,
             "rightCorner": self.PLATFORM_RIGHT_CORNER_IMAGE,
             "center": self.PLATFORM_CENTER_IMAGE,

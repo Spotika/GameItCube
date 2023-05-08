@@ -14,14 +14,14 @@ class MainGameApp(App, MainGameDesign):
         cls.init_textures()
         cls.init_sprites_and_groups()
 
-        platformGenerator = PlatformGenerator(cls.allSprites)
+        # platformGenerator = PlatformGenerator(cls.allSprites)
 
         while cls.running:
             EventHandler.tick()
 
             EventHandler.update(cls)
 
-            platformGenerator.update()
+            # platformGenerator.update()
 
             cls.check_events()
 
@@ -33,6 +33,6 @@ class MainGameApp(App, MainGameDesign):
     def check_events(cls):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_ESCAPE:
                     cls.redirect("MainMenuApp")
                     cls.end()

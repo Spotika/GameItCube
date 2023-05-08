@@ -28,6 +28,7 @@ class MainMenuApp(App, MainMenuDesign):
 
     @classmethod
     def git_button(cls):
+        """редирект на страницу гита проекта"""
         webbrowser.open('https://github.com/Spotika/GameItCube', new=2)
 
     @classmethod

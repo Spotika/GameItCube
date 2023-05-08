@@ -61,3 +61,8 @@ class EventHandler:
     def get_fps(cls) -> float:
         """возвращает кол во фпс"""
         return cls.clock.get_fps()
+
+    @classmethod
+    def get_ticks(cls) -> int:
+        """возвращает то, что возвращает pygame.time.get_ticks()"""
+        return pygame.time.get_ticks()

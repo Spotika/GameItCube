@@ -13,7 +13,7 @@ MASK_LAYER = 100
 
 
 # misc
-FPS = 120
+FPS = 60
 DESIGN_WIDTH = 1600
 """ширина дизайна"""
 DESIGN_HEIGHT = 800
@@ -30,6 +30,8 @@ INSTALLED_APPS = [
 ]
 """Добавбь сюда свое приложение и оно будет доступно для редиректа в него \n(!) сувать путь до модуля относительно
 main.py"""
+
+PLAYER_DIMS = (20, 45)
 
 
 class BackGroundTextures:
