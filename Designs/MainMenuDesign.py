@@ -35,7 +35,6 @@ class MainMenuDesign(Design):
             "infoLabel": Label((50, 708), (220, 32)),
             "playerLabel": Label((1159, 234), (331, 331)),
             "gameLabel": Label((489, 66), (623, 92), texture_path=Config.GAME_LOGO),
-            "gitInfoLabel": Label((96, 234), (331, 331)),
-
+            "gitInfoButton": Button((96, 234), (331, 331), group=cls.get_group("ButtonGroup"),
+                                    texture_path=Config.ButtonTextures.GIT_BUTTON),
         })
-

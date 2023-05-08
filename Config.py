@@ -64,6 +64,7 @@ class ButtonTextures:
     START_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/startButton.png"
     EXIT_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/exitButton.png"
     SETTINGS_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/settingsButton.png"
+    GIT_BUTTON = "media/img/buttonTextures/gitButton.png"
 
 
 class PlayerTextures:

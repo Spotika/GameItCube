@@ -8,6 +8,7 @@ from Sprites.Button import Button
 from Group import Group
 from Sprites.Label import Label
 from Designs.MainMenuDesign import MainMenuDesign
+import webbrowser
 
 
 class MainMenuApp(App, MainMenuDesign):
@@ -26,12 +27,17 @@ class MainMenuApp(App, MainMenuDesign):
         cls.end()
 
     @classmethod
+    def git_button(cls):
+        webbrowser.open('https://github.com/Spotika/GameItCube', new=2)
+
+    @classmethod
     def loop(cls, *args, **kwargs):
 
         cls.init_textures()
 
         cls.link_function_to_button("exitButton", cls.exit_button)
         cls.link_function_to_button("enterButton", cls.enter_button)
+        cls.link_function_to_button("gitInfoButton", cls.git_button)
 
         cls.init_sprites_and_groups()
 
