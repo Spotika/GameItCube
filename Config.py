@@ -11,7 +11,6 @@ BACK_GROUND_SPRITE_LAYER = -50
 BUTTON_SPRITE_LAYER = 50
 MASK_LAYER = 100
 
-
 # misc
 FPS = 60
 DESIGN_WIDTH = 1600
@@ -19,10 +18,8 @@ DESIGN_WIDTH = 1600
 DESIGN_HEIGHT = 800
 """высота дизайна"""
 
-
 NORMALIZE = True
 """будут ли элементы маштабироваться"""
-
 
 INSTALLED_APPS = [
     "Apps.MainGameApp",
@@ -71,3 +68,11 @@ class ButtonTextures:
 
 class PlayerTextures:
     PLAYER1_TEXTURE = "media/img/playerTextures/playerTexture1.png"
+
+
+class Animations:
+    class NinjaPlayer:
+        MOOVING_TEXTURES = [
+            "media/img/animations/NinjaPlayer/mooving/0.png",
+            "media/img/animations/NinjaPlayer/mooving/1.png",
+        ]

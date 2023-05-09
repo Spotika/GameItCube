@@ -4,6 +4,7 @@ from Designs.MainGameDesign import MainGameDesign
 from EventHandler import EventHandler
 from QueryDeque import QueryDeque
 from Sprites.Platform import PlatformGenerator
+from Players.NinjaPlayer import NinjaPlayer
 
 
 class MainGameApp(App, MainGameDesign):

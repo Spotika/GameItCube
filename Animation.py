@@ -25,7 +25,7 @@ class Animation:
         for texture_path in textures_file_path:
             texture = pygame.image.load(texture_path).convert_alpha()  # тут подгрузка
             if dims is not None:
-                texture = pygame.transform.scale(dims)
+                texture = pygame.transform.scale(texture, dims)
             self.SPRITES.append(texture)
 
     def next_sprite(self) -> pygame.Surface:
