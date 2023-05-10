@@ -28,7 +28,7 @@ INSTALLED_APPS = [
 """Добавбь сюда свое приложение и оно будет доступно для редиректа в него \n(!) сувать путь до модуля относительно
 main.py"""
 
-PLAYER_DIMS = (20, 45)
+PLAYER_DIMS = (34, 48)
 
 
 class BackGroundTextures:

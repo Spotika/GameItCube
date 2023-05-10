@@ -5,7 +5,7 @@ from EventHandler import EventHandler
 class Animation:
     """Класс для структурирывания и создания анимированых спрайтов на основе коллекции изображений"""
 
-    SPRITES: list[pygame.Surface] = []
+    SPRITES: list[pygame.Surface]
     """Список поверхностей анимации"""
 
     CURRENT_SPRITE = 0
@@ -19,9 +19,16 @@ class Animation:
     now = EventHandler.get_ticks()
     """текущее кол во тиков"""
 
-    def __init__(self, textures_file_path, dims=None, frame_rate=60):
+    def __init__(self, textures_file_path=None, dims=None, frame_rate=60):
         """инициализация текстурами"""
+
+        # это решает проблему с изменяемыми типами
+        self.SPRITES = []
+        if textures_file_path is None:
+            textures_file_path = []
+
         self.FRAME_RATE = frame_rate
+
         for texture_path in textures_file_path:
             texture = pygame.image.load(texture_path).convert_alpha()  # тут подгрузка
             if dims is not None:
@@ -30,6 +37,10 @@ class Animation:
 
     def next_sprite(self) -> pygame.Surface:
         """Возвращает спрайт и обновляет по времени счётчик спрайтов"""
+
+        """если вдруг нет спрайтов"""
+        if len(self.SPRITES) == 0:
+            return pygame.Surface((0, 0))
 
         resImage = self.SPRITES[self.CURRENT_SPRITE]
 
