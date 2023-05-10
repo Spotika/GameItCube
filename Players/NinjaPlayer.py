@@ -14,37 +14,32 @@ class NinjaPlayer(Player):
     def __init__(self, position: tuple[int, int] = (0, 0),
                  dims: tuple[int, int] = Config.PLAYER_DIMS):
         super().__init__(position, dims)
-        self.playerAnimations["mooving"] = Animation(Config.Animations.NinjaPlayer.MOOVING_TEXTURES,
-                                                     dims=dims,
-                                                     frame_rate=50)
+        self.playerAnimations["moving"] = Animation(Config.Animations.NinjaPlayer.MOVING_TEXTURES,
+                                                    dims=dims,
+                                                    frame_rate=50)
         self.playerAnimations["idling"] = Animation(Config.Animations.NinjaPlayer.IDLING_TEXTURES,
                                                     dims=dims,
                                                     frame_rate=100)
         self.set_direction("right")
         self.set_state("idling")
-        self.motion = "none"
 
     def update(self):
-        prevState = self.currentState
-        self.check_events()
-
-        if self.currentState != prevState:
-            self.get_animation_by_state(prevState).reset()
-
-        self.set_image(self.get_animation_by_current_state().next_sprite())
+        super().update()
 
     def check_events(self):
+        super().check_events()
+        ...
         # for event in EventHandler.get_events():
         #     if event.type == pygame.KEYDOWN:
         #         if event.key == pygame.K_LEFT:
         #             self.set_direction("left")
-        #             self.set_state("mooving")
+        #             self.set_state("moving")
         #             # self.rect.move(-EventHandler.get_dt() * self.playerSpeed, 0)
         #             self.motion = "left"
         #         elif event.key == pygame.K_RIGHT:
         #
         #             self.set_direction("right")
-        #             self.set_state("mooving")
+        #             self.set_state("moving")
         #             # self.rect.move(EventHandler.get_dt() * self.playerSpeed, 0)
         #             self.motion = "right"
         #     elif event.type == pygame.KEYUP:

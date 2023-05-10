@@ -17,6 +17,8 @@ DESIGN_WIDTH = 1600
 """ширина дизайна"""
 DESIGN_HEIGHT = 800
 """высота дизайна"""
+NORMAL_FRICTION_COEFFICIENT = 0.4
+"""нормальный коеэффициент трения"""
 
 NORMALIZE = True
 """будут ли элементы маштабироваться"""
@@ -55,6 +57,15 @@ class BackGroundTextures:
     ]
 
 
+MAX_PLAYER_SPEED_MODULE_X: float = 1000
+MAX_PLAYER_SPEED_MODULE_Y: float = 1000
+MAX_PLAYER_ACCELERATION_MODULE_X: float = 1000
+MAX_PLAYER_ACCELERATION_MODULE_Y: float = 1000
+PLAYER_BASE_ACCELERATION_MODULE: float = 10
+PLAYER_BASE_SPEED_MODULE: float = 20
+G_CONSTANT: float = 9.81
+
+
 class Audio:
     BUTTON_CLICKED_SFX = "media/audio/minecraftButtonSfx.mp3"
 
@@ -72,7 +83,7 @@ class PlayerTextures:
 
 class Animations:
     class NinjaPlayer:
-        MOOVING_TEXTURES = [
+        MOVING_TEXTURES = [
             "media/img/animations/NinjaPlayer/mooving/0.png",
             "media/img/animations/NinjaPlayer/mooving/1.png",
         ]

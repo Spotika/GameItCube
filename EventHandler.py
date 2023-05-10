@@ -23,6 +23,7 @@ class EventHandler:
         cls._events = pygame.event.get()
         cls._mousePressed = pygame.mouse.get_pressed(3)
         cls._mousePos = pygame.mouse.get_pos()
+        cls._keysPressed = pygame.key.get_pressed()
         """обновление состояний"""
 
         """Обновление групп в конкретном приложении"""
@@ -37,12 +38,16 @@ class EventHandler:
                 exit(0)  # выход
 
     @classmethod
-    def get_events(cls):
+    def get_events(cls) -> list[pygame.event.Event]:
         return cls._events
 
     @classmethod
     def get_mouse_pressed(cls):
         return cls._mousePressed
+
+    @classmethod
+    def get_key_pressed(cls):
+        return cls.get_key_pressed
 
     @classmethod
     def get_mouse_pos(cls):

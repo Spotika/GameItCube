@@ -35,3 +35,6 @@ class Vector2D:
     def __str__(self):
         return f"vector {self.x}, {self.y}"
 
+    @classmethod
+    def from_polar(cls, teta: float, r: float):
+        return Vector2D(r * math.cos(teta), r * math.sin(teta))
