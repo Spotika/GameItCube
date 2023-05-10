@@ -28,6 +28,7 @@ class NinjaPlayer(Player):
 
     def check_events(self):
         super().check_events()
+        # print(123)
         ...
         # for event in EventHandler.get_events():
         #     if event.type == pygame.KEYDOWN:
