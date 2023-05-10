@@ -76,3 +76,6 @@ class Animations:
             "media/img/animations/NinjaPlayer/mooving/0.png",
             "media/img/animations/NinjaPlayer/mooving/1.png",
         ]
+        IDLING_TEXTURES = [
+            "media/img/animations/NinjaPlayer/idling/0.png",
+        ]

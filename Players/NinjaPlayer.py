@@ -16,9 +16,12 @@ class NinjaPlayer(Player):
         super().__init__(position, dims)
         self.playerAnimations["mooving"] = Animation(Config.Animations.NinjaPlayer.MOOVING_TEXTURES,
                                                      dims=dims,
-                                                     frame_rate=100)
-        self.set_direction("left")
-        self.set_state("mooving")
+                                                     frame_rate=50)
+        self.playerAnimations["idling"] = Animation(Config.Animations.NinjaPlayer.IDLING_TEXTURES,
+                                                    dims=dims,
+                                                    frame_rate=100)
+        self.set_direction("right")
+        self.set_state("idling")
         self.motion = "none"
 
     def update(self):
@@ -46,6 +49,7 @@ class NinjaPlayer(Player):
         #             self.motion = "right"
         #     elif event.type == pygame.KEYUP:
         #         self.motion = "none"
+        #         self.set_state("idling")
         #
         # if self.motion == "left":
         #     self.rect.x += -EventHandler.get_dt() * self.playerSpeed / 1000
