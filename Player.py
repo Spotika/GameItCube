@@ -6,6 +6,7 @@ from Screen import Screen
 from EventHandler import EventHandler
 from Vector2D import Vector2D
 import math
+import Scripts
 
 
 class Player(pygame.sprite.Sprite):
@@ -40,6 +41,8 @@ class Player(pygame.sprite.Sprite):
     image: pygame.Surface = pygame.Surface((0, 0))
     """объект image персонажа"""
 
+    position: list[float, float]
+
     # тут векторные или физические величины для перемещения
     gravitationAcceleration = Vector2D(0, Config.G_CONSTANT)
 
@@ -71,20 +74,27 @@ class Player(pygame.sprite.Sprite):
     """текущая нажатая кнопка"""
 
     collisions: list[bool, bool, bool, bool]
+    """столкновение персонажа по сторонам"""
 
     lastState = "idling"
+    """предыдущее состояние"""
 
     def __init__(self, position: tuple[int, int] = (0, 0), dims: tuple[int, int] = Config.PLAYER_DIMS) -> None:
         super().__init__()
         self.collisions = [False, False, False, False]
         self.do_normalize()
-        self.rect = pygame.Rect(position, dims)
+        # self.rect = pygame.Rect(position, dims)
+        self.position = list(position)
 
     def set_pos(self, x=None, y=None) -> None:
         if x is not None:
-            self.rect.x = x
+            self.position[0] = x
         if y is not None:
-            self.rect.y = y
+            self.position[1] = y
+
+    def update_rect_position(self):
+        """обновляет координаты rect игрока"""
+        self.rect.x, self.rect.y = self.position
 
     def get_pos(self) -> tuple[int, int]:
         return self.rect.x, self.rect.y
@@ -151,8 +161,9 @@ class Player(pygame.sprite.Sprite):
         ...
 
     def move(self, x=0, y=0):
-        """сдвигает персонажа на какое то расстояние по Oy и Ox"""
-        self.set_rect(self.rect.move(x, y))
+        """сдвигает position на какое то расстояние по Oy и Ox"""
+        self.position[0] += x
+        self.position[1] += y
 
     def calculate_vectors(self) -> None:
         """высчитывает вектора"""
@@ -164,11 +175,12 @@ class Player(pygame.sprite.Sprite):
         self.playerSpeedVector += self.playerAccelerationVector * (EventHandler.get_dt() / 1000)
 
         # обработка переполнения
-        self.playerSpeedVector.x = min(self.MAX_PLAYER_SPEED_MODULE_X, self.playerSpeedVector.x)
-        self.playerSpeedVector.y = min(self.MAX_PLAYER_SPEED_MODULE_X, self.playerSpeedVector.y)
+        self.playerSpeedVector.x = min(self.MAX_PLAYER_SPEED_MODULE_X, abs(self.playerSpeedVector.x)) * \
+                                   Scripts.sign(self.playerSpeedVector.x)
+        self.playerSpeedVector.y = min(self.MAX_PLAYER_SPEED_MODULE_Y, abs(self.playerSpeedVector.y)) * \
+                                   Scripts.sign(self.playerSpeedVector.y)
 
         """если столкновения"""
-
         # c полом или потолком
         if self.collisions[2] or self.collisions[0]:
             self.playerAccelerationVector.y = 0
@@ -227,6 +239,7 @@ class Player(pygame.sprite.Sprite):
         self.calculate_vectors()
         self.move_by_vectors()
 
+        self.update_rect_position()
         self.update_animations()
         self.render_image()
 
