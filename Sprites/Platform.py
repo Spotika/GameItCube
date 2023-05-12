@@ -29,7 +29,7 @@ class Platform(Interface, pygame.sprite.Sprite):
         super().__init__()
 
     def calculate_dims(self) -> tuple[int, int]:
-        """считает размеры платформы через длину текстур и платформы"""
+        """Считает размеры платформы через длину текстур и платформы"""
         return ((self.textures["leftCorner"].get_size()[0] +
                  self.textures["rightCorner"].get_size()[0] +
                  self.textures["center"].get_size()[0] * self.platformLength),
@@ -55,12 +55,12 @@ class Platform(Interface, pygame.sprite.Sprite):
         return image.convert_alpha()
 
     def update(self):
-        """перемещение платформы"""
+        """Перемещение платформы"""
         self.rect.x -= EventHandler.get_dt() * Game.Platforms.speed / 1000
         self.position = (self.rect.x, self.rect.y)
 
     def out_of_screen(self) -> bool:
-        """если платформа за экраном, то возвращает True"""
+        """Если платформа за экраном, то возвращает True"""
         return self.position[0] + self.width + 1 < 0
 
 

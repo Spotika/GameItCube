@@ -250,6 +250,15 @@ class Player(pygame.sprite.Sprite):
         # право
         collisions[1] = position[0] + self.get_dims()[0] > Screen.width
 
+        # FIXME Ну это прям дичь полная, но немного работает
+        # TODO - починить
+        platformGroup = self.get_app().platformGenerator.platformGroup
+
+        for platform in platformGroup:
+            platformRect = platform.rect
+            if pygame.Rect(position, self.get_dims()).colliderect(platformRect):
+                collisions[2] = True
+
         return collisions
 
     def generate_vectors_by_state(self):

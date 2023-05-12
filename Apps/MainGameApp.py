@@ -15,7 +15,7 @@ class MainGameApp(App, MainGameDesign):
         cls.init_textures()
         cls.init_sprites_and_groups()
 
-        platformGenerator = PlatformGenerator(cls.allSprites)
+        cls.platformGenerator = PlatformGenerator(cls.allSprites)
 
         cls.get_element("player").set_app(cls)
 
@@ -24,7 +24,7 @@ class MainGameApp(App, MainGameDesign):
 
             EventHandler.update(cls)
 
-            platformGenerator.update()
+            cls.platformGenerator.update()
 
             cls.check_events()
 
