@@ -7,9 +7,7 @@ from EventHandler import EventHandler
 
 
 class NinjaPlayer(Player):
-    """первый игрок в игре, дочерний класс"""
-
-    # блять я заебался писать, поэтому пишу хуёво, рефакторить буду потом
+    """Первый игрок в игре, дочерний класс"""
 
     def __init__(self, position: tuple[int, int] = (0, 0),
                  dims: tuple[int, int] = Config.PLAYER_DIMS):

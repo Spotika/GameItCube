@@ -12,13 +12,11 @@ BUTTON_SPRITE_LAYER = 50
 MASK_LAYER = 100
 
 # misc
-FPS = 60
+FPS = 120
 DESIGN_WIDTH = 1600
 """ширина дизайна"""
 DESIGN_HEIGHT = 800
 """высота дизайна"""
-NORMAL_FRICTION_COEFFICIENT = 0.4
-"""нормальный коеэффициент трения"""
 
 NORMALIZE = True
 """будут ли элементы маштабироваться"""
@@ -58,13 +56,16 @@ class BackGroundTextures:
 
 
 # TODO: подкоректировать эти штуки
-MAX_PLAYER_SPEED_MODULE_X: float = 200
-MAX_PLAYER_SPEED_MODULE_Y: float = 500
+FRICTION_COEFFICIENT = 4
+"""нормальный коеэффициент трения"""
+MAX_PLAYER_SPEED_MODULE_X: float = 600
+MAX_PLAYER_SPEED_MODULE_Y: float = 600
 MAX_PLAYER_ACCELERATION_MODULE_X: float = 1000
 MAX_PLAYER_ACCELERATION_MODULE_Y: float = 1000
 PLAYER_BASE_ACCELERATION_MODULE: float = 1500
 PLAYER_BASE_SPEED_MODULE: float = 200
 G_CONSTANT: float = 400
+MIN_SPEED_LIM: float = 20
 
 
 class Audio:

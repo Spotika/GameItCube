@@ -15,14 +15,16 @@ class MainGameApp(App, MainGameDesign):
         cls.init_textures()
         cls.init_sprites_and_groups()
 
-        # platformGenerator = PlatformGenerator(cls.allSprites)
+        platformGenerator = PlatformGenerator(cls.allSprites)
+
+        cls.get_element("player").set_app(cls)
 
         while cls.running:
             EventHandler.tick()
 
             EventHandler.update(cls)
 
-            # platformGenerator.update()
+            platformGenerator.update()
 
             cls.check_events()
 
