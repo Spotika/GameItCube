@@ -99,7 +99,6 @@ class PlatformGenerator(Interface):
         self.clock = pygame.time.Clock()
         self.platformGroup = pygame.sprite.Group()
         self.platformDeque: deque[Platform] = deque()
-        self.delay = 0
         self.timer = 0
         self.generate_platform()
 
@@ -167,14 +166,13 @@ class PlatformGenerator(Interface):
         self.tick()
 
 
-        if self.platformDeque[0].position[0] + self.platformDeque[0].width < 1450:
-            if self.timer >= self.delay:
+        if self.platformDeque[-1].position[0] + self.platformDeque[-1].width < 1450:
+            if self.timer >= self.TIME_ISGENERATE:
                 self.timer = 0
-                self.set_delay()
                 self.generate_platform()
                 self.update_y()
                 self.update_y_border()
-                # self.update_len()
+                self.update_len()
 
 
     def generate_platform(self):
@@ -198,20 +196,17 @@ class PlatformGenerator(Interface):
     def tick(self):
         self.timer += self.clock.tick()
 
-    def set_delay(self):
-        self.delay = self.TIME_ISGENERATE
-
     def update_y(self):
         self.RANDY = random.randint(self.MIN_Y_GEN, self.MAX_Y_GEN)
 
     def update_y_border(self):
         if self.RANDY < 100 or self.MIN_Y_GEN < 100:
             self.MIN_Y_GEN += 150
-        elif self.RANDY > 890 or self.MIN_Y_GEN > 890:
+        elif self.RANDY > 790 or self.MIN_Y_GEN > 790:
             self.MIN_Y_GEN -= 150
         else:
             self.MIN_Y_GEN = self.RANDY - 100
         self.MAX_Y_GEN = self.MIN_Y_GEN + 200
 
     def update_len(self):
-        self.RAND_LEN = random.randint(1, 4)
+        self.RAND_LEN = random.randint(1, 3)
