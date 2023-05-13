@@ -4,6 +4,8 @@ from Screen import Screen
 
 
 class Interface:
+    """полезная фигня корорая должна помогать в нормализации изображения но это не точно, надо рефакторить"""
+
     height: int = 0
     width: int = 0
 

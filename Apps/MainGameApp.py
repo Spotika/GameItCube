@@ -4,6 +4,7 @@ from Designs.MainGameDesign import MainGameDesign
 from EventHandler import EventHandler
 from QueryDeque import QueryDeque
 from Sprites.Platform import PlatformGenerator
+from Players.NinjaPlayer import NinjaPlayer
 
 
 class MainGameApp(App, MainGameDesign):
@@ -14,14 +15,16 @@ class MainGameApp(App, MainGameDesign):
         cls.init_textures()
         cls.init_sprites_and_groups()
 
-        platformGenerator = PlatformGenerator(cls.allSprites)
+        cls.platformGenerator = PlatformGenerator(cls.allSprites)
+
+        cls.get_element("player").set_app(cls)
 
         while cls.running:
             EventHandler.tick()
 
             EventHandler.update(cls)
 
-            platformGenerator.update()
+            cls.platformGenerator.update()
 
             cls.check_events()
 
@@ -33,6 +36,6 @@ class MainGameApp(App, MainGameDesign):
     def check_events(cls):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_ESCAPE:
                     cls.redirect("MainMenuApp")
                     cls.end()

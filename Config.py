@@ -10,7 +10,8 @@ GAME_LOGO = "media/img/gameLogo.png"
 BACK_GROUND_SPRITE_LAYER = -50
 BUTTON_SPRITE_LAYER = 50
 MASK_LAYER = 100
-
+PLAYER_LAYER = 60
+PLAYER_DIFF_DIFF = 10
 
 # misc
 FPS = 120
@@ -19,10 +20,8 @@ DESIGN_WIDTH = 1600
 DESIGN_HEIGHT = 800
 """высота дизайна"""
 
-
 NORMALIZE = True
 """будут ли элементы маштабироваться"""
-
 
 INSTALLED_APPS = [
     "Apps.MainGameApp",
@@ -30,6 +29,8 @@ INSTALLED_APPS = [
 ]
 """Добавбь сюда свое приложение и оно будет доступно для редиректа в него \n(!) сувать путь до модуля относительно
 main.py"""
+
+PLAYER_DIMS = (34, 48)
 
 
 class BackGroundTextures:
@@ -56,6 +57,19 @@ class BackGroundTextures:
     ]
 
 
+# TODO: подкоректировать эти штуки
+FRICTION_COEFFICIENT = 4
+"""нормальный коеэффициент трения"""
+MAX_PLAYER_SPEED_MODULE_X: float = 400
+MAX_PLAYER_SPEED_MODULE_Y: float = 600
+MAX_PLAYER_ACCELERATION_MODULE_X: float = 1000
+MAX_PLAYER_ACCELERATION_MODULE_Y: float = 1000
+PLAYER_BASE_ACCELERATION_MODULE: float = 10000
+PLAYER_BASE_SPEED_MODULE: float = 200
+G_CONSTANT: float = 800
+MIN_SPEED_LIM: float = 20
+
+
 class Audio:
     BUTTON_CLICKED_SFX = "media/audio/minecraftButtonSfx.mp3"
 
@@ -69,3 +83,14 @@ class ButtonTextures:
 
 class PlayerTextures:
     PLAYER1_TEXTURE = "media/img/playerTextures/playerTexture1.png"
+
+
+class Animations:
+    class NinjaPlayer:
+        MOVING_TEXTURES = [
+            "media/img/animations/NinjaPlayer/mooving/0.png",
+            "media/img/animations/NinjaPlayer/mooving/1.png",
+        ]
+        IDLING_TEXTURES = [
+            "media/img/animations/NinjaPlayer/idling/0.png",
+        ]
