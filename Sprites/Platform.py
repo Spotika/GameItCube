@@ -1,7 +1,7 @@
 import pygame
 import random
 
-from Group import Group
+import Config
 from Interface import Interface
 from EventHandler import EventHandler
 from Screen import Screen
@@ -10,13 +10,13 @@ from Game import Game
 from Colors import Colors
 
 
-# ! платформы не маштабируются
+# FIXME платформы не маштабируются
 
 class Platform(Interface, pygame.sprite.Sprite):
     normalize = True
 
-    def __init__(self, rand_pos: tuple[int, int], platform_rand_lenth: int, textures: dict[str, pygame.Surface]):
-        self.platformLength = platform_rand_lenth
+    def __init__(self, rand_pos: tuple[int, int], platform_rand_lentgh: int, textures: dict[str, pygame.Surface]):
+        self.platformLength = platform_rand_lentgh
         """кол во центральных элементов в платформе"""
 
         self.textures = textures
@@ -36,6 +36,7 @@ class Platform(Interface, pygame.sprite.Sprite):
                 self.textures["center"].get_size()[1])
 
     def generate_platform_image(self) -> pygame.Surface:
+        """Генерирует изображение платформы"""
         image = pygame.Surface((self.width, self.height))
 
         # отрисовка текстур в image
@@ -65,13 +66,11 @@ class Platform(Interface, pygame.sprite.Sprite):
 
 
 class PlatformGenerator(Interface):
+    """Генератор платформ"""
     SIZE_SCALE = 4
     PLATFORM_CENTER_IMAGE = pygame.image.load('media/img/platformCenter.png')  # 25
     PLATFORM_LEFT_CORNER_IMAGE = pygame.image.load('media/img/platformLeftCorner.png')  # 6
     PLATFORM_RIGHT_CORNER_IMAGE = pygame.image.load('media/img/platformRightCorner.png')  # 6
-
-    TIME_DELAY_MAX = 500  # милисекунды
-    TIME_DELAY_MIN = 500
 
     # подгрузка текстур и их увеличение
     PLATFORM_LEFT_CORNER_IMAGE = pygame.transform.scale(
@@ -90,105 +89,149 @@ class PlatformGenerator(Interface):
          PLATFORM_RIGHT_CORNER_IMAGE.get_size()[1] * SIZE_SCALE,)
     ).convert_alpha()
 
+    """Ограничение платформ по Oy в зависимости от размера игрока"""
+    PLATFORM_Y_MIN = Config.PLAYER_DIMS[1] * 1.5
+    PLATFORM_Y_MAX = Screen.height - Config.PLAYER_DIMS[1] * 1.5
+
+    """Ограничение длины платформ"""
+    PLATFORM_LENGTH_MAX = 4
+    PLATFORM_LENGTH_MIN = 1
+
+    NEXT_PLATFORM_CHANCE = 0.5
+    """Шанс на каждую последующую платформу"""
+
+    MIN_DIST_BETWEEN_PLATFORM_OY = 100
+    """Минимальная дистанция между сгенерированными платформами по Oy"""
+
+    """Ограничение дистанции по Ox"""
+    MIN_DIST_BETWEEN_PLATFORM_OX = 100
+    MAX_DIST_BETWEEN_PLATFORM_OX = 300
+
+    """Ограничение разброса платформ"""
+    MIN_PLATFORM_OY_DIFF = 200
+    MAX_PLATFORM_OY_DIFF = 400
+
+    MAX_NUM_OF_PLATFORMS = 5
+    """Максимальное количество платформ, которое может сгенерироваться единовременно"""
+
+    nextPlatformDistance = 0
+    """Расстояние до следующей сгенерируемой платформы"""
+
+    parentPlatform = None
+    """Родительская платформа"""
+
     def __init__(self, all_sprites: pygame.sprite.LayeredUpdates):
-        self.width = Screen.width
-        self.height = Screen.height
         self.allSprites = all_sprites
         self.clock = pygame.time.Clock()
         self.platformGroup = pygame.sprite.Group()
         self.platformDeque: deque[Platform] = deque()
-        self.delay = 0
-        self.timer = 0
+
+        self.parentPlatform = self.generate_platform(random.randint(self.PLATFORM_Y_MIN,
+                                                                    self.PLATFORM_Y_MAX), self.get_random_lenght())
+        self.update_next_platform_distance()
 
         super().__init__()
 
+    def update_next_platform_distance(self):
+        """Обновляет nextPlatformDistance"""
+        self.nextPlatformDistance = Screen.width - random.randint(self.MIN_DIST_BETWEEN_PLATFORM_OX,
+                                                                  self.MAX_DIST_BETWEEN_PLATFORM_OX)
+
+    def get_random_lenght(self):
+        return random.randint(self.PLATFORM_LENGTH_MIN, self.PLATFORM_LENGTH_MAX)
+
     def update(self) -> None:
-        """"""
-        # TODO антону
-        """
-        придумай и реализуя нормальную генерацию платформ
-        
-        Требования к коду: 
-        1) Пиши коментарии к каждому методу, который создаешь
-        
-        2) желательно пиши методы, функция self.update() не должна быть сложной, она лишь только собирает весь 
-        функционал во едино
-            
-        3) если переменная константа или что-то фундаментальное пиши заглавными буквами
-        
-        4) если не очень ясно из названия переменной что конкретно она делает и для чего нужна, то пиши под ней 
-        комментарий, состоящий из тройных скобочек, в котором объясни значение переменной в коде
-        Пример:
-        K_MAX = None
-        '''что то о переменной'''
-        
-        Требования по задаче:
-        0) Платформы должны генерироваться по случайной координате Y от MIN_Y_GEN до MAX_Y_GEN, X - ширина экрана.
-        MIN_Y_GEN и MAX_Y_GEN - атрибуты класса которые нужно создать 
-        
-        1) платформы разной случайной длины, должны быть атрибуты, задающие макс и мин длину
-        
-        2) следующая платформа должна генерироваться только если её конец находится на каком-то случайном расстоянии от
-        края экрана в диапозоне от MIN_GEN_DIST до MAX_GEN_DIST - атрибуты класса, которое нужно создать
-        
-        3) Назовём родительнской платформой ту которая на момент события генерации является последней
-        (имеет наибольшую координату X), тогда первая, сгенерированная платформа не должна отличаться от
-        родительской по координате Y больше чем на MAX_PARENT_Y_DIFF (атрибут класса), но быть
-        
-        4) Когда происходит событие генерации со 100% вероятностью генерируется 1 платформа, далее каждая платформа 
-        может сгенерироваться с вероянтостью GEN_NEXT_PLATFORM_CHANCE. Каждая сгенерированая в одно событие генерации
-        платформа не должна быть ближе к другим платформам чем на (MAX_Y_GEN - MIN_Y_GEN) / кол-во сгенерированых 
-        платформ. 
-        ^
-        4.1) То есть тебе нужно сначала сгенерировать первую платформу по правилим пункта 3, затем
-        определить кол-во платформ которые сгенерятся дополнительно, а потом как-то хитро распределить координаты между 
-        ними так чтоб пункт 4 выполнилсяп
-        
-        
-        Ну и некоторые полезные функции:
-        1) Ты сам видел, что в классе Platform есть нужные тебе атрибуты, так что пользуйся ими
-        2) В классе PlatformGenerator есть атрибут platformDeque - это очередь платформ, так вот что бы получить
-        последнюю сгенерированую (родительскую) платформу напиши self.platformDeque[-1], если есть вопросы по ней
-        загугли 'collections.deque python'
-        
-        ну тут вроде всё, а сам в ахуе, сколько написал, если что задавай вопросы в дс, тг, или ватсап 
-        (дс не желательно, тк могу не ответить в срок)
-        
-        !если не получется то переходи по следующим ссылкам, они тебе обязательно помогут)))!
-        1) https://youtu.be/bDHk0gwymqk
-        2) https://www.youtube.com/watch?v=xvFZjo5PgG0
-        
-        """
         self.platformGroup.update()
         self.check_for_delete()
-        self.tick()
 
-        if self.timer >= self.delay:
-            self.timer = 0
-            self.set_delay()
-            self.generate_platform()
+        self.generate_platform_batch()
 
-    def generate_platform(self):
-        newPlatform = Platform((self.width, random.randint(0, self.height)), platform_rand_lenth=random.randint(1, 3),
+    def generate_platform_batch(self):
+        """Генерирует группу платформ хитрым алгритмом"""
+        if not self.check_for_generate():  # стоит ли генерировать
+            return
+
+        newPlatforms = []  # список новых пар для генерации (<координата> <длина>)
+
+        """генерация случайного числа платформ с экспоненциальной вероятностью"""
+        numOfPlatforms = 1  # количество сгенерированых платформ единовременно
+        while numOfPlatforms < self.MAX_NUM_OF_PLATFORMS and random.random() <= self.NEXT_PLATFORM_CHANCE:
+            numOfPlatforms += 1
+
+        """тут погнали переменные для алгоритма"""
+        d = random.randint(self.MIN_PLATFORM_OY_DIFF, self.MAX_PLATFORM_OY_DIFF)
+        # минимальная дистанция между родительской и одной из сгенерированых платформ
+        h = self.PLATFORM_Y_MAX - self.PLATFORM_Y_MIN
+        # высота области генерации
+        n = numOfPlatforms
+        # количество сгенерированых платформ единовременно
+        x = h // self.MAX_NUM_OF_PLATFORMS  # self.MIN_DIST_BETWEEN_PLATFORM_OY, можно заменять
+        # минимальное расстояние между платформами
+        k = random.randint((h - n * x) // (2 * n), (h - n * x) // n)
+        # диапазон генерации платформы
+
+        borderLine = self.parentPlatform.position[1]
+        # линия генерации
+
+        """две равновероятные ситуации генерации"""
+        if random.random() <= 0.5:  # генерация сверху
+            """Установка максимальной границы сверху"""
+            c = 0  # просто счётчик
+            while borderLine - d >= self.PLATFORM_Y_MIN and c < n:
+                borderLine -= d
+                c += 1
+
+            """тут просто генерация и сдвиг границы вниз"""
+            while n > 0 and borderLine + x <= self.PLATFORM_Y_MAX:
+                newPlatforms.append(
+                    (min(self.PLATFORM_Y_MAX, random.randint(borderLine - k, borderLine)), self.get_random_lenght())
+                )
+                n -= 1
+                borderLine = newPlatforms[-1][0] + x
+        else:  # генерация снизу
+            """Установка максимальной границы снизу"""
+            c = 0  # просто счётчик
+            while borderLine + d <= self.PLATFORM_Y_MAX and c < n:
+                borderLine += d
+                c += 1
+
+            """тут просто генерация и сдвиг границы вверх"""
+            while n > 0 and borderLine >= self.PLATFORM_Y_MIN:
+                newPlatforms.append(
+                    (max(self.PLATFORM_Y_MIN, random.randint(borderLine, borderLine + k)), self.get_random_lenght())
+                )
+                n -= 1
+                borderLine = newPlatforms[-1][0] - x
+
+        nextParentPlatformNum = random.randint(0, len(newPlatforms))
+        for i in range(len(newPlatforms)):
+            newPlatform = self.generate_platform(*newPlatforms[i])
+            if i == nextParentPlatformNum:
+                self.parentPlatform = newPlatform
+
+        self.update_next_platform_distance()
+
+    def check_for_generate(self):
+        """Проверка, стоит ли генерировать"""
+        platform = self.platformDeque[-1]
+        return platform.position[0] + platform.width <= self.nextPlatformDistance
+
+    def generate_platform(self, y_cord, platform_length) -> Platform:
+        """Генерирует платформу по заданной Y координате и длине"""
+        newPlatform = Platform((Screen.width, y_cord), platform_rand_lentgh=platform_length,
                                textures={
                                    "leftCorner": self.PLATFORM_LEFT_CORNER_IMAGE,
                                    "rightCorner": self.PLATFORM_RIGHT_CORNER_IMAGE,
                                    "center": self.PLATFORM_CENTER_IMAGE,
-                               })  # FIXME тут переделай длину платформы
+                               })
 
         self.platformDeque.append(newPlatform)
         self.platformGroup.add(newPlatform)
         self.allSprites.add(self.platformGroup)
+        return newPlatform
 
     def check_for_delete(self):
         """Проверяет, стоит ли удалять платформу"""
-
         while len(self.platformDeque) != 0 and (lastPlatform := self.platformDeque[0]).out_of_screen():
             lastPlatform.kill()
             self.platformDeque.popleft()
-
-    def tick(self):
-        self.timer += self.clock.tick()
-
-    def set_delay(self):
-        self.delay = random.randint(self.TIME_DELAY_MIN, self.TIME_DELAY_MAX)

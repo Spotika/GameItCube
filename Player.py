@@ -326,8 +326,6 @@ class Player(pygame.sprite.Sprite):
     def update(self) -> None:
         """Обновление для спрайта. Если хочется переопределить, то вызывайте super"""
 
-        # self.lastAnimationState = self.auto_set_state()
-        print(self.playerSpeedVector)
 
         self.check_events()
         self.generate_vectors_by_state()
@@ -362,7 +360,6 @@ class Player(pygame.sprite.Sprite):
                         if self.get_state_by_name("onPlatform"):
                             self.position[1] += Config.PLAYER_DIFF_DIFF
                             self.playerSpeedVector += Vector2D(0, self.playerBaseSpeedModule // 2)
-
 
             elif event.type == pygame.KEYUP and event.key == self.get_state_by_name("currentMovingKey"):
                 # остановка движения

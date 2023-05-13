@@ -20,7 +20,7 @@ class Animation:
     """текущее кол во тиков"""
 
     def __init__(self, textures_file_path=None, dims=None, frame_rate=60):
-        """инициализация текстурами"""
+        """Инициализация текстурами"""
 
         # это решает проблему с изменяемыми типами
         self.SPRITES = []
@@ -33,7 +33,7 @@ class Animation:
             texture = pygame.image.load(texture_path).convert_alpha()  # тут подгрузка
             if dims is not None:
                 texture = pygame.transform.scale(texture, dims)
-            self.SPRITES.append(texture)
+            self.SPRITES.append(texture.convert_alpha())
 
     def next_sprite(self) -> pygame.Surface:
         """Возвращает спрайт и обновляет по времени счётчик спрайтов"""
