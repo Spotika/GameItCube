@@ -70,7 +70,7 @@ class PlatformGenerator(Interface):
     PLATFORM_LEFT_CORNER_IMAGE = pygame.image.load('media/img/platformLeftCorner.png')  # 6
     PLATFORM_RIGHT_CORNER_IMAGE = pygame.image.load('media/img/platformRightCorner.png')  # 6
 
-    TIME_DELAY_MAX = 1500  # милисекунды
+    TIME_DELAY_MAX = 500  # милисекунды
     TIME_DELAY_MIN = 500
 
     # подгрузка текстур и их увеличение
@@ -142,7 +142,7 @@ class PlatformGenerator(Interface):
         ^
         4.1) То есть тебе нужно сначала сгенерировать первую платформу по правилим пункта 3, затем
         определить кол-во платформ которые сгенерятся дополнительно, а потом как-то хитро распределить координаты между 
-        ними так чтоб пункт 4 выполнился
+        ними так чтоб пункт 4 выполнилсяп
         
         
         Ну и некоторые полезные функции:
@@ -171,17 +171,17 @@ class PlatformGenerator(Interface):
     def generate_platform(self):
         newPlatform = Platform((self.width, random.randint(0, self.height)), platform_rand_lenth=random.randint(1, 3),
                                textures={
-            "leftCorner": self.PLATFORM_LEFT_CORNER_IMAGE,
-            "rightCorner": self.PLATFORM_RIGHT_CORNER_IMAGE,
-            "center": self.PLATFORM_CENTER_IMAGE,
-        })  # FIXME тут переделай длину платформы
+                                   "leftCorner": self.PLATFORM_LEFT_CORNER_IMAGE,
+                                   "rightCorner": self.PLATFORM_RIGHT_CORNER_IMAGE,
+                                   "center": self.PLATFORM_CENTER_IMAGE,
+                               })  # FIXME тут переделай длину платформы
 
         self.platformDeque.append(newPlatform)
         self.platformGroup.add(newPlatform)
         self.allSprites.add(self.platformGroup)
 
     def check_for_delete(self):
-        """проверяет стоит ли удалять платформу"""
+        """Проверяет, стоит ли удалять платформу"""
 
         while len(self.platformDeque) != 0 and (lastPlatform := self.platformDeque[0]).out_of_screen():
             lastPlatform.kill()

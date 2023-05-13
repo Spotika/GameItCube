@@ -178,8 +178,6 @@ class Player(pygame.sprite.Sprite):
     def calculate_vectors(self) -> None:
         """Высчитывает вектора"""
 
-        # TODO сделать адекватную силу трения иначе перс как на катке
-
         # воздействие ускорения на скорость
         self.playerSpeedVector += self.playerAccelerationVector * (EventHandler.get_dt() / 1000)
 
@@ -189,19 +187,20 @@ class Player(pygame.sprite.Sprite):
         self.playerSpeedVector.y = min(self.MAX_PLAYER_SPEED_MODULE_Y,
                                        abs(self.playerSpeedVector.y)) * Scripts.sign(self.playerSpeedVector.y)
 
-        # """если модуль проекции меньше порогового значения, то он равен 0"""
-        # if abs(self.playerSpeedVector.x) <= Config.MIN_SPEED_LIMIT:
-        #     self.playerSpeedVector.x = 0
-        # if abs(self.playerSpeedVector.y) <= Config.MIN_SPEED_LIMIT:
-        #     self.playerSpeedVector.y = 0
-
     def move_by_vectors(self) -> None:
-        """Сдвиг персонажа"""
+        """Сдвиг персонажа в соответствии с коллизиями"""
         self.move(
             self.playerSpeedVector.x * EventHandler.get_dt() / 1000,
             self.playerSpeedVector.y * EventHandler.get_dt() / 1000
         )
 
+        """
+        Суть этой штуки в том, что если персонаж имеет столкновение с какой либо из сторон своего хит бокса,
+        пока не перестанет существовать коллизий его будет сдвигать на 0.2 (значени взято с потолка, но оно
+        должно быть < 1, так как могут появиться подёргивания) в противоположную от коллизий сторону. 
+        Вроде работает
+        """
+        # TODO если это будет лагать, то нужно переделать на бин поиск
         while any(collisions := self.check_env_collisions(self.position)):
             if collisions[0]:
                 self.move(y=0.2)
@@ -219,19 +218,15 @@ class Player(pygame.sprite.Sprite):
                 self.move(x=0.2)
                 self.playerSpeedVector.x = 0
                 self.playerAccelerationVector.x = 0
+        # тут обновление позиции игрока
         self.update_rect_position()
-
-    # def check_position(self) -> bool:
-    #     """Проверяет локальный атрибут position на соответствие условиям коллизий и иных ограничений"""
-    #     # игрок не должен иметь коллизии с чем либо из среды
-    #     return not any(self.check_env_collisions(self.position))  # [False, False, False, False]
 
     def render_image(self) -> None:
         """Устанавливает изображение"""
         self.set_image(self.get_animation_by_current_state().next_sprite())
 
     def check_env_collisions(self, position=None) -> list[bool, bool, bool, bool]:
-        """Проверка коллизий с окружающей средой"""
+        """Проверка коллизий с окружающей средой, тут все физические объекты"""
         if position is None:
             position = self.get_pos()
 
@@ -250,14 +245,21 @@ class Player(pygame.sprite.Sprite):
         # право
         collisions[1] = position[0] + self.get_dims()[0] > Screen.width
 
-        # FIXME Ну это прям дичь полная, но немного работает
-        # TODO - починить
-        platformGroup = self.get_app().platformGenerator.platformGroup
+        """столкновения с платформами
+        Идея такая: 
+        1) если игрок имеет положительную по оси Oy скорость, то с платформой от столкнуться не может,
+        2) если нижняя часть персонажа ниже верхней части платформы, то так же персонаж не может с ней столкнуться
+        """
+        platformGroup = self.get_app().platformGenerator.platformGroup  # получение группу платформ
 
-        for platform in platformGroup:
-            platformRect = platform.rect
-            if pygame.Rect(position, self.get_dims()).colliderect(platformRect):
-                collisions[2] = True
+        for platform in platformGroup:  # цикл при переборе платформ
+            platformRect = platform.rect  # рект платформы для проверки коллизий
+            if self.playerSpeedVector.y >= 0 and position[1] < platformRect.y and \
+                    position[1] + self.get_dims()[1] < platformRect.y + 10:  # число 10 это погрешность питона
+
+                if pygame.Rect(position, self.get_dims()).colliderect(platformRect):
+                    print(platformRect.y, position[1], position[1] + self.get_dims()[1])
+                    collisions[2] = True
 
         return collisions
 
