@@ -28,7 +28,7 @@ class MainMenuApp(App, MainMenuDesign):
 
     @classmethod
     def git_button(cls):
-        """редирект на страницу гита проекта"""
+        """Редирект на страницу гита проекта"""
         webbrowser.open('https://github.com/Spotika/GameItCube', new=2)
 
     @classmethod
@@ -57,5 +57,7 @@ class MainMenuApp(App, MainMenuDesign):
     def check_events(cls):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_ESCAPE:
                     cls.end()
+                elif event.key == pygame.K_RETURN:
+                    cls.enter_button()

@@ -38,3 +38,7 @@ class Vector2D:
     @classmethod
     def from_polar(cls, teta: float, r: float):
         return Vector2D(r * math.cos(teta), r * math.sin(teta))
+
+    def zero(self):
+        self.x = 0
+        self.y = 0

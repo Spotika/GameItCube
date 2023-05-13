@@ -18,8 +18,7 @@ class NinjaPlayer(Player):
         self.playerAnimations["idling"] = Animation(Config.Animations.NinjaPlayer.IDLING_TEXTURES,
                                                     dims=dims,
                                                     frame_rate=100)
-        self.set_direction("right")
-        self.set_state("idling")
+        self.set_animation_state("idling")
 
     def update(self):
         super().update()
@@ -27,7 +26,6 @@ class NinjaPlayer(Player):
     def check_events(self):
         super().check_events()
         # print(123)
-        ...
         # for event in EventHandler.get_events():
         #     if event.type == pygame.KEYDOWN:
         #         if event.key == pygame.K_LEFT:

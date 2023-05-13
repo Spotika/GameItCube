@@ -8,33 +8,24 @@ from EventHandler import EventHandler
 from Vector2D import Vector2D
 import math
 import Scripts
+from typing import Any
+from Game import Game
 
 
 class Player(pygame.sprite.Sprite):
     """Базовый класс игрока"""
 
-    playerStates: list[str] = [
-        "idling",
-        "moving",
-        "falling"
-    ]
-    """состояние игрока, например idling - простой, moving - движение"""
+    PLAYER_STATE_NAMES: list[tuple[str, Any]] = None
+    """все возможные имена состояний игрока и их значения по умолчанию (<имя>, <значение>)"""
 
-    playerDirection: str = "left"
-    """ориентация модельки игрока"""
+    playerStates: dict[str, Any]
+    """состояния игрока в JSON формате"""
 
-    currentState: str = "idling"
-    """текущее состояние игрока"""
+    currentAnimationState: str = "idling"
+    """текущее состояние анимации игрока"""
 
-    playerAnimations: dict[str, Animation] = {
-        "idling": Animation(),
-        "moving": Animation(),
-        "falling": Animation(),
-    }
+    playerAnimations: dict[str, Animation] = None
     """анимации, присущие каждому состоянию"""
-
-    isLiving: bool = True
-    """жив ли персонаж"""
 
     rect: pygame.Rect = pygame.Rect(0, 0, 0, 0)
     """объект рект персонажа"""
@@ -43,6 +34,7 @@ class Player(pygame.sprite.Sprite):
     """объект image персонажа"""
 
     position: list[float, float]
+    """позиция игрока"""
 
     # тут векторные или физические величины для перемещения
     gravitationAcceleration = Vector2D(0, Config.G_CONSTANT)
@@ -54,7 +46,10 @@ class Player(pygame.sprite.Sprite):
     """базовая скорость игрока"""
 
     playerSpeedVector: Vector2D = Vector2D()
-    """вектор полной скорости персонажа"""
+    """вектор скорости самого персонажа, которая не превышат определённых значений"""
+
+    playerAdditionalSpeedVector: Vector2D = Vector2D()
+    """вектор дополнительной скорости, которая может быть любой в отличие от playerSpeedVector"""
 
     playerAccelerationVector: Vector2D = Vector2D(0, 0) + gravitationAcceleration
     """вектор частичного ускорения персонажа"""
@@ -65,30 +60,60 @@ class Player(pygame.sprite.Sprite):
     MAX_PLAYER_SPEED_MODULE_Y: float = Config.MAX_PLAYER_SPEED_MODULE_Y
     """максимальный модуль скорости OY"""
 
-    MAX_PLAYER_ACCELERATION_MODULE_X: float = Config.MAX_PLAYER_ACCELERATION_MODULE_X
-    """максимальный модуль ускорения OX"""
-
-    MAX_PLAYER_ACCELERATION_MODULE_Y: float = Config.MAX_PLAYER_ACCELERATION_MODULE_Y
-    """максимальный модуль ускорения OY"""
-
-    currentMovingKey: int = None
-    """текущая нажатая кнопка"""
-
     collisionsWithEnv: list[bool, bool, bool, bool]
     """столкновение персонажа с окружающей средой по сторонам"""
 
-    lastState = "idling"
-    """предыдущее состояние"""
+    lastAnimationState = "idling"
+    """предыдущее состояние анимации"""
 
     app: App = None
     """ссылка на класс приложения, в котором игрок"""
 
     def __init__(self, position: tuple[int, int] = (0, 0), dims: tuple[int, int] = Config.PLAYER_DIMS) -> None:
         super().__init__()
-        self.collisionsWithEnv = [False, False, False, False]
-        self.do_normalize()
         self.rect = pygame.Rect(position, dims)
+        self.do_normalize()
+
+        """тут инициализация всех локальных ссылочных атрибутов атрибутов"""
+        self.collisionsWithEnv = [False, False, False, False]
         self.position = list(position)
+        self.playerAnimations = {
+            "idling": Animation(),
+            "moving": Animation(),
+            "falling": Animation(),
+        }
+        # инициализация состояний
+        self.PLAYER_STATE_NAMES = [
+            ("direction", "right"),  # направление взгляда персонажа
+            ("isLiving", True),  # жив ли персонаж
+            ("currentMovingKey", None),  # текущая нажатая кнопка
+            ("onPlatform", False),  # на платформе ли персонаж
+        ]
+
+        self.playerStates = {}
+        self.load_states_from_names()
+        self.layer = Config.PLAYER_LAYER
+
+    def load_states_from_names(self):
+        """Загружает в локальный атрибут playerStates значения из PLAYER_STATE_NAMES"""
+        for name in self.PLAYER_STATE_NAMES:
+            self.playerStates[name[0]] = name[1]
+
+    def get_state_by_name(self, name: str) -> Any:
+        """Возвращает состояние из playerStates по имени"""
+        if name not in self.playerStates.keys():
+            raise ValueError(f"Нет состояния с именем {name}")
+        return self.playerStates[name]
+
+    def set_state_by_name(self, name: str, state: Any) -> None:
+        self.playerStates[name] = state
+
+    def extend_state_names(self, names: tuple[str, Any] | list[tuple[str, Any]]):
+        """Добавляет в атрибут PLAYER_STATE_NAMES другие имена и их значения"""
+        if isinstance(names, tuple):
+            self.PLAYER_STATE_NAMES.append(names)
+        else:
+            self.PLAYER_STATE_NAMES.extend(names)
 
     def set_pos(self, x=None, y=None) -> None:
         if x is not None:
@@ -109,20 +134,14 @@ class Player(pygame.sprite.Sprite):
     def set_dims(self, dims: tuple[int, int]) -> None:
         self.rect.width, self.rect.height = dims
 
-    def set_state(self, state: str) -> None:
-        self.currentState = state
+    def set_animation_state(self, state: str) -> None:
+        self.currentAnimationState = state
 
-    def get_state(self) -> str:
-        return self.currentState
-
-    def set_direction(self, direction) -> None:
-        self.playerDirection = direction
-
-    def get_direction(self) -> str:
-        return self.playerDirection
+    def get_animation_state(self) -> str:
+        return self.currentAnimationState
 
     def set_image(self, image):
-        if self.get_direction() == "left":
+        if self.get_state_by_name("direction") == "left":
             self.image = pygame.transform.flip(image, True, False)
         else:
             self.image = image
@@ -151,16 +170,10 @@ class Player(pygame.sprite.Sprite):
                                    (Screen.height / Config.DESIGN_HEIGHT) * self.rect.y
 
     def get_animation_by_current_state(self) -> Animation:
-        return self.playerAnimations[self.currentState]
+        return self.playerAnimations[self.currentAnimationState]
 
     def get_animation_by_state(self, state) -> Animation:
         return self.playerAnimations[state]
-
-    def set_current_moving_key(self, key) -> None:
-        self.currentMovingKey = key
-
-    def get_current_moving_key(self) -> int:
-        return self.currentMovingKey
 
     def update_animations(self) -> None:
         """TODO обновляет некоторые анимации по необходимости. Например изменяет фрейм рейт анимации"""
@@ -187,12 +200,16 @@ class Player(pygame.sprite.Sprite):
         self.playerSpeedVector.y = min(self.MAX_PLAYER_SPEED_MODULE_Y,
                                        abs(self.playerSpeedVector.y)) * Scripts.sign(self.playerSpeedVector.y)
 
+        self.playerSpeedVector += self.playerAdditionalSpeedVector
+
     def move_by_vectors(self) -> None:
         """Сдвиг персонажа в соответствии с коллизиями"""
         self.move(
             self.playerSpeedVector.x * EventHandler.get_dt() / 1000,
             self.playerSpeedVector.y * EventHandler.get_dt() / 1000
         )
+
+        self.playerSpeedVector -= self.playerAdditionalSpeedVector
 
         """
         Суть этой штуки в том, что если персонаж имеет столкновение с какой либо из сторон своего хит бокса,
@@ -252,23 +269,38 @@ class Player(pygame.sprite.Sprite):
         """
         platformGroup = self.get_app().platformGenerator.platformGroup  # получение группу платформ
 
+        self.set_state_by_name("onPlatform", False)  # по умолчанию перс не на платформе
+
         for platform in platformGroup:  # цикл при переборе платформ
             platformRect = platform.rect  # рект платформы для проверки коллизий
             if self.playerSpeedVector.y >= 0 and position[1] < platformRect.y and \
-                    position[1] + self.get_dims()[1] < platformRect.y + 10:  # число 10 это погрешность питона
+                    position[1] + self.get_dims()[1] < platformRect.y + \
+                    Config.PLAYER_DIFF_DIFF:  # Config.PLAYER_DIFF_DIFF - погрешность коллизий
 
+                # проверка коллизий для состояния onPlatform
+                """эта штука временно расширяет хитбокс персонажа на Config.PLAYER_DIFF_DIFF по оси Oy
+                и проеверяет коллизию, если коллизия есть - перс на платформе
+                """
+                if pygame.Rect(position, (self.get_dims()[0],
+                                          self.get_dims()[1] + Config.PLAYER_DIFF_DIFF)).colliderect(platformRect):
+                    self.set_state_by_name("onPlatform", True)
+
+                # проверка истинной коллизии
                 if pygame.Rect(position, self.get_dims()).colliderect(platformRect):
-                    print(platformRect.y, position[1], position[1] + self.get_dims()[1])
                     collisions[2] = True
+                    break
 
         return collisions
 
     def generate_vectors_by_state(self):
-        match self.get_state():
+        """Генерирует векторы скоростей в зависимости от состояния"""
+        self.playerAccelerationVector.y = self.gravitationAcceleration.y
+        self.playerAdditionalSpeedVector.zero()
+        match self.get_animation_state():
 
             case "moving":
 
-                match self.get_direction():
+                match self.get_state_by_name("direction"):
 
                     case "left":
                         self.playerAccelerationVector = Vector2D.from_polar(
@@ -285,12 +317,17 @@ class Player(pygame.sprite.Sprite):
                     self.playerAccelerationVector.x = 0
                 else:
                     self.playerAccelerationVector.x = -self.playerSpeedVector.x * Config.FRICTION_COEFFICIENT
-        self.playerAccelerationVector.y = self.gravitationAcceleration.y
+
+        # если перс на платформе, то в дополнительную скорость добавляется скорость платформ
+        if self.get_state_by_name("onPlatform"):
+            # TODO не очень работает перемешание вместе с платформами
+            self.playerAdditionalSpeedVector.x = -Game.Platforms.speed * 1.77  # не понимаю почему так, но так надо
 
     def update(self) -> None:
         """Обновление для спрайта. Если хочется переопределить, то вызывайте super"""
 
-        self.lastState = self.auto_set_state()
+        # self.lastAnimationState = self.auto_set_state()
+        print(self.playerSpeedVector)
 
         self.check_events()
         self.generate_vectors_by_state()
@@ -308,18 +345,25 @@ class Player(pygame.sprite.Sprite):
             if event.type == pygame.KEYDOWN:
                 match event.key:
                     case pygame.K_UP:
-                        self.playerSpeedVector += Vector2D(0, -2 * self.playerBaseSpeedModule)
+                        self.playerSpeedVector -= Vector2D(0, 2 * self.playerBaseSpeedModule)
 
                     case pygame.K_LEFT:
-                        self.set_current_moving_key(pygame.K_LEFT)
-                        self.set_direction("left")
-                        self.set_state("moving")
+                        self.set_state_by_name("currentMovingKey", pygame.K_LEFT)
+                        self.set_state_by_name("direction", "left")
+                        self.set_animation_state("moving")
 
                     case pygame.K_RIGHT:
-                        self.set_current_moving_key(pygame.K_RIGHT)
-                        self.set_direction("right")
-                        self.set_state("moving")
+                        self.set_state_by_name("currentMovingKey", pygame.K_RIGHT)
+                        self.set_state_by_name("direction", "right")
+                        self.set_animation_state("moving")
 
-            elif event.type == pygame.KEYUP and event.key == self.get_current_moving_key():
+                    case pygame.K_DOWN:
+                        """соскальзывание с платформы"""
+                        if self.get_state_by_name("onPlatform"):
+                            self.position[1] += Config.PLAYER_DIFF_DIFF
+                            self.playerSpeedVector += Vector2D(0, self.playerBaseSpeedModule // 2)
+
+
+            elif event.type == pygame.KEYUP and event.key == self.get_state_by_name("currentMovingKey"):
                 # остановка движения
-                self.set_state("idling")
+                self.set_animation_state("idling")
