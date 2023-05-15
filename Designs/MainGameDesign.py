@@ -17,7 +17,7 @@ class MainGameDesign(Design):
         })
         ELEMENTS = {
             "backGround": BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_JUNGLE_LAYERS,
-                                                   speed_begin=40,
+                                                   speed_begin=400,
                                                    speed_difference=0.8),
             "fps": FpsShow((100, 100), (0, 0)),
             "player": NinjaPlayer((100, 100)),

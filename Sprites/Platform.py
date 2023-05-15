@@ -64,6 +64,83 @@ class Platform(Interface, pygame.sprite.Sprite):
         """Если платформа за экраном, то возвращает True"""
         return self.position[0] + self.width + 1 < 0
 
+    def intersect_left_border(self):
+        """Пересекает ли платформа левую границу экрана"""
+        return self.position[0] + self.width > Screen.width
+
+
+class PlatformStream:
+    nextPlatformDistance: int = 0
+    """дистанция от экрана, до последней платформы"""
+
+    platformDeque: deque[Platform]
+    parentPlatform: Platform
+
+    def __init__(self, gen_instance) -> None:
+        self.genInstance = gen_instance
+        self.update_next_platform_distance()
+        self.platformDeque = deque()
+
+        platform = self.genInstance.generate_platform(random.randint(
+            self.genInstance.PLATFORM_Y_MIN,
+            self.genInstance.PLATFORM_Y_MAX
+        ), 0)  # бананы, это костыль
+        self.genInstance.add_platform_to_intersection(platform)
+        self.genInstance.add_platform_to_group(platform)
+        self.genInstance.add_platform_to_sprites(platform)
+        self.platformDeque.append(platform)
+        self.parentPlatform = platform
+
+    def update_next_platform_distance(self) -> None:
+        self.nextPlatformDistance = Screen.width - random.randint(self.genInstance.MIN_DIST_BETWEEN_PLATFORM_OX,
+                                                                  self.genInstance.MAX_DIST_BETWEEN_PLATFORM_OX)
+
+    def update(self):
+        self.generate()
+        self.check_for_delete()
+
+    def check_for_generate(self) -> bool:
+        platform = self.platformDeque[-1]
+        return platform.position[0] + platform.width <= self.nextPlatformDistance
+
+    def get_parent_platform(self):
+        return self.parentPlatform
+
+    def add_parent_platform(self, platform):
+        self.parentPlatform = platform
+
+    def generate(self) -> None:
+        if not self.check_for_generate():
+            return
+
+        i = 0
+        while not self.genInstance.check_intersection((platform := self.genInstance.generate_platform(
+                random.randint(
+                    max(self.genInstance.PLATFORM_Y_MIN,
+                        self.get_parent_platform().position[1] - self.genInstance.MAX_PLATFORM_OY_DIFF),
+                    min(self.genInstance.PLATFORM_Y_MAX,
+                        self.get_parent_platform().position[1] + self.genInstance.MAX_PLATFORM_OY_DIFF)
+                ),
+                self.genInstance.get_random_length(),
+        ))) and i < self.genInstance.NUM_OF_GENERATIONS:
+            i += 1
+
+        if i == self.genInstance.NUM_OF_GENERATIONS:
+            self.add_parent_platform(platform)
+        else:
+            self.genInstance.add_platform_to_intersection(platform)
+            self.genInstance.add_platform_to_group(platform)
+            self.genInstance.add_platform_to_sprites(platform)
+            self.platformDeque.append(platform)
+
+        self.update_next_platform_distance()
+
+    def check_for_delete(self) -> None:
+        """Проверяет, стоит ли удалять платформу"""
+        while len(self.platformDeque) != 0 and (lastPlatform := self.platformDeque[0]).out_of_screen():
+            lastPlatform.kill()
+            self.platformDeque.popleft()
+
 
 class PlatformGenerator(Interface):
     """Генератор платформ"""
@@ -94,144 +171,75 @@ class PlatformGenerator(Interface):
     PLATFORM_Y_MAX = Screen.height - Config.PLAYER_DIMS[1] * 1.5
 
     """Ограничение длины платформ"""
-    PLATFORM_LENGTH_MAX = 4
-    PLATFORM_LENGTH_MIN = 1
+    PLATFORM_LENGTH_MAX = 8
+    PLATFORM_LENGTH_MIN = 2
 
-    NEXT_PLATFORM_CHANCE = 0.5
-    """Шанс на каждую последующую платформу"""
-
-    MIN_DIST_BETWEEN_PLATFORM_OY = 100
+    MIN_DIST_BETWEEN_PLATFORM_OY = Config.PLAYER_DIMS[1] * 2
     """Минимальная дистанция между сгенерированными платформами по Oy"""
 
-    """Ограничение дистанции по Ox"""
+    """Ограничение дистанции генерации по Ox"""
     MIN_DIST_BETWEEN_PLATFORM_OX = 100
     MAX_DIST_BETWEEN_PLATFORM_OX = 300
 
     """Ограничение разброса платформ"""
-    MIN_PLATFORM_OY_DIFF = 200
-    MAX_PLATFORM_OY_DIFF = 400
+    MAX_PLATFORM_OY_DIFF = 500
 
-    MAX_NUM_OF_PLATFORMS = 5
-    """Максимальное количество платформ, которое может сгенерироваться единовременно"""
+    NUM_OF_GENERATIONS = 3
+    """Количество попыток сгенерировать платформу"""
 
-    nextPlatformDistance = 0
-    """Расстояние до следующей сгенерируемой платформы"""
+    platformStreams = []
 
-    parentPlatform = None
-    """Родительская платформа"""
+    intersectLeftBorderPlatforms: list[Platform]
 
     def __init__(self, all_sprites: pygame.sprite.LayeredUpdates):
         self.allSprites = all_sprites
         self.clock = pygame.time.Clock()
         self.platformGroup = pygame.sprite.Group()
-        self.platformDeque: deque[Platform] = deque()
-
-        self.parentPlatform = self.generate_platform(random.randint(self.PLATFORM_Y_MIN,
-                                                                    self.PLATFORM_Y_MAX), self.get_random_lenght())
-        self.update_next_platform_distance()
+        self.intersectLeftBorderPlatforms = list()
+        self.platformStreams = [PlatformStream(self), PlatformStream(self), PlatformStream(self)]
 
         super().__init__()
 
-    def update_next_platform_distance(self):
-        """Обновляет nextPlatformDistance"""
-        self.nextPlatformDistance = Screen.width - random.randint(self.MIN_DIST_BETWEEN_PLATFORM_OX,
-                                                                  self.MAX_DIST_BETWEEN_PLATFORM_OX)
+    def add_platform_to_intersection(self, platform: Platform) -> None:
+        """Добавляет платформу в пересечение"""
+        self.intersectLeftBorderPlatforms.append(platform)
 
-    def get_random_lenght(self):
+    def update_intersection(self) -> None:
+        """Обновляет пересечение"""
+        self.intersectLeftBorderPlatforms = list(filter(lambda platform: platform.intersect_left_border(),
+                                                        self.intersectLeftBorderPlatforms))
+
+    def check_intersection(self, platform) -> bool:
+        """Можно ли заспавнить эту платформу"""
+        for xPlatform in self.intersectLeftBorderPlatforms:
+            if xPlatform.rect.colliderect(
+                    pygame.Rect(platform.rect.x, platform.rect.y - self.MIN_DIST_BETWEEN_PLATFORM_OY,
+                                platform.rect.width, platform.rect.height + 2 * self.MIN_DIST_BETWEEN_PLATFORM_OY)):
+                return False
+        return True
+
+    def get_random_length(self) -> int:
         return random.randint(self.PLATFORM_LENGTH_MIN, self.PLATFORM_LENGTH_MAX)
 
     def update(self) -> None:
-        self.platformGroup.update()
-        self.check_for_delete()
+        # обновление потоков
+        for stream in self.platformStreams:
+            stream.update()
 
-        self.generate_platform_batch()
-
-    def generate_platform_batch(self):
-        """Генерирует группу платформ хитрым алгритмом"""
-        if not self.check_for_generate():  # стоит ли генерировать
-            return
-
-        newPlatforms = []  # список новых пар для генерации (<координата> <длина>)
-
-        """генерация случайного числа платформ с экспоненциальной вероятностью"""
-        numOfPlatforms = 1  # количество сгенерированых платформ единовременно
-        while numOfPlatforms < self.MAX_NUM_OF_PLATFORMS and random.random() <= self.NEXT_PLATFORM_CHANCE:
-            numOfPlatforms += 1
-
-        """тут погнали переменные для алгоритма"""
-        d = random.randint(self.MIN_PLATFORM_OY_DIFF, self.MAX_PLATFORM_OY_DIFF)
-        # минимальная дистанция между родительской и одной из сгенерированых платформ
-        h = self.PLATFORM_Y_MAX - self.PLATFORM_Y_MIN
-        # высота области генерации
-        n = numOfPlatforms
-        # количество сгенерированых платформ единовременно
-        x = h // self.MAX_NUM_OF_PLATFORMS  # self.MIN_DIST_BETWEEN_PLATFORM_OY, можно заменять
-        # минимальное расстояние между платформами
-        k = random.randint((h - n * x) // (2 * n), (h - n * x) // n)
-        # диапазон генерации платформы
-
-        borderLine = self.parentPlatform.position[1]
-        # линия генерации
-
-        """две равновероятные ситуации генерации"""
-        if random.random() <= 0.5:  # генерация сверху
-            """Установка максимальной границы сверху"""
-            c = 0  # просто счётчик
-            while borderLine - d >= self.PLATFORM_Y_MIN and c < n:
-                borderLine -= d
-                c += 1
-
-            """тут просто генерация и сдвиг границы вниз"""
-            while n > 0 and borderLine + x <= self.PLATFORM_Y_MAX:
-                newPlatforms.append(
-                    (min(self.PLATFORM_Y_MAX, random.randint(borderLine - k, borderLine)), self.get_random_lenght())
-                )
-                n -= 1
-                borderLine = newPlatforms[-1][0] + x
-        else:  # генерация снизу
-            """Установка максимальной границы снизу"""
-            c = 0  # просто счётчик
-            while borderLine + d <= self.PLATFORM_Y_MAX and c < n:
-                borderLine += d
-                c += 1
-
-            """тут просто генерация и сдвиг границы вверх"""
-            while n > 0 and borderLine >= self.PLATFORM_Y_MIN:
-                newPlatforms.append(
-                    (max(self.PLATFORM_Y_MIN, random.randint(borderLine, borderLine + k)), self.get_random_lenght())
-                )
-                n -= 1
-                borderLine = newPlatforms[-1][0] - x
-
-        nextParentPlatformNum = random.randint(0, len(newPlatforms))
-        for i in range(len(newPlatforms)):
-            newPlatform = self.generate_platform(*newPlatforms[i])
-            if i == nextParentPlatformNum:
-                self.parentPlatform = newPlatform
-
-        self.update_next_platform_distance()
-
-    def check_for_generate(self):
-        """Проверка, стоит ли генерировать"""
-        platform = self.platformDeque[-1]
-        return platform.position[0] + platform.width <= self.nextPlatformDistance
+        self.update_intersection()
 
     def generate_platform(self, y_cord, platform_length) -> Platform:
         """Генерирует платформу по заданной Y координате и длине"""
-        newPlatform = Platform((Screen.width, y_cord), platform_rand_lentgh=platform_length,
-                               textures={
-                                   "leftCorner": self.PLATFORM_LEFT_CORNER_IMAGE,
-                                   "rightCorner": self.PLATFORM_RIGHT_CORNER_IMAGE,
-                                   "center": self.PLATFORM_CENTER_IMAGE,
-                               })
+        return Platform((Screen.width, y_cord), platform_rand_lentgh=platform_length, textures={
+            "leftCorner": self.PLATFORM_LEFT_CORNER_IMAGE,
+            "rightCorner": self.PLATFORM_RIGHT_CORNER_IMAGE,
+            "center": self.PLATFORM_CENTER_IMAGE,
+        })
 
-        self.platformDeque.append(newPlatform)
-        self.platformGroup.add(newPlatform)
-        self.allSprites.add(self.platformGroup)
-        return newPlatform
+    def add_platform_to_group(self, platform):
+        """Добавление платформы в группу"""
+        self.platformGroup.add(platform)
 
-    def check_for_delete(self):
-        """Проверяет, стоит ли удалять платформу"""
-        while len(self.platformDeque) != 0 and (lastPlatform := self.platformDeque[0]).out_of_screen():
-            lastPlatform.kill()
-            self.platformDeque.popleft()
+    def add_platform_to_sprites(self, platform):
+        """Добавление платформы в спрайты"""
+        self.allSprites.add(platform)

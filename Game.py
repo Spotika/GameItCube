@@ -5,4 +5,4 @@ class Game:
         volume = 10
 
     class Platforms:
-        speed = 100
+        speed = 400
