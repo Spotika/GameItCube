@@ -12,7 +12,9 @@ class HeadUpDisplayModule(SpriteModule):
 
         self.set_design(
             {
-
+                "back": ImageLabel((0, 0), self.dims, color=(0, 0, 0), layer=0),
+                "heart": ImageLabel((19, 7), (40, 46), texture_path=Config.HEART_IMAGE_PATH),
+                "clarity": ImageLabel((190, 7), (40, 46), texture_path=Config.CLARITY_IMAGE_PATH),
             }
         )
 

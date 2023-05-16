@@ -5,6 +5,7 @@ import Config
 from Sprites.FpsShow import FpsShow
 from Players.NinjaPlayer import NinjaPlayer
 from Sprites.SpriteModules.HeadUpDisplayModule import HeadUpDisplayModule
+from Screen import Screen
 
 
 class MainGameDesign(Design):
@@ -19,6 +20,6 @@ class MainGameDesign(Design):
                                                    speed_difference=0.8),
             "fps": FpsShow((0, 0), (400, 100)),
             "player": NinjaPlayer((100, 600)),
-            "HUD": HeadUpDisplayModule((0, 0), (1600, Config.HUD_HEIGHT))
+            "HUD": HeadUpDisplayModule((0, 0), (Screen.width, Config.HUD_HEIGHT))
         }
         cls.set_elements(ELEMENTS)

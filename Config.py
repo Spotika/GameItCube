@@ -5,6 +5,9 @@ PLATFORM_RIGHT_CORNER = "media/img/platformRightCorner.png"
 PLATFORM_CENTER = "media/img/platformCenter.png"
 SOLID_WHITE_TEXTURE = "media/img/solidWhite.png"
 GAME_LOGO = "media/img/gameLogo.png"
+HEART_IMAGE_PATH = "media/img/heart.png"
+CLARITY_IMAGE_PATH = "media/img/clarity.png"
+
 
 # Layers
 BACK_GROUND_SPRITE_LAYER = -50
