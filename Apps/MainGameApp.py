@@ -17,6 +17,7 @@ class MainGameApp(App, MainGameDesign):
 
         cls.platformGenerator = PlatformGenerator(cls.allSprites)
 
+        # привязка класса к игроку
         cls.get_element("player").set_app(cls)
 
         while cls.running:

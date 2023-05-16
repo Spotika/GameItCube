@@ -321,13 +321,10 @@ class Player(pygame.sprite.Sprite):
         # если перс на платформе, то в дополнительную скорость добавляется скорость платформ
         if self.get_state_by_name("onPlatform"):
             # TODO не очень работает перемешание вместе с платформами
-            self.playerAdditionalSpeedVector.x = -Game.Platforms.speed * 1.77  # не понимаю почему так, но так надо
+            self.playerAdditionalSpeedVector.x = -Game.Platforms.speed  # не понимаю почему так, но так надо
 
     def update(self) -> None:
         """Обновление для спрайта. Если хочется переопределить, то вызывайте super"""
-
-        # self.lastAnimationState = self.auto_set_state()
-        print(self.playerSpeedVector)
 
         self.check_events()
         self.generate_vectors_by_state()
@@ -362,7 +359,6 @@ class Player(pygame.sprite.Sprite):
                         if self.get_state_by_name("onPlatform"):
                             self.position[1] += Config.PLAYER_DIFF_DIFF
                             self.playerSpeedVector += Vector2D(0, self.playerBaseSpeedModule // 2)
-
 
             elif event.type == pygame.KEYUP and event.key == self.get_state_by_name("currentMovingKey"):
                 # остановка движения
