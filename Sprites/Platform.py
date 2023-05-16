@@ -84,7 +84,7 @@ class PlatformStream:
         platform = self.genInstance.generate_platform(random.randint(
             self.genInstance.PLATFORM_Y_MIN,
             self.genInstance.PLATFORM_Y_MAX
-        ), 0)  # FIXME бананы, это костыль
+        ), 10)  # FIXME бананы, это костыль
         self.genInstance.add_platform_to_intersection(platform)
         self.genInstance.add_platform_to_group(platform)
         self.genInstance.add_platform_to_sprites(platform)
