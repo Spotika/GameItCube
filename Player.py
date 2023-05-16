@@ -320,7 +320,6 @@ class Player(pygame.sprite.Sprite):
 
         # если перс на платформе, то в дополнительную скорость добавляется скорость платформ
         if self.get_state_by_name("onPlatform"):
-            # TODO не очень работает перемешание вместе с платформами
             self.playerAdditionalSpeedVector.x = -Game.Platforms.speed  # не понимаю почему так, но так надо
 
     def update(self) -> None:
