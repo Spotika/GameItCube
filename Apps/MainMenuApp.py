@@ -6,7 +6,7 @@ from Sprites.BackGrounds import BackGroundParallaxSprite
 import Config
 from Sprites.Button import Button
 from Group import Group
-from Sprites.Label import Label
+from Sprites.ImageLabel import ImageLabel
 from Designs.MainMenuDesign import MainMenuDesign
 import webbrowser
 

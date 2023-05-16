@@ -15,6 +15,14 @@ from Game import Game
 class Player(pygame.sprite.Sprite):
     """Базовый класс игрока"""
 
+    """Статы игрока"""
+    playerHealth: int = Config.PLAYER_MAX_HEALTH
+    """Здоровье игрока"""
+    playerMana: int = Config.PLAYER_MAX_MANA
+    """Мана игрока"""
+
+    """Дальше полная дичь"""
+
     PLAYER_STATE_NAMES: list[tuple[str, Any]] = None
     """все возможные имена состояний игрока и их значения по умолчанию (<имя>, <значение>)"""
 
@@ -69,6 +77,9 @@ class Player(pygame.sprite.Sprite):
     app: App = None
     """ссылка на класс приложения, в котором игрок"""
 
+    collisionEnvFunctions: list
+    """Список функций, обрабатывающйх столкновения"""
+
     def __init__(self, position: tuple[int, int] = (0, 0), dims: tuple[int, int] = Config.PLAYER_DIMS) -> None:
         super().__init__()
         self.rect = pygame.Rect(position, dims)
@@ -93,6 +104,28 @@ class Player(pygame.sprite.Sprite):
         self.playerStates = {}
         self.load_states_from_names()
         self.layer = Config.PLAYER_LAYER
+        self.collisionEnvFunctions = []
+
+    def get_health(self) -> int:
+        return self.playerHealth
+
+    def get_mana(self) -> int:
+        return self.playerMana
+
+    # FIXME
+    def update_mana(self, mana) -> None:
+        self.playerMana += mana
+        self.playerMana = min(self.playerMana, Config.PLAYER_MAX_MANA)
+        self.playerMana = max(0, self.playerMana)
+
+    def update_health(self, health) -> None:
+        self.playerHealth += health
+        self.playerHealth = min(self.playerHealth, Config.PLAYER_MAX_MANA)
+        self.playerHealth = max(0, self.playerHealth)
+
+    def add_to_collision_env_functions(self, function) -> None:
+        """Добавляет функцию в список функций"""
+        self.collisionEnvFunctions.append(function)
 
     def load_states_from_names(self):
         """Загружает в локальный атрибут playerStates значения из PLAYER_STATE_NAMES"""
@@ -290,6 +323,10 @@ class Player(pygame.sprite.Sprite):
                     collisions[2] = True
                     break
 
+        """Проверка коллизий из списка"""
+        for func in self.collisionEnvFunctions:
+            collisions = Scripts.merge_collisions(collisions, func(position))
+
         return collisions
 
     def generate_vectors_by_state(self):
@@ -320,7 +357,6 @@ class Player(pygame.sprite.Sprite):
 
         # если перс на платформе, то в дополнительную скорость добавляется скорость платформ
         if self.get_state_by_name("onPlatform"):
-            # TODO не очень работает перемешание вместе с платформами
             self.playerAdditionalSpeedVector.x = -Game.Platforms.speed  # не понимаю почему так, но так надо
 
     def update(self) -> None:

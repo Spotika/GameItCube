@@ -84,7 +84,7 @@ class PlatformStream:
         platform = self.genInstance.generate_platform(random.randint(
             self.genInstance.PLATFORM_Y_MIN,
             self.genInstance.PLATFORM_Y_MAX
-        ), 0)  # FIXME бананы, это костыль
+        ), 10)  # FIXME бананы, это костыль
         self.genInstance.add_platform_to_intersection(platform)
         self.genInstance.add_platform_to_group(platform)
         self.genInstance.add_platform_to_sprites(platform)
@@ -167,7 +167,7 @@ class PlatformGenerator(Interface):
     ).convert_alpha()
 
     """Ограничение платформ по Oy в зависимости от размера игрока"""
-    PLATFORM_Y_MIN = Config.PLAYER_DIMS[1] * 1.5
+    PLATFORM_Y_MIN = Config.PLAYER_DIMS[1] * 1.5 + Config.HUD_HEIGHT
     PLATFORM_Y_MAX = Screen.height - Config.PLAYER_DIMS[1] * 1.5
 
     """Ограничение длины платформ"""

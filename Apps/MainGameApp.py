@@ -19,6 +19,12 @@ class MainGameApp(App, MainGameDesign):
 
         # привязка класса к игроку
         cls.get_element("player").set_app(cls)
+        cls.get_element("player").add_to_collision_env_functions(
+            cls.get_element("HUD").collision_function
+        )
+
+        cls.get_element("HUD").get_design("healthLabel").add_player(cls.get_element("player"))
+        cls.get_element("HUD").get_design("manaLabel").add_player(cls.get_element("player"))
 
         while cls.running:
             EventHandler.tick()
