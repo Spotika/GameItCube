@@ -1,6 +1,7 @@
 import pygame
 import Config
-from Sprites.Label import Label
+from Sprites.ImageLabel import ImageLabel
+from Sprites.TextLabel import TextLabel
 
 
 class HeadUpDisplay(pygame.sprite.Sprite):

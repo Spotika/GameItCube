@@ -4,7 +4,7 @@ from Colors import Colors
 import Config
 
 
-class Label(Interface, pygame.sprite.Sprite):
+class ImageLabel(Interface, pygame.sprite.Sprite):
     """Накладывает прозрачную маску цвета"""
 
     def __init__(self, position=(0, 0), dims=(0, 0), color=Colors.WHITE, opacity=255, texture_path=None,

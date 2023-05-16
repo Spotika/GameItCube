@@ -19,7 +19,7 @@ class MainGameDesign(Design):
             "backGround": BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_JUNGLE_LAYERS,
                                                    speed_begin=100,
                                                    speed_difference=0.8),
-            "fps": FpsShow((400, 100), (0, 0)),
+            "fps": FpsShow((0, 0), (400, 100)),
             "player": NinjaPlayer((100, 100)),
         }
         cls.set_elements(ELEMENTS)
