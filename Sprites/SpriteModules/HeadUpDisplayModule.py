@@ -17,8 +17,8 @@ class HeadUpDisplayModule(SpriteModule):
                 "back": ImageLabel((0, 0), self.dims, color=(0, 0, 0), layer=0),
                 "heart": ImageLabel((19, 7), (40, 46), texture_path=Config.HEART_IMAGE_PATH),
                 "clarity": ImageLabel((190, 7), (40, 46), texture_path=Config.CLARITY_IMAGE_PATH),
-                "healthLabel": HealthLabel((90, 19), (52, 23)),
-                "manaLabel": ManaLabel((261, 19), (52, 23)),
+                "healthLabel": HealthLabel((90, 19), (52, 25), font=("Consolas", 50)),
+                "manaLabel": ManaLabel((261, 19), (52, 25), font=("Consolas", 50)),
             }
         )
 
