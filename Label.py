@@ -7,12 +7,13 @@ class Label(pygame.sprite.Sprite):
     image: pygame.Surface
     rect: pygame.Rect
 
-    def __init__(self, position, dims):
+    def __init__(self, position, dims, layer=50):
         super().__init__()
         self.position = position
         self.dims = dims
         self.image = pygame.Surface(dims)
         self.rect = pygame.Rect(position, dims)
+        self.layer = layer
 
     def set_image(self, image, transform=True) -> None:
         """Устанавливает image и маштабирует по необходимости"""

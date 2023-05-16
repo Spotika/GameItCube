@@ -24,7 +24,7 @@ class MainMenuDesign(Design):
                                                    ),
 
             "blackoutLabel": ImageLabel((30, 30), (Config.DESIGN_WIDTH - 60, Config.DESIGN_HEIGHT - 60), opacity=140,
-                                        color=Colors.BLACK),
+                                        color=Colors.BLACK, layer=0),
             "settingsButton": Button((50, 66), (34 * 3, 22 * 3), group=cls.get_group("ButtonGroup"),
                                      texture_path=Config.ButtonTextures.SETTINGS_BUTTON_IMG_FILE_PATH),
             "enterButton": Button((576, 253), (450, 111), group=cls.get_group("ButtonGroup"),
