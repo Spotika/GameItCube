@@ -6,4 +6,4 @@ from Sprites.TextLabel import TextLabel
 class FpsShow(TextLabel):
 
     def update(self):
-        self.write(str(EventHandler.get_fps()))
+        self.write(str(round(EventHandler.get_fps())))

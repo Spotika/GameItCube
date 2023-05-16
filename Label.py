@@ -21,6 +21,7 @@ class Label(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(image, self.dims)
         else:
             self.image = image
+        self.image = self.image.convert_alpha()
 
     def set_rect(self, rect) -> None:
         """Устанавливает rect"""
