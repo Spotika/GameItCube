@@ -9,7 +9,7 @@ class Interface:
     height: int = 0
     width: int = 0
 
-    position: tuple[int, int] = (0, 0)
+    position: list[int, int] = [0, 0]
 
     texture_path: str = ""
 
@@ -37,5 +37,5 @@ class Interface:
     def do_normalize(self):
         self.width = (Screen.width / Config.DESIGN_WIDTH) * self.width
         self.height = (Screen.height / Config.DESIGN_HEIGHT) * self.height
-        self.position = (Screen.width / Config.DESIGN_WIDTH) * self.position[0], \
-                        (Screen.height / Config.DESIGN_HEIGHT) * self.position[1]
+        self.position = [(Screen.width / Config.DESIGN_WIDTH) * self.position[0], \
+                        (Screen.height / Config.DESIGN_HEIGHT) * self.position[1]]

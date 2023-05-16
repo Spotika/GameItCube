@@ -21,7 +21,7 @@ class Platform(Interface, pygame.sprite.Sprite):
 
         self.textures = textures
         self.width, self.height = self.calculate_dims()
-        self.position = rand_pos
+        self.position = list(rand_pos)
         self.image = self.generate_platform_image()
         self.rect = pygame.Rect(self.position, (self.width, self.height))
         self.image.set_colorkey(Colors.BLACK)  # важная штука, которая убирает черный фон у платформ
@@ -57,8 +57,8 @@ class Platform(Interface, pygame.sprite.Sprite):
 
     def update(self):
         """Перемещение платформы"""
-        self.rect.x -= EventHandler.get_dt() * Game.Platforms.speed / 1000
-        self.position = (self.rect.x, self.rect.y)
+        self.position[0] -= EventHandler.get_dt() * Game.Platforms.speed / 1000
+        self.rect.x, self.rect.y = self.position
 
     def out_of_screen(self) -> bool:
         """Если платформа за экраном, то возвращает True"""
@@ -84,7 +84,7 @@ class PlatformStream:
         platform = self.genInstance.generate_platform(random.randint(
             self.genInstance.PLATFORM_Y_MIN,
             self.genInstance.PLATFORM_Y_MAX
-        ), 0)  # бананы, это костыль
+        ), 0)  # FIXME бананы, это костыль
         self.genInstance.add_platform_to_intersection(platform)
         self.genInstance.add_platform_to_group(platform)
         self.genInstance.add_platform_to_sprites(platform)
