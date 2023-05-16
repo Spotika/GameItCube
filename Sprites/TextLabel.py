@@ -11,4 +11,4 @@ class TextLabel(Label):
         self.color = color
 
     def write(self, text) -> None:
-        self.set_image(self.font.render(text, True, self.color), transform=False)
+        self.set_image(self.font.render(str(text), True, self.color), transform=False)

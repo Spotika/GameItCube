@@ -28,3 +28,6 @@ class SpriteModule(Label):
     def update_design(self) -> None:
         """Обновляет дизайны"""
         self._layeredUpdates.update()
+
+    def get_design(self, name: str) -> Label:
+        return self.design[name]

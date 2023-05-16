@@ -8,6 +8,8 @@ GAME_LOGO = "media/img/gameLogo.png"
 HEART_IMAGE_PATH = "media/img/heart.png"
 CLARITY_IMAGE_PATH = "media/img/clarity.png"
 
+PLAYER_MAX_HEALTH = 100
+PLAYER_MAX_MANA = 50
 
 # Layers
 BACK_GROUND_SPRITE_LAYER = -50
