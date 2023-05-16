@@ -69,6 +69,9 @@ class Player(pygame.sprite.Sprite):
     app: App = None
     """ссылка на класс приложения, в котором игрок"""
 
+    collisionEnvFunctions: list
+    """Список функций, обрабатывающйх столкновения"""
+
     def __init__(self, position: tuple[int, int] = (0, 0), dims: tuple[int, int] = Config.PLAYER_DIMS) -> None:
         super().__init__()
         self.rect = pygame.Rect(position, dims)
@@ -93,6 +96,11 @@ class Player(pygame.sprite.Sprite):
         self.playerStates = {}
         self.load_states_from_names()
         self.layer = Config.PLAYER_LAYER
+        self.collisionEnvFunctions = []
+
+    def add_to_collision_env_functions(self, function) -> None:
+        """Добавляет функцию в список функций"""
+        self.collisionEnvFunctions.append(function)
 
     def load_states_from_names(self):
         """Загружает в локальный атрибут playerStates значения из PLAYER_STATE_NAMES"""
@@ -289,6 +297,10 @@ class Player(pygame.sprite.Sprite):
                 if pygame.Rect(position, self.get_dims()).colliderect(platformRect):
                     collisions[2] = True
                     break
+
+        """Проверка коллизий из списка"""
+        for func in self.collisionEnvFunctions:
+            collisions = Scripts.merge_collisions(collisions, func(position))
 
         return collisions
 

@@ -35,3 +35,6 @@ class Label(pygame.sprite.Sprite):
     def get_for_blit(self) -> tuple[pygame.Surface, pygame.Rect]:
         """Возвращает данные для блита на поверхность"""
         return self.get_image(), self.get_rect()
+
+    def collision_function(self, position) -> list[bool]:
+        """Проверка коллизий с собой"""

@@ -14,3 +14,13 @@ def sign(num):
     if num >= 0:
         return 1
     return -1
+
+
+def merge_collisions(collision1: list[bool],
+                     collision2: list[bool]) -> list[bool]:
+    """Сливает два массива коллизий по принипу или"""
+    res = []
+
+    for i in range(len(collision1)):
+        res.append((collision1[i] or collision2[i]))
+    return res

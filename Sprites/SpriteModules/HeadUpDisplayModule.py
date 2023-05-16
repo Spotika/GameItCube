@@ -21,3 +21,11 @@ class HeadUpDisplayModule(SpriteModule):
     def update(self):
         self.update_design()
         self.update_image_by_design()
+
+    def collision_function(self, position) -> list[bool]:
+        res = [False, False, False, False]
+
+        if position[1] < self.position[1] + self.dims[1]:
+            res[0] = True
+
+        return res
