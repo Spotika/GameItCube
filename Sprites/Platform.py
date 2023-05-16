@@ -167,7 +167,7 @@ class PlatformGenerator(Interface):
     ).convert_alpha()
 
     """Ограничение платформ по Oy в зависимости от размера игрока"""
-    PLATFORM_Y_MIN = Config.PLAYER_DIMS[1] * 1.5
+    PLATFORM_Y_MIN = Config.PLAYER_DIMS[1] * 1.5 + Config.HUD_HEIGHT
     PLATFORM_Y_MAX = Screen.height - Config.PLAYER_DIMS[1] * 1.5
 
     """Ограничение длины платформ"""
