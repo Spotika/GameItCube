@@ -15,13 +15,35 @@ from Game import Game
 class Player(pygame.sprite.Sprite):
     """Базовый класс игрока"""
 
-    """Статы игрока"""
-    playerHealth: int = Config.PLAYER_MAX_HEALTH
-    """Здоровье игрока"""
-    playerMana: int = Config.PLAYER_MAX_MANA
-    """Мана игрока"""
+    """Объекты свойства (хп, мана, реген), их инициализировать в классе игрока"""
+    # TODO: Закончить объявление классов
+    _MAX_MANA: int = 100
+    _MAX_HEALTH: int = 100
+    _MAX_LEVEL: int = 30
+    _mana: int = _MAX_MANA
+    _health: int = _MAX_HEALTH
+    _regeneration: int = 0
+    _money: int = 0
+    _level: int = 1
+    _experience: int = 0
+    _experience_for_next: int = 100
 
-    """Дальше полная дичь"""
+    # статы
+    _strenght = 0
+    _intelligence = 0
+    _dexterity = 0
+
+    def update_by_states(self) -> None:
+        """Обновляет свойства по статам игрока"""
+
+    @property
+    def mana(self) -> int:
+        return self._mana
+
+    @mana.setter
+    def mana(self, value) -> None: ...
+
+    """Ниже передвижение коллизии и визуал"""
 
     PLAYER_STATE_NAMES: list[tuple[str, Any]] = None
     """все возможные имена состояний игрока и их значения по умолчанию (<имя>, <значение>)"""
@@ -105,23 +127,6 @@ class Player(pygame.sprite.Sprite):
         self.load_states_from_names()
         self.layer = Config.PLAYER_LAYER
         self.collisionEnvFunctions = []
-
-    def get_health(self) -> int:
-        return self.playerHealth
-
-    def get_mana(self) -> int:
-        return self.playerMana
-
-    # FIXME
-    def update_mana(self, mana) -> None:
-        self.playerMana += mana
-        self.playerMana = min(self.playerMana, Config.PLAYER_MAX_MANA)
-        self.playerMana = max(0, self.playerMana)
-
-    def update_health(self, health) -> None:
-        self.playerHealth += health
-        self.playerHealth = min(self.playerHealth, Config.PLAYER_MAX_MANA)
-        self.playerHealth = max(0, self.playerHealth)
 
     def add_to_collision_env_functions(self, function) -> None:
         """Добавляет функцию в список функций"""
