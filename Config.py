@@ -7,7 +7,9 @@ SOLID_WHITE_TEXTURE = "media/img/solidWhite.png"
 GAME_LOGO = "media/img/gameLogo.png"
 HEART_IMAGE_PATH = "media/img/heart.png"
 CLARITY_IMAGE_PATH = "media/img/clarity.png"
-
+STRENGTH_IMAGE_PATH = "media/img/interface/strength.png"
+DEXTERITY_IMAGE_PATH = "media/img/interface/dexterity.png"
+INTELLIGENCE_IMAGE_PATH = "media/img/interface/intelligence.png"
 PLAYER_MAX_HEALTH = 100
 PLAYER_MAX_MANA = 50
 
@@ -18,7 +20,7 @@ MASK_LAYER = 100
 PLAYER_LAYER = 60
 PLAYER_DIFF_DIFF = 10
 HUD_LAYER = 99
-HUD_HEIGHT = 60
+HUD_HEIGHT = 80
 
 # misc
 FPS = 120
