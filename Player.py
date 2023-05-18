@@ -15,33 +15,57 @@ from Game import Game
 class Player(pygame.sprite.Sprite):
     """Базовый класс игрока"""
 
-    """Объекты свойства (хп, мана, реген), их инициализировать в классе игрока"""
-    # TODO: Закончить объявление классов
-    _MAX_MANA: int = 100
-    _MAX_HEALTH: int = 100
-    _MAX_LEVEL: int = 30
-    _mana: int = _MAX_MANA
-    _health: int = _MAX_HEALTH
-    _regeneration: int = 0
-    _money: int = 0
-    _level: int = 1
-    _experience: int = 0
-    _experience_for_next: int = 100
+    """Свойства и переменные для игрока"""
 
-    # статы
-    _strenght = 0
-    _intelligence = 0
-    _dexterity = 0
+    MAX_MANA: int = 100
+    MAX_HEALTH: int = 100
+    MAX_LEVEL: int = 30
+    regeneration: int = 0
+    experience_for_next: int = 100
+    money: int = 0
 
-    def update_by_states(self) -> None:
-        """Обновляет свойства по статам игрока"""
+    dexterity: int = 0
+    strength: int = 0
+    intelligence: int = 0
 
-    @property
-    def mana(self) -> int:
-        return self._mana
+    dexterity_inc: int = 0
+    strength_inc: int = 0
+    intelligence_inc: int = 0
 
-    @mana.setter
-    def mana(self, value) -> None: ...
+    mana: int = MAX_MANA
+    health: int = MAX_HEALTH
+    level: int = 1
+    experience: int = 0
+
+    def get_dexterity(self):
+        return self.dexterity
+
+    def get_strength(self):
+        return self.strength
+
+    def get_intelligence(self):
+        return self.intelligence
+
+    def get_mana(self) -> int:
+        return self.mana
+
+    def set_mana(self, value):
+        self.mana = value
+
+    def get_health(self) -> int:
+        return self.health
+
+    def set_health(self, value):
+        self.health = value
+
+    def get_level(self) -> int:
+        return self.level
+
+    def set_level(self, value):
+        self.level = value
+
+    def get_money(self):
+        return self.money
 
     """Ниже передвижение коллизии и визуал"""
 

@@ -12,6 +12,9 @@ DEXTERITY_IMAGE_PATH = "media/img/interface/dexterity.png"
 INTELLIGENCE_IMAGE_PATH = "media/img/interface/intelligence.png"
 PLAYER_MAX_HEALTH = 100
 PLAYER_MAX_MANA = 50
+SPELL_SLOT_IMAGE_PATH = "media/img/interface/spell_slot.png"
+MONEY_IMAGE_PATH = "media/img/interface/money.png"
+LEVEL_SLOT_IMAGE_PATH = "media/img/interface/level_slot.png"
 
 # Layers
 BACK_GROUND_SPRITE_LAYER = -50
