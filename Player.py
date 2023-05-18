@@ -15,13 +15,59 @@ from Game import Game
 class Player(pygame.sprite.Sprite):
     """Базовый класс игрока"""
 
-    """Статы игрока"""
-    playerHealth: int = Config.PLAYER_MAX_HEALTH
-    """Здоровье игрока"""
-    playerMana: int = Config.PLAYER_MAX_MANA
-    """Мана игрока"""
+    """Свойства и переменные для игрока"""
 
-    """Дальше полная дичь"""
+    MAX_MANA: int = 100
+    MAX_HEALTH: int = 100
+    MAX_LEVEL: int = 30
+    regeneration: int = 0
+    experience_for_next: int = 100
+    money: int = 0
+
+    dexterity: int = 0
+    strength: int = 0
+    intelligence: int = 0
+
+    dexterity_inc: int = 0
+    strength_inc: int = 0
+    intelligence_inc: int = 0
+
+    mana: int = MAX_MANA
+    health: int = MAX_HEALTH
+    level: int = 1
+    experience: int = 0
+
+    def get_dexterity(self):
+        return self.dexterity
+
+    def get_strength(self):
+        return self.strength
+
+    def get_intelligence(self):
+        return self.intelligence
+
+    def get_mana(self) -> int:
+        return self.mana
+
+    def set_mana(self, value):
+        self.mana = value
+
+    def get_health(self) -> int:
+        return self.health
+
+    def set_health(self, value):
+        self.health = value
+
+    def get_level(self) -> int:
+        return self.level
+
+    def set_level(self, value):
+        self.level = value
+
+    def get_money(self):
+        return self.money
+
+    """Ниже передвижение коллизии и визуал"""
 
     PLAYER_STATE_NAMES: list[tuple[str, Any]] = None
     """все возможные имена состояний игрока и их значения по умолчанию (<имя>, <значение>)"""
@@ -105,23 +151,6 @@ class Player(pygame.sprite.Sprite):
         self.load_states_from_names()
         self.layer = Config.PLAYER_LAYER
         self.collisionEnvFunctions = []
-
-    def get_health(self) -> int:
-        return self.playerHealth
-
-    def get_mana(self) -> int:
-        return self.playerMana
-
-    # FIXME
-    def update_mana(self, mana) -> None:
-        self.playerMana += mana
-        self.playerMana = min(self.playerMana, Config.PLAYER_MAX_MANA)
-        self.playerMana = max(0, self.playerMana)
-
-    def update_health(self, health) -> None:
-        self.playerHealth += health
-        self.playerHealth = min(self.playerHealth, Config.PLAYER_MAX_MANA)
-        self.playerHealth = max(0, self.playerHealth)
 
     def add_to_collision_env_functions(self, function) -> None:
         """Добавляет функцию в список функций"""

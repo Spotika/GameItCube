@@ -23,8 +23,18 @@ class MainGameApp(App, MainGameDesign):
             cls.get_element("HUD").collision_function
         )
 
-        cls.get_element("HUD").get_design("healthLabel").add_player(cls.get_element("player"))
-        cls.get_element("HUD").get_design("manaLabel").add_player(cls.get_element("player"))
+        player = cls.get_element("player")
+
+        # подключение трекеров
+        cls.get_element("HUD").get_design("healthTracker").add_state(player.get_health)
+        cls.get_element("HUD").get_design("manaTracker").add_state(player.get_mana)
+        cls.get_element("HUD").get_design("strengthTracker").add_state(player.get_strength)
+        cls.get_element("HUD").get_design("dexterityTracker").add_state(player.get_dexterity)
+        cls.get_element("HUD").get_design("intelligenceTracker").add_state(player.get_intelligence)
+        cls.get_element("HUD").get_design("moneyTracker").add_state(player.get_money)
+        cls.get_element("HUD").get_design("levelTracker").add_state(player.get_level)
+        cls.get_element("HUD").get_design("experienceTracker").add_state(
+            lambda: f"{player.experience}/{player.experience_for_next}")
 
         while cls.running:
             EventHandler.tick()
