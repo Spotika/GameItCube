@@ -5,6 +5,7 @@ from EventHandler import EventHandler
 from QueryDeque import QueryDeque
 from Sprites.Platform import PlatformGenerator
 from Players.NinjaPlayer import NinjaPlayer
+from Screen import Screen
 
 
 class MainGameApp(App, MainGameDesign):
@@ -54,5 +55,4 @@ class MainGameApp(App, MainGameDesign):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    cls.redirect("MainMenuApp")
-                    cls.end()
+                    cls.redirect("PauseApp", use_deque=False, penis=Screen.display)

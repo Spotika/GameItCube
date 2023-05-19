@@ -1,44 +1,45 @@
 import pygame
 from App import App
-from Screen import Screen
+from Designs.PauseDesign import PauseDesign
 from EventHandler import EventHandler
-from Sprites.BackGrounds import BackGroundParallaxSprite
-import Config
-from Sprites.Button import Button
-from Group import Group
-from Sprites.ImageLabel import ImageLabel
-from Designs.MainMenuDesign import MainMenuDesign
-import webbrowser
+from Screen import Screen
 
-
-class MainMenuApp(App, MainMenuDesign):
-    """Главное меню"""
-
-    """Ниже события кнопок"""
+class PauseApp(App, PauseDesign):
+    @classmethod
+    def back_button(cls):
+        """Выход из паузы"""
+        cls.end()
 
     @classmethod
     def exit_button(cls):
         """Выход из игры"""
-        cls.end()
+        cls.redirect("MainMenuApp", use_deque=False)
 
     @classmethod
-    def enter_button(cls):
-        cls.redirect("MainGameApp")
-        cls.end()
+    def settings_button(cls):
+        """Выход из паузы"""
+        pass
+
+
 
     @classmethod
-    def git_button(cls):
-        """Редирект на страницу гита проекта"""
-        webbrowser.open('https://github.com/Spotika/GameItCube', new=2)
+    def render(cls):
+        """Отрисовка экрана"""
+        Screen.display.blit(cls.gameFrame, (0, 0))
+        cls.allSprites.update()
+        cls.allSprites.draw(Screen.display)
+        Screen.update_display()
+
 
     @classmethod
     def loop(cls, *args, **kwargs):
+        cls.gameFrame = kwargs["penis"]
 
         cls.init_textures()
 
+        cls.link_function_to_button("backButton", cls.back_button)
         cls.link_function_to_button("exitButton", cls.exit_button)
-        cls.link_function_to_button("enterButton", cls.enter_button)
-        cls.link_function_to_button("gitInfoButton", cls.git_button)
+        cls.link_function_to_button("settingsButton", cls.settings_button)
 
         cls.init_sprites_and_groups()
 
@@ -51,7 +52,7 @@ class MainMenuApp(App, MainMenuDesign):
 
             cls.render()  # app update
 
-            cls.check_events()  # local events checkback
+            cls.check_events()  # local events check
 
     @classmethod
     def check_events(cls):
@@ -61,3 +62,4 @@ class MainMenuApp(App, MainMenuDesign):
                     cls.end()
                 elif event.key == pygame.K_RETURN:
                     cls.enter_button()
+

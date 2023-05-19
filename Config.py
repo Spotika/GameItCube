@@ -37,7 +37,8 @@ NORMALIZE = True
 
 INSTALLED_APPS = [
     "Apps.MainGameApp",
-    "Apps.MainMenuApp"
+    "Apps.MainMenuApp",
+    "Apps.PauseApp"
 ]
 """Добавбь сюда свое приложение и оно будет доступно для редиректа в него \n(!) сувать путь до модуля относительно
 main.py"""

@@ -10,7 +10,7 @@ class Screen:
 
     height: int = 800  # 800
 
-    displayWidth, displayHeight = 800, 400
+    displayWidth, displayHeight = 1600, 800
 
     display: pygame.Surface
 
