@@ -23,8 +23,6 @@ class Interface:
     normalize = Config.NORMALIZE
 
     def __init__(self, group=None):
-        if self.normalize:
-            self.do_normalize()
 
         if group is not None:
             group.add_elem(self)

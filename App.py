@@ -47,7 +47,7 @@ class App:
         Screen.display.fill((0, 0, 0))
         cls.allSprites.update()
         cls.allSprites.draw(Screen.display)
-        pygame.display.update()
+        Screen.update_display()
 
     @classmethod
     def check_events(cls):

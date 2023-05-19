@@ -10,8 +10,6 @@ from Game import Game
 from Colors import Colors
 
 
-# FIXME платформы не маштабируются
-
 class Platform(Interface, pygame.sprite.Sprite):
     normalize = True
 
