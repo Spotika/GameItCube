@@ -15,7 +15,7 @@ class Screen:
 
     display: pygame.Surface
 
-    title: str = "Game"
+    title: str = "GAY SEX 2: THE RETURN OF -=WAR THUNDER=-"
 
     allSprites = pygame.sprite.LayeredUpdates()
 

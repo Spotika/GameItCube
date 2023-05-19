@@ -14,7 +14,7 @@ class Platform(Interface, pygame.sprite.Sprite):
     normalize = True
 
     def __init__(self, rand_pos: tuple[int, int], platform_rand_lentgh: int, textures: dict[str, pygame.Surface]):
-        self.platformLength = platform_rand_lentgh
+        self.length = platform_rand_lentgh
         """кол во центральных элементов в платформе"""
 
         self.textures = textures
@@ -30,7 +30,7 @@ class Platform(Interface, pygame.sprite.Sprite):
         """Считает размеры платформы через длину текстур и платформы"""
         return ((self.textures["leftCorner"].get_size()[0] +
                  self.textures["rightCorner"].get_size()[0] +
-                 self.textures["center"].get_size()[0] * self.platformLength),
+                 self.textures["center"].get_size()[0] * self.length),
                 self.textures["center"].get_size()[1])
 
     def generate_platform_image(self) -> pygame.Surface:
@@ -131,6 +131,9 @@ class PlatformStream:
             self.genInstance.add_platform_to_sprites(platform)
             self.platformDeque.append(platform)
 
+            EventHandler.push_to_stream("Platform", "generate", platform)
+            # отправка события о создании
+
         self.update_next_platform_distance()
 
     def check_for_delete(self) -> None:
@@ -228,11 +231,12 @@ class PlatformGenerator(Interface):
 
     def generate_platform(self, y_cord, platform_length) -> Platform:
         """Генерирует платформу по заданной Y координате и длине"""
-        return Platform((Screen.width, y_cord), platform_rand_lentgh=platform_length, textures={
+        newPlatform = Platform((Screen.width, y_cord), platform_rand_lentgh=platform_length, textures={
             "leftCorner": self.PLATFORM_LEFT_CORNER_IMAGE,
             "rightCorner": self.PLATFORM_RIGHT_CORNER_IMAGE,
             "center": self.PLATFORM_CENTER_IMAGE,
         })
+        return newPlatform
 
     def add_platform_to_group(self, platform):
         """Добавление платформы в группу"""

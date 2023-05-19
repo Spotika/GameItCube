@@ -2,9 +2,8 @@ import pygame
 from App import App
 from Designs.MainGameDesign import MainGameDesign
 from EventHandler import EventHandler
-from QueryDeque import QueryDeque
 from Sprites.Platform import PlatformGenerator
-from Players.NinjaPlayer import NinjaPlayer
+from Sprites.Money import MoneyGenerator
 
 
 class MainGameApp(App, MainGameDesign):
@@ -15,6 +14,7 @@ class MainGameApp(App, MainGameDesign):
         cls.init_textures()
         cls.init_sprites_and_groups()
 
+        # создание генератора платформ
         cls.platformGenerator = PlatformGenerator(cls.allSprites)
 
         # привязка класса к игроку
@@ -24,6 +24,9 @@ class MainGameApp(App, MainGameDesign):
         )
 
         player = cls.get_element("player")
+
+        # создание генератора монет
+        cls.moneyGenerator = MoneyGenerator(cls.allSprites, cls.platformGenerator, player)
 
         # подключение трекеров
         cls.get_element("HUD").get_design("healthTracker").add_state(player.get_health)
@@ -42,6 +45,8 @@ class MainGameApp(App, MainGameDesign):
             EventHandler.update(cls)
 
             cls.platformGenerator.update()
+
+            cls.moneyGenerator.update()
 
             cls.check_events()
 
