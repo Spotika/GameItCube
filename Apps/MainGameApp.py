@@ -47,7 +47,7 @@ class MainGameApp(App, MainGameDesign):
 
             cls.render()
 
-        cls.end()
+        cls.end(*args, **kwargs)
 
     @classmethod
     def check_events(cls):
