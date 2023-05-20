@@ -33,7 +33,7 @@ class MainMenuDesign(Design):
                                  texture_path=Config.ButtonTextures.EXIT_BUTTON_IMG_FILE_PATH),
 
             "infoLabel": ImageLabel((50, 708), (220, 32)),
-            "playerLabel": ImageLabel((1159, 234), (331, 331)),
+            "playerLabel": ImageLabel((1159, 234), (331, 331), texture_path=Config.PlayerTextures.PLAYER1_TEXTURE),
             "gameLabel": ImageLabel((489, 66), (623, 92), texture_path=Config.GAME_LOGO),
             "gitInfoButton": Button((96, 234), (331, 331), group=cls.get_group("ButtonGroup"),
                                     texture_path=Config.ButtonTextures.GIT_BUTTON),

@@ -23,9 +23,14 @@ class Label(pygame.sprite.Sprite):
             self.image = image
         self.image = self.image.convert_alpha()
 
-    def set_rect(self, rect) -> None:
-        """Устанавливает rect"""
-        self.rect = rect
+    def set_rect(self, position) -> None:
+        """Устанавливает rect x, y"""
+        self.rect.x = position[0]
+        self.rect.y = position[1]
+
+    def update_rect_by_pos(self) -> None:
+        """Обновляет rect позицией"""
+        self.set_rect(self.position)
 
     def get_image(self) -> pygame.Surface:
         return self.image
@@ -37,5 +42,5 @@ class Label(pygame.sprite.Sprite):
         """Возвращает данные для блита на поверхность"""
         return self.get_image(), self.get_rect()
 
-    def collision_function(self, position) -> list[bool]:
-        """Проверка коллизий с собой"""
+    def collision_function(self, position):
+        """Проверка коллизий игрока с собой"""
