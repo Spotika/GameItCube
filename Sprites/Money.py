@@ -4,10 +4,10 @@ from EventHandler import EventHandler
 import random
 import Config
 from Game import Game
+from collections import deque
 
 
 class Coin(ImageLabel):
-
     width = 24
     height = 27
 
@@ -20,11 +20,21 @@ class Coin(ImageLabel):
         return self.rect.collidepoint(*position)
 
     def update(self):
+        # перемещение монеты
         self.position[0] -= EventHandler.get_dt() * Game.Platforms.speed / 1000
+
+        # коллизия с игроком
         if self.rect.colliderect(self.player.rect):
             self.kill()
             self.player.money += 1
+
+        if self.out_of_screen():
+            self.kill()
+
         self.update_rect_by_pos()
+
+    def out_of_screen(self):
+        return self.position[0] + self.width + 1 < 0
 
 
 class MoneyGenerator:
@@ -57,7 +67,6 @@ class MoneyGenerator:
 
     def add_coin_to_sprites(self, coin):
         self.allSprites.add(coin)
-        self.allSprites.add(coin)
 
     def generate_coin(self, position):
         newCoin = Coin(position, player=self.player)
@@ -89,7 +98,5 @@ class MoneyGenerator:
         platform = EventHandler.get_from_stream("Platform")
         if platform is None:
             return
-
-        # проаерка коллизий с игроком
 
         self.generate(platform[1])
