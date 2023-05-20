@@ -55,10 +55,6 @@ class WildBoarMob(Entity):
                               self.BASE_SPEED_MODULE_RIGHT * (1 + self.SPEED_MODULE_RIGHT_DIFF_PRECENT))
 
     def update(self):
-        if self.player.rect.colliderect(self.rect):
-            self.player.health -= 1
-            self.player.playerSpeedVector += self.speedVector
-
         self.calculate_behavior()
         self.move_by_vector()
         self.update_rect_by_pos()
