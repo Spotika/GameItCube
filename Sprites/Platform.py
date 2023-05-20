@@ -8,10 +8,14 @@ from Screen import Screen
 from collections import deque
 from Game import Game
 from Colors import Colors
+from typing import Any
 
 
 class Platform(Interface, pygame.sprite.Sprite):
     normalize = True
+
+    states: dict[str, Any]
+    """Словарь состояний платформы"""
 
     def __init__(self, rand_pos: tuple[int, int], platform_rand_lentgh: int, textures: dict[str, pygame.Surface]):
         self.length = platform_rand_lentgh
@@ -24,7 +28,18 @@ class Platform(Interface, pygame.sprite.Sprite):
         self.rect = pygame.Rect(self.position, (self.width, self.height))
         self.image.set_colorkey(Colors.BLACK)  # важная штука, которая убирает черный фон у платформ
 
+        self.states = {}
+
         super().__init__()
+
+    def add_state(self, state_name, value) -> None:
+        self.states[state_name] = value
+
+    def get_state(self, state_name) -> Any | None:
+        if state_name not in self.states.keys():
+            return None
+
+        return self.states[state_name]
 
     def calculate_dims(self) -> tuple[int, int]:
         """Считает размеры платформы через длину текстур и платформы"""

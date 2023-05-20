@@ -17,7 +17,6 @@ MONEY_IMAGE_PATH = "media/img/interface/money.png"
 LEVEL_SLOT_IMAGE_PATH = "media/img/interface/level_slot.png"
 COIN_IMAGE_PATH = "media/img/interface/coin.png"
 
-
 # Layers
 BACK_GROUND_SPRITE_LAYER = -50
 BUTTON_SPRITE_LAYER = 50
@@ -27,7 +26,6 @@ PLAYER_DIFF_DIFF = 20
 HUD_LAYER = 99
 HUD_HEIGHT = 80
 HUD_BACK_TEXTURE = "media/img/interface/HudBack.png"
-
 
 # misc
 FPS = 120
@@ -110,3 +108,11 @@ class Animations:
         IDLING_TEXTURES = [
             "media/img/animations/NinjaPlayer/idling/0.png",
         ]
+
+    class BoarMob:
+        CASUAL_TEXTURES = [
+            "media/img/mobs/kaban.png"
+        ]
+
+
+BOAR_DIMS = (73, 49)
