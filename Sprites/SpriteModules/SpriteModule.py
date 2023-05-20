@@ -3,7 +3,7 @@ from Label import Label
 
 
 class SpriteModule(Label):
-    design: dict[Label]
+    design: dict[str, Label]
     """Дизайн модуля писать"""
 
     _layeredUpdates: pygame.sprite.LayeredUpdates
@@ -12,6 +12,10 @@ class SpriteModule(Label):
     def set_design(self, design: dict) -> None:
         self.design = design
         self._layeredUpdates = pygame.sprite.LayeredUpdates()
+
+    def add_design(self, name, sprite) -> None:
+        self.design[name] = sprite
+        self._layeredUpdates.add(sprite)
 
     def add_to_layer_updates(self, sprite):
         self._layeredUpdates.add(sprite)

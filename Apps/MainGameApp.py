@@ -43,6 +43,10 @@ class MainGameApp(App, MainGameDesign):
         cls.get_element("HUD").get_design("experienceTracker").add_state(
             lambda: f"{player.experience}/{player.experience_for_next}")
 
+        cls.ability1 = cls.get_element("HUD").get_design("ability1")
+        cls.ability2 = cls.get_element("HUD").get_design("ability2")
+        cls.ability3 = cls.get_element("HUD").get_design("ability3")
+
         while cls.running:
             EventHandler.tick()
 
@@ -67,3 +71,14 @@ class MainGameApp(App, MainGameDesign):
                 if event.key == pygame.K_ESCAPE:
                     cls.redirect("MainMenuApp")
                     cls.end()
+
+                match event.key:
+
+                    case pygame.K_z:
+                        ...
+
+                    case pygame.K_x:
+                        ...
+
+                    case pygame.K_c:
+                        ...
