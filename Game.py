@@ -6,3 +6,7 @@ class Game:
 
     class Platforms:
         speed = 200
+
+    class Mob:
+        speed = 100
+        diff = 0.2

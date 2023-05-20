@@ -25,28 +25,4 @@ class NinjaPlayer(Player):
 
     def check_events(self):
         super().check_events()
-        # print(123)
-        # for event in EventHandler.get_events():
-        #     if event.type == pygame.KEYDOWN:
-        #         if event.key == pygame.K_LEFT:
-        #             self.set_direction("left")
-        #             self.set_state("moving")
-        #             # self.rect.move(-EventHandler.get_dt() * self.playerSpeed, 0)
-        #             self.motion = "left"
-        #         elif event.key == pygame.K_RIGHT:
-        #
-        #             self.set_direction("right")
-        #             self.set_state("moving")
-        #             # self.rect.move(EventHandler.get_dt() * self.playerSpeed, 0)
-        #             self.motion = "right"
-        #     elif event.type == pygame.KEYUP:
-        #         self.motion = "none"
-        #         self.set_state("idling")
-        #
-        # if self.motion == "left":
-        #     self.rect.x += -EventHandler.get_dt() * self.playerSpeed / 1000
-        # elif self.motion == "right":
-        #     self.rect.x += EventHandler.get_dt() * self.playerSpeed / 1000
-        # else:
-        #     ...
-        ...
+

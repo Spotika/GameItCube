@@ -44,3 +44,19 @@ class Label(pygame.sprite.Sprite):
 
     def collision_function(self, position):
         """Проверка коллизий игрока с собой"""
+
+    def set_pos(self, x=None, y=None) -> None:
+        if x is not None:
+            self.position[0] = x
+        if y is not None:
+            self.position[1] = y
+
+    def set_dims(self, dims):
+        self.dims = dims
+
+    def move(self, x: float = 0, y: float = 0):
+        """сдвигает position на какое то расстояние по Oy и Ox"""
+        self.position[0] += x
+        self.position[1] += y
+
+    def update(self) -> None: ...

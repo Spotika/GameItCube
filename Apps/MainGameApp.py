@@ -4,6 +4,7 @@ from Designs.MainGameDesign import MainGameDesign
 from EventHandler import EventHandler
 from Sprites.Platform import PlatformGenerator
 from Sprites.Money import MoneyGenerator
+from Sprites.MobGenerator import MobGenerator
 
 
 class MainGameApp(App, MainGameDesign):
@@ -28,6 +29,9 @@ class MainGameApp(App, MainGameDesign):
         # создание генератора монет
         cls.moneyGenerator = MoneyGenerator(cls.allSprites, cls.platformGenerator, player)
 
+        # создание генератора мобов
+        cls.mobGenerator = MobGenerator(cls.allSprites, player)
+
         # подключение трекеров
         cls.get_element("HUD").get_design("healthTracker").add_state(player.get_health)
         cls.get_element("HUD").get_design("manaTracker").add_state(player.get_mana)
@@ -47,6 +51,8 @@ class MainGameApp(App, MainGameDesign):
             cls.platformGenerator.update()
 
             cls.moneyGenerator.update()
+
+            cls.mobGenerator.update()
 
             cls.check_events()
 

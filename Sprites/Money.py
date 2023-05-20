@@ -76,6 +76,7 @@ class MoneyGenerator:
     def generate(self, platform):
 
         if random.random() > self.GENERATE_COIN_GROUP_CHANCE:
+            EventHandler.push_to_stream("MoneyGenerator", "platform_for_mob", platform)
             return
 
         numOfCoins = self.get_num_of_coins(platform.length)

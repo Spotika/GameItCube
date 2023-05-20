@@ -237,14 +237,6 @@ class Player(pygame.sprite.Sprite):
     def get_animation_by_state(self, state) -> Animation:
         return self.playerAnimations[state]
 
-    def update_animations(self) -> None:
-        """TODO обновляет некоторые анимации по необходимости. Например изменяет фрейм рейт анимации"""
-
-    def auto_set_state(self) -> str:
-        """TODO автоматически обновляет состояние на основе координат, ускорений и скоростей.
-        Возвращает предыдущее состояние"""
-        ...
-
     def move(self, x: float = 0, y: float = 0):
         """сдвигает position на какое то расстояние по Oy и Ox"""
         self.position[0] += x
@@ -396,7 +388,6 @@ class Player(pygame.sprite.Sprite):
         self.calculate_vectors()
         self.move_by_vectors()
 
-        self.update_animations()
         self.render_image()
 
     def check_events(self) -> None:
