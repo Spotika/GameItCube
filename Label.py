@@ -4,8 +4,21 @@ import pygame
 class Label(pygame.sprite.Sprite):
     position: list[float, float]
     dims: list[float, float]
-    image: pygame.Surface
+    _image: pygame.Surface
     rect: pygame.Rect
+
+    isShow = True
+
+    @property
+    def image(self) -> pygame.Surface:
+        """В зависимости от isShow может выдать обычное или пустое изобрвжение"""
+        if self.isShow:
+            return self._image
+        return pygame.Surface((0, 0))
+
+    @image.setter
+    def image(self, value):
+        self._image = value
 
     def __init__(self, position, dims, layer=50):
         super().__init__()
@@ -59,4 +72,15 @@ class Label(pygame.sprite.Sprite):
         self.position[0] += x
         self.position[1] += y
 
-    def update(self) -> None: ...
+    def update(self) -> None:
+        ...
+
+    def hide(self):
+        """Скрывает лейбл"""
+        self.isShow = False
+        return self
+
+    def show(self):
+        """Показывает лейбл"""
+        self.isShow = True
+        return self

@@ -5,10 +5,15 @@ from EventHandler import EventHandler
 from Sprites.Platform import PlatformGenerator
 from Sprites.Money import MoneyGenerator
 from Sprites.MobGenerator import MobGenerator
+from Abilities.ShurikenAttack import ShurikenAttack
 
 
 class MainGameApp(App, MainGameDesign):
     """Сама игра"""
+
+    ability1 = None
+    ability2 = None
+    ability3 = None
 
     @classmethod
     def loop(cls, *args, **kwargs):
@@ -43,6 +48,12 @@ class MainGameApp(App, MainGameDesign):
         cls.get_element("HUD").get_design("experienceTracker").add_state(
             lambda: f"{player.experience}/{player.experience_for_next}")
 
+        cls.ability1 = cls.get_element("HUD").get_design("ability1")
+        cls.ability2 = cls.get_element("HUD").get_design("ability2")
+        cls.ability3 = cls.get_element("HUD").get_design("ability3")
+
+        cls.ability1.add_ability(ShurikenAttack, player)
+
         while cls.running:
             EventHandler.tick()
 
@@ -67,3 +78,14 @@ class MainGameApp(App, MainGameDesign):
                 if event.key == pygame.K_ESCAPE:
                     cls.redirect("MainMenuApp")
                     cls.end()
+
+                match event.key:
+
+                    case pygame.K_z:
+                        cls.ability1.call()
+
+                    case pygame.K_x:
+                        cls.ability2.call()
+
+                    case pygame.K_c:
+                        cls.ability3.call()

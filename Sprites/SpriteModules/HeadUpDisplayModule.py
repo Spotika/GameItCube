@@ -5,6 +5,7 @@ from Sprites.TextLabel import TextLabel
 from .SpriteModule import SpriteModule
 from Sprites.SpriteModules.ModuleParts.StateTracker import StateTracker
 from Colors import Colors
+from .AbilityModule import AbilityModule
 
 
 class HeadUpDisplayModule(SpriteModule):
@@ -31,9 +32,9 @@ class HeadUpDisplayModule(SpriteModule):
                 "intelligenceTracker": StateTracker((553, 55), (39, 19), font=("Consolas", 50)),
 
                 # TODO: сделать новый класс под слоты
-                "spelSlot1Image": ImageLabel((639, 8), (60, 60), texture_path=Config.SPELL_SLOT_IMAGE_PATH),
-                "spelSlot2Image": ImageLabel((744, 8), (60, 60), texture_path=Config.SPELL_SLOT_IMAGE_PATH),
-                "spelSlot3Image": ImageLabel((849, 8), (60, 60), texture_path=Config.SPELL_SLOT_IMAGE_PATH),
+                "ability1": AbilityModule((639, 8), (60, 60)),
+                "ability2": AbilityModule((744, 8), (60, 60)),
+                "ability3": AbilityModule((849, 8), (60, 60)),
 
                 "moneyImage": ImageLabel((955, 20), (40, 45), texture_path=Config.MONEY_IMAGE_PATH),
                 "moneyTracker": StateTracker((1018, 30), (55, 27), font=("Consolas", 50)),
