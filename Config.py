@@ -116,3 +116,4 @@ class Animations:
 
 
 BOAR_DIMS = (73, 49)
+SHURIKEN_ATTACK_SPELL_TEXTURE_PATH = "media/img/spells/shurikenAttack.png"

@@ -30,11 +30,11 @@ class Ability:
         """Активация способности"""
 
         # простая проверка на время
-        if ticks := EventHandler.get_ticks() - cls.nowTime >= cls.delay:
+        if (ticks := EventHandler.get_ticks()) - cls.nowTime >= cls.delay:
             # активация
             cls.nowTime = ticks
 
     @classmethod
     def get_time_left_in_sec(cls) -> int:
         """Возвращает время до отката кд способности"""
-        return (EventHandler.get_ticks() - cls.nowTime) // 1000
+        return max(0, (cls.delay - (EventHandler.get_ticks() - cls.nowTime - 999)) // 1000)

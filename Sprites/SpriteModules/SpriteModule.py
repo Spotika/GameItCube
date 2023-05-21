@@ -27,11 +27,12 @@ class SpriteModule(Label):
 
     def update_image_by_design(self) -> None:
         """Обновляет изображение по дизайну"""
+        self.get_image().fill((0, 0, 0))
         self._layeredUpdates.draw(self.get_image())
 
     def update_design(self) -> None:
         """Обновляет дизайны"""
         self._layeredUpdates.update()
 
-    def get_design(self, name: str) -> Label:
+    def get_design(self, name: str):
         return self.design[name]
