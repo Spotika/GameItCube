@@ -84,3 +84,4 @@ class Label(pygame.sprite.Sprite):
         """Показывает лейбл"""
         self.isShow = True
         return self
+

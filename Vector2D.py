@@ -42,3 +42,6 @@ class Vector2D:
     def zero(self):
         self.x = 0
         self.y = 0
+
+    def __call__(self):
+        return self.x, self.y

@@ -22,7 +22,7 @@ BACK_GROUND_SPRITE_LAYER = -50
 BUTTON_SPRITE_LAYER = 50
 MASK_LAYER = 100
 PLAYER_LAYER = 60
-PLAYER_DIFF_DIFF = 20
+PLAYER_DIFF_DIFF = 10
 HUD_LAYER = 99
 HUD_HEIGHT = 80
 HUD_BACK_TEXTURE = "media/img/interface/HudBack.png"
@@ -74,14 +74,20 @@ class BackGroundTextures:
 # TODO: подкоректировать эти штуки
 FRICTION_COEFFICIENT = 4
 """нормальный коеэффициент трения"""
-MAX_PLAYER_SPEED_MODULE_X: float = 400
+MAX_PLAYER_SPEED_MODULE_X: float = 50
 MAX_PLAYER_SPEED_MODULE_Y: float = 600
 MAX_PLAYER_ACCELERATION_MODULE_X: float = 1000
 MAX_PLAYER_ACCELERATION_MODULE_Y: float = 1000
 PLAYER_BASE_ACCELERATION_MODULE: float = 10000
-PLAYER_BASE_SPEED_MODULE: float = 300
+PLAYER_BASE_SPEED_MODULE: float = 150
+REALY_MAX_BASE_SPEED = 1000
 G_CONSTANT: float = 800
 MIN_SPEED_LIM: float = 20
+
+BASE_EXP_FOR_NEXT = 50
+
+STATE_BY_MONEY = 0.07
+"""атрибут за монету"""
 
 
 class Audio:
@@ -114,6 +120,17 @@ class Animations:
             "media/img/mobs/kaban.png"
         ]
 
+    SHURIKEN_FRAMES = [
+        "media/img/animations/Shuriken/0.png",
+        "media/img/animations/Shuriken/1.png",
+        "media/img/animations/Shuriken/2.png",
+        "media/img/animations/Shuriken/3.png"
+    ]
+
 
 BOAR_DIMS = (73, 49)
 SHURIKEN_ATTACK_SPELL_TEXTURE_PATH = "media/img/spells/shurikenAttack.png"
+DODGE_SPELL_TEXTURE_PATH = "media/img/spells/dodgeSpell.png"
+SHURIKEN_DIMS = (18 * 2, 17 * 2)
+
+DEXT_FOR_JUMP = (1 / 150)

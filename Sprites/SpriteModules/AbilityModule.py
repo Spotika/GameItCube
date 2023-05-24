@@ -22,10 +22,12 @@ class AbilityModule(SpriteModule):
 
         self.init_design()
 
-    def add_ability(self, ability: Ability, player):
+    def add_ability(self, ability: Ability, player, app):
         """Добавляет способность в модуль способности и присоединяет её к игроку"""
         self.ability = ability
         self.ability.link_player(player)
+        self.ability.link_app(app)
+        self.ability.init()
         self.add_design("ability", ImageLabel((0, 0), (60, 60), texture_path=ability.texture_path))
         self.get_design("timer").link_timer(ability.get_time_left_in_sec)
 

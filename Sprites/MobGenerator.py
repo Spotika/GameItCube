@@ -26,7 +26,7 @@ class MobGenerator:
         self.allSprites.add(coin)
 
     def generate_mob(self, platform):
-        newMob = self.get_random_mob()(platform, self.player)
+        newMob = self.get_random_mob()(platform)
         self.add_mob_to_sprites(newMob)
         self.add_mob_to_group(newMob)
 

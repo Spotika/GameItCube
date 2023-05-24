@@ -15,10 +15,16 @@ class Ability:
     nowTime: int = 0
     """Количество тиков с прошлого применения"""
 
+    app = None
+
     @classmethod
     def link_player(cls, player) -> None:
         """Присоединение игрока к способности"""
         cls.player = player
+
+    @classmethod
+    def link_app(cls, app):
+        cls.app = app
 
     @classmethod
     def update(cls) -> None:
@@ -26,15 +32,28 @@ class Ability:
         ...
 
     @classmethod
-    def call(cls) -> None:
+    def call(cls):
         """Активация способности"""
 
         # простая проверка на время
         if (ticks := EventHandler.get_ticks()) - cls.nowTime >= cls.delay:
             # активация
             cls.nowTime = ticks
+            return True
+        else:
+            return False
 
     @classmethod
-    def get_time_left_in_sec(cls) -> int:
+    def get_time_left_in_sec(cls):
         """Возвращает время до отката кд способности"""
-        return max(0, (cls.delay - (EventHandler.get_ticks() - cls.nowTime - 999)) // 1000)
+        t = max(0, (cls.delay - (EventHandler.get_ticks() - cls.nowTime)) / 1000)
+
+        return round(t, 1)
+
+    @classmethod
+    def init(cls):
+        ...
+
+    @classmethod
+    def refresh(cls):
+        cls.nowTime = EventHandler.get_ticks() - cls.delay

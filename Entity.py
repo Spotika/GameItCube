@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from Label import Label
 from Vector2D import Vector2D
@@ -5,21 +7,19 @@ from typing import Any
 from Animation import Animation
 from App import App
 from EventHandler import EventHandler
+from Screen import Screen
+from Game import Game
 
 
 class Entity(Label):
     """Базовый класс существа"""
 
+    max_exp, min_exp = 0, 0
+
     """Статы моба"""
-    health: int = 100
+    health: int = Game.Mob.healthBase
 
     isLiving: bool = True
-
-    def get_health(self):
-        return self.health
-
-    def set_health(self, value):
-        self.health = value
 
     STATE_NAMES: list[tuple[str, Any]] = None
     """все возможные имена состояний игрока и их значения по умолчанию (<имя>, <значение>)"""
@@ -38,6 +38,8 @@ class Entity(Label):
 
     app: App = None
 
+    damage_senders: set
+
     def __init__(self, position, dims):
         super().__init__(position, dims)
         self.speedVector = Vector2D()
@@ -47,12 +49,8 @@ class Entity(Label):
         self.states = {}
         self.load_states_from_names()
         self.animations = {}
-
-    def get_app(self) -> App:
-        return self.app
-
-    def set_app(self, app) -> None:
-        self.app = app
+        self.app = EventHandler.DataStash.app
+        self.damage_senders = set()
 
     def set_animation_state(self, state: str) -> None:
         self.currentAnimationState = state
@@ -104,4 +102,27 @@ class Entity(Label):
         self.set_image(self.get_animation_by_current_state().next_sprite())
 
     def update(self) -> None:
-        ...
+        if self.out_of_screen():
+            self.kill()
+
+    def out_of_screen(self):
+        return self.position[0] + self.dims[0] + 1 < 0
+
+    def get_exp(self):
+        return random.randint(self.min_exp, self.max_exp)
+
+    def damage(self, value):
+        """Наносит урон"""
+        self.health -= value
+        if self.health <= 0:
+            self.death()
+
+    def death(self):
+        """Вызывается при естесственной смерти"""
+        EventHandler.DataStash.player.add_exp(self.get_exp())
+        self.kill()
+
+    def damage_from(self, sender, damage):
+        if sender not in self.damage_senders:
+            self.damage(damage)
+            self.damage_senders.add(sender)

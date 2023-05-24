@@ -6,6 +6,7 @@ from Sprites.Platform import PlatformGenerator
 from Sprites.Money import MoneyGenerator
 from Sprites.MobGenerator import MobGenerator
 from Abilities.ShurikenAttack import ShurikenAttack
+from Abilities.DodgeSpell import DodgeSpell
 
 
 class MainGameApp(App, MainGameDesign):
@@ -14,6 +15,7 @@ class MainGameApp(App, MainGameDesign):
     ability1 = None
     ability2 = None
     ability3 = None
+    player = None
 
     @classmethod
     def loop(cls, *args, **kwargs):
@@ -29,35 +31,47 @@ class MainGameApp(App, MainGameDesign):
             cls.get_element("HUD").collision_function
         )
 
-        player = cls.get_element("player")
+        cls.player = cls.get_element("player")
+
+        EventHandler.DataStash.player = cls.player
+        EventHandler.DataStash.app = cls
 
         # создание генератора монет
-        cls.moneyGenerator = MoneyGenerator(cls.allSprites, cls.platformGenerator, player)
+        cls.moneyGenerator = MoneyGenerator(cls.allSprites, cls.platformGenerator, cls.player)
 
         # создание генератора мобов
-        cls.mobGenerator = MobGenerator(cls.allSprites, player)
+        cls.mobGenerator = MobGenerator(cls.allSprites, cls.player)
+
+        EventHandler.DataStash.mobGenerator = cls.mobGenerator
 
         # подключение трекеров
-        cls.get_element("HUD").get_design("healthTracker").add_state(player.get_health)
-        cls.get_element("HUD").get_design("manaTracker").add_state(player.get_mana)
-        cls.get_element("HUD").get_design("strengthTracker").add_state(player.get_strength)
-        cls.get_element("HUD").get_design("dexterityTracker").add_state(player.get_dexterity)
-        cls.get_element("HUD").get_design("intelligenceTracker").add_state(player.get_intelligence)
-        cls.get_element("HUD").get_design("moneyTracker").add_state(player.get_money)
-        cls.get_element("HUD").get_design("levelTracker").add_state(player.get_level)
+        cls.get_element("HUD").get_design("healthTracker").add_state(cls.player.get_health)
+        cls.get_element("HUD").get_design("manaTracker").add_state(cls.player.get_mana)
+        cls.get_element("HUD").get_design("strengthTracker").add_state(cls.player.get_strength)
+        cls.get_element("HUD").get_design("dexterityTracker").add_state(cls.player.get_dexterity)
+        cls.get_element("HUD").get_design("intelligenceTracker").add_state(cls.player.get_intelligence)
+        cls.get_element("HUD").get_design("moneyTracker").add_state(cls.player.get_money)
+        cls.get_element("HUD").get_design("levelTracker").add_state(cls.player.get_level)
         cls.get_element("HUD").get_design("experienceTracker").add_state(
-            lambda: f"{player.experience}/{player.experience_for_next}")
+            lambda: f"{cls.player.experience}/{cls.player.experience_for_next}")
 
         cls.ability1 = cls.get_element("HUD").get_design("ability1")
         cls.ability2 = cls.get_element("HUD").get_design("ability2")
         cls.ability3 = cls.get_element("HUD").get_design("ability3")
 
-        cls.ability1.add_ability(ShurikenAttack, player)
+        cls.ability1.add_ability(ShurikenAttack, cls.player, cls)
+        cls.ability2.add_ability(DodgeSpell, cls.player, cls)
 
         while cls.running:
             EventHandler.tick()
 
             EventHandler.update(cls)
+
+            if cls.player.get_state_by_name("isLiving") is False:
+                # TODO: сделать экран смерти
+                print("Вы проиграли")
+                cls.end()
+                cls.redirect("MainMenuApp")
 
             cls.platformGenerator.update()
 
