@@ -19,7 +19,7 @@ class MainGameDesign(Design):
                                                    speed_begin=100,
                                                    speed_difference=0.8),
             "fps": FpsShow((0, Config.HUD_HEIGHT), (50, 50)),
-            "player": NinjaPlayer((100, 600)),
+            "player": NinjaPlayer((Screen.width, 0)),
             "HUD": HeadUpDisplayModule((0, 0), (Screen.width, Config.HUD_HEIGHT))
         }
         cls.set_elements(ELEMENTS)

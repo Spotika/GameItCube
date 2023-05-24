@@ -70,7 +70,8 @@ class Platform(Interface, pygame.sprite.Sprite):
 
     def update(self):
         """Перемещение платформы"""
-        self.position[0] -= EventHandler.get_dt() * Game.Platforms.speed / 1000
+        self.position[0] -= EventHandler.get_dt() * Game.get_speed(Game.Platforms.speed,
+                                                                   Game.EnvStats.get_any_attr()) / 1000
         self.rect.x, self.rect.y = self.position
 
     def out_of_screen(self) -> bool:

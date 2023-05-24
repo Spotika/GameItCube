@@ -15,45 +15,62 @@ from Game import Game
 class Player(pygame.sprite.Sprite):
     """Базовый класс игрока"""
 
+    DAMAGE_DELAY = 100
+    """Задержка между уроном"""
+    damageTimer = 0
+
     """Свойства и переменные для игрока"""
 
-    MAX_MANA: int = 100
-    MAX_HEALTH: int = 100
+    BASE_MANA: int = 0
+    BASE_HEALTH: int = 100
     MAX_LEVEL: int = 30
-    regeneration: int = 0
-    experience_for_next: int = 100
+    BASE_MANA_REGEN: int = 0.5
+    BASE_HEALTH_REGEN: int = 0.1
+    experience_for_next: int = Config.BASE_EXP_FOR_NEXT
     money: int = 0
 
-    dexterity: int = 0
-    strength: int = 0
-    intelligence: int = 0
+    dexterity: int = 13
+    strength: int = 17
+    intelligence: int = 25
 
-    dexterity_inc: int = 0
-    strength_inc: int = 0
-    intelligence_inc: int = 0
+    dexterity_inc: int = 2
+    strength_inc: int = 2
+    intelligence_inc: int = 2
 
-    mana: int = MAX_MANA
-    health: int = MAX_HEALTH
+    mana: int = BASE_MANA
+    health: int = 1
     level: int = 1
     experience: int = 0
 
+    def get_max_jumps(self):
+        return self.get_dexterity() * Config.DEXT_FOR_JUMP
+
+    def update_stats(self):
+        mm, mh = Game.get_mana_max(self.BASE_MANA, self.get_intelligence()), \
+            Game.get_health_max(self.BASE_HEALTH, self.get_strength())
+
+        self.mana = min(mm, self.mana + EventHandler.get_dt() / 1000 * Game.get_mana_regen(self.BASE_MANA_REGEN,
+                                                                                           self.get_intelligence()))
+        self.health = min(mh, self.health + EventHandler.get_dt() / 1000 * Game.get_health_regen(self.BASE_HEALTH_REGEN,
+                                                                                                 self.get_strength()))
+
     def get_dexterity(self):
-        return self.dexterity
+        return self.dexterity + self.get_level() * self.dexterity_inc
 
     def get_strength(self):
-        return self.strength
+        return self.strength + self.get_level() * self.strength_inc
 
     def get_intelligence(self):
-        return self.intelligence
+        return self.intelligence + self.get_level() * self.intelligence_inc
 
     def get_mana(self) -> int:
-        return self.mana
+        return round(self.mana)
 
     def set_mana(self, value):
         self.mana = value
 
     def get_health(self) -> int:
-        return self.health
+        return round(self.health)
 
     def set_health(self, value):
         self.health = value
@@ -102,7 +119,7 @@ class Player(pygame.sprite.Sprite):
     playerSpeedVector: Vector2D = Vector2D()
     """вектор скорости самого персонажа, которая не превышат определённых значений"""
 
-    playerAdditionalSpeedVector: Vector2D = Vector2D()
+    playerAdditionalSpeedVectors: dict[str, tuple[Vector2D, bool]]
     """вектор дополнительной скорости, которая может быть любой в отличие от playerSpeedVector"""
 
     playerAccelerationVector: Vector2D = Vector2D(0, 0) + gravitationAcceleration
@@ -128,6 +145,10 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self, position: tuple[int, int] = (0, 0), dims: tuple[int, int] = Config.PLAYER_DIMS) -> None:
         super().__init__()
+        mm, mh = Game.get_mana_max(self.BASE_MANA, self.get_intelligence()), \
+            Game.get_health_max(self.BASE_HEALTH, self.get_strength())
+        self.mana = mm
+        self.health = mh
         self.rect = pygame.Rect(position, dims)
         self.do_normalize()
 
@@ -145,12 +166,26 @@ class Player(pygame.sprite.Sprite):
             ("isLiving", True),  # жив ли персонаж
             ("currentMovingKey", None),  # текущая нажатая кнопка
             ("onPlatform", False),  # на платформе ли персонаж
+            ("canJump", self.get_max_jumps())  # может ли прыгать
         ]
-
+        self.playerAdditionalSpeedVectors = {}
         self.playerStates = {}
         self.load_states_from_names()
         self.layer = Config.PLAYER_LAYER
         self.collisionEnvFunctions = []
+        self.add_speed("platform")
+
+    def increase_level(self):
+        self.level += 1
+
+    def add_exp(self, exp):
+        self.experience += exp
+
+    def update_exp(self):
+        if self.experience >= self.experience_for_next:
+            self.experience %= self.experience_for_next
+            self.increase_level()
+            self.experience_for_next = Game.get_next_exp_for_lvl()
 
     def add_to_collision_env_functions(self, function) -> None:
         """Добавляет функцию в список функций"""
@@ -245,25 +280,38 @@ class Player(pygame.sprite.Sprite):
     def calculate_vectors(self) -> None:
         """Высчитывает вектора"""
 
-        # воздействие ускорения на скорость
-        self.playerSpeedVector += self.playerAccelerationVector * (EventHandler.get_dt() / 1000)
-
         # обработка переполнения
-        self.playerSpeedVector.x = min(self.MAX_PLAYER_SPEED_MODULE_X,
-                                       abs(self.playerSpeedVector.x)) * Scripts.sign(self.playerSpeedVector.x)
-        self.playerSpeedVector.y = min(self.MAX_PLAYER_SPEED_MODULE_Y,
-                                       abs(self.playerSpeedVector.y)) * Scripts.sign(self.playerSpeedVector.y)
+        # воздействие ускорения на скорость
+        """Теперь у героя нет полного ограничения на скорость, однако при привышении лимита
+        ускорение перестаёт увеличивать скорость по модулю"""
 
-        self.playerSpeedVector += self.playerAdditionalSpeedVector
+        max_x = Game.get_speed(self.MAX_PLAYER_SPEED_MODULE_X, self.get_dexterity())
+
+        self.playerSpeedVector.y += self.playerAccelerationVector.y * (EventHandler.get_dt() / 1000)
+        self.playerSpeedVector.y = min(abs(self.MAX_PLAYER_SPEED_MODULE_Y),
+                                       abs(self.playerSpeedVector.y)) * Scripts.sign(
+            self.playerSpeedVector.y
+        )
+        # self.playerSpeedVector += self.playerAccelerationVector * (EventHandler.get_dt() / 1000)
+        if abs(self.playerSpeedVector.x) > max_x:
+            if Scripts.sign(self.playerSpeedVector.x) != Scripts.sign(self.playerAccelerationVector.x):
+                self.playerSpeedVector.x += self.playerAccelerationVector.x * (EventHandler.get_dt() / 1000)
+        else:
+            self.playerSpeedVector.x += self.playerAccelerationVector.x * (EventHandler.get_dt() / 1000)
+
+        self.playerSpeedVector.x = min(Config.REALY_MAX_BASE_SPEED,
+                                       abs(self.playerSpeedVector.x)) * Scripts.sign(
+            self.playerSpeedVector.x
+        )
+
+        # self.merge_speed_vectors()
 
     def move_by_vectors(self) -> None:
         """Сдвиг персонажа в соответствии с коллизиями"""
         self.move(
-            self.playerSpeedVector.x * EventHandler.get_dt() / 1000,
+            (self.playerSpeedVector.x + self.get_speed_by_name("platform").x) * EventHandler.get_dt() / 1000,
             self.playerSpeedVector.y * EventHandler.get_dt() / 1000
         )
-
-        self.playerSpeedVector -= self.playerAdditionalSpeedVector
 
         """
         Суть этой штуки в том, что если персонаж имеет столкновение с какой либо из сторон своего хит бокса,
@@ -307,14 +355,15 @@ class Player(pygame.sprite.Sprite):
         # верх
         collisions[0] = position[1] < 0
 
-        # низ
-        collisions[2] = position[1] + self.get_dims()[1] > Screen.height
-
         # лево
         collisions[3] = position[0] < 0
 
         # право
         collisions[1] = position[0] + self.get_dims()[0] > Screen.width
+
+        # проверка падения
+        if position[1] > Screen.height:
+            self.set_state_by_name("isLiving", False)
 
         """столкновения с платформами
         Идея такая: 
@@ -353,7 +402,6 @@ class Player(pygame.sprite.Sprite):
     def generate_vectors_by_state(self):
         """Генерирует векторы скоростей в зависимости от состояния"""
         self.playerAccelerationVector.y = self.gravitationAcceleration.y
-        self.playerAdditionalSpeedVector.zero()
         match self.get_animation_state():
 
             case "moving":
@@ -378,11 +426,21 @@ class Player(pygame.sprite.Sprite):
 
         # если перс на платформе, то в дополнительную скорость добавляется скорость платформ
         if self.get_state_by_name("onPlatform"):
-            self.playerAdditionalSpeedVector.x = -Game.Platforms.speed  # не понимаю почему так, но так надо
+            self.set_state_by_name("canJump", self.get_max_jumps())
+            self.add_speed("platform", x=-Game.get_speed(Game.Platforms.speed, Game.EnvStats.get_any_attr()))
+        else:
+            self.playerSpeedVector.x += self.get_speed_by_name("platform").x
+            self.add_speed("platform")
 
     def update(self) -> None:
         """Обновление для спрайта. Если хочется переопределить, то вызывайте super"""
+        if self.health < 1:
+            # проверка смерти
+            self.set_state_by_name("isLiving", False)
 
+        self.update_exp()
+
+        self.update_stats()
         self.check_events()
         self.generate_vectors_by_state()
         self.calculate_vectors()
@@ -398,7 +456,14 @@ class Player(pygame.sprite.Sprite):
             if event.type == pygame.KEYDOWN:
                 match event.key:
                     case pygame.K_UP:
-                        self.playerSpeedVector -= Vector2D(0, 2 * self.playerBaseSpeedModule)
+                        if self.get_state_by_name("canJump") > 0:
+                            self.playerSpeedVector -= Vector2D(0, 2 * (min(Config.REALY_MAX_BASE_SPEED,
+                                                                           Game.get_speed(self.playerBaseSpeedModule,
+                                                                                          self.get_dexterity()))))
+                            d = 1
+                            if self.get_state_by_name("onPlatform"):
+                                d += 1
+                            self.set_state_by_name("canJump", self.get_state_by_name("canJump") - d)
 
                     case pygame.K_LEFT:
                         self.set_state_by_name("currentMovingKey", pygame.K_LEFT)
@@ -419,3 +484,38 @@ class Player(pygame.sprite.Sprite):
             elif event.type == pygame.KEYUP and event.key == self.get_state_by_name("currentMovingKey"):
                 # остановка движения
                 self.set_animation_state("idling")
+
+    def add_speed(self, name, x=0, y=0, merge=True) -> None:
+        self.playerAdditionalSpeedVectors[name] = (Vector2D(x, y), merge)
+
+    def get_speed_by_name(self, name) -> Vector2D:
+        return self.playerAdditionalSpeedVectors[name][0]
+
+    def merge_speed_vectors(self) -> None:
+        """Сливает все векторы скоростей во едино и удаляет оставшиеся"""
+        for speed in self.playerAdditionalSpeedVectors.values():
+            if speed[1]:
+                self.playerSpeedVector += speed[0]
+
+        self.playerAdditionalSpeedVectors.clear()
+
+    def get_full_speed(self) -> Vector2D:
+        sp = Vector2D(*self.playerSpeedVector())
+        for speed in self.playerAdditionalSpeedVectors.values():
+            sp += speed[0]
+        return sp
+
+    def damage(self, value) -> None:
+        """Наносит урон игроку"""
+        if (ticks := EventHandler.get_ticks()) - self.damageTimer > self.DAMAGE_DELAY:
+            self.health = max(0, self.health - value)
+            self.damageTimer = ticks
+
+    def merge_single_speed(self, speed: Vector2D):
+        self.playerSpeedVector += speed
+
+    def check_mana(self, mana):
+        if self.mana < mana:
+            return False
+        self.mana -= mana
+        return True

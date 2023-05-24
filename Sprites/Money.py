@@ -21,7 +21,8 @@ class Coin(ImageLabel):
 
     def update(self):
         # перемещение монеты
-        self.position[0] -= EventHandler.get_dt() * Game.Platforms.speed / 1000
+        self.position[0] -= EventHandler.get_dt() * Game.get_speed(Game.Platforms.speed,
+                                                                   Game.EnvStats.get_any_attr()) / 1000
 
         # коллизия с игроком
         if self.rect.colliderect(self.player.rect):

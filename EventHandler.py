@@ -22,6 +22,9 @@ class EventHandler:
     существует класс событий, каждое событие делится на тип и данные (любые)
     """
 
+    class DataStash:
+        """Свалка для данных"""
+
     @classmethod
     def push_to_stream(cls, event_class: str, event_type: str, event_data: Any) -> None:
         """Создает событие по данным и добавляет в поток
