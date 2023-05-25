@@ -69,6 +69,7 @@ class WildBoarMob(Entity):
         self.move_by_vector()
         self.update_rect_by_pos()
         self.render_image()
+        self.blit_image_by_health()
 
         # TODO сделать коллизии с кабанчиками и добавить урон
 

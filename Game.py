@@ -61,7 +61,7 @@ class Game:
         push_speed = 1000
         speed = 0
         diff = 10
-        healthBase = 70
+        healthBase = 100
 
         damage = 30
         min_exp = 10

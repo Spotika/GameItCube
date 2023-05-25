@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
     money: int = 0
 
     dexterity: int = 13
-    strength: int = 17
+    strength: int = 11
     intelligence: int = 25
 
     dexterity_inc: int = 2
