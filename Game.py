@@ -1,3 +1,5 @@
+import random
+
 from EventHandler import EventHandler
 import Config
 import math
@@ -26,13 +28,15 @@ class Game:
     def get_speed(speed, dexterity):
         return speed + dexterity * 5
 
-    @staticmethod
-    def get_damage(damage, strength):
-        return damage + 2 * strength
+    @classmethod
+    def get_damage(cls, damage, strength):
+        d = damage + 2 * strength
+        r = random.randint(round(d - d * cls.damageDiff), round(d + d * cls.damageDiff))
+        return r
 
     @staticmethod
     def get_delay(delay, intelligence):
-        return delay * (1 - 0.002 * intelligence)
+        return delay * (1 - 0.004 * intelligence)
 
     @staticmethod
     def get_health_regen(health_regen, strength):
@@ -68,7 +72,7 @@ class Game:
         max_exp = 40
 
     class DodgeSpell:
-        delay = 5000
+        delay = 3000
         mana = 70
 
         scale_by_dexterity = 0.2
@@ -76,4 +80,7 @@ class Game:
     class Shuriken:
         speed = 200
         delay = 1000
+        damage_diff = 0.15
         damage = 20
+
+    damageDiff = 0.2
