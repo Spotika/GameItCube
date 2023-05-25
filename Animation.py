@@ -49,7 +49,7 @@ class Animation:
             self.now = ticks
             self.CURRENT_SPRITE += 1  # увеличение счетчика
             self.CURRENT_SPRITE = self.CURRENT_SPRITE % len(self.SPRITES)  # взятие счетчика по модулю кол во спрайтов
-        return resImage
+        return resImage.convert_alpha()
 
     def reset(self) -> None:
         """обнуляет счетчик спрайтов"""

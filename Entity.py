@@ -9,6 +9,7 @@ from App import App
 from EventHandler import EventHandler
 from Screen import Screen
 from Game import Game
+import Scripts
 
 
 class Entity(Label):
@@ -17,7 +18,7 @@ class Entity(Label):
     max_exp, min_exp = 0, 0
 
     """Статы моба"""
-    health: int = Game.Mob.healthBase
+    health: int
 
     isLiving: bool = True
 
@@ -51,6 +52,8 @@ class Entity(Label):
         self.animations = {}
         self.app = EventHandler.DataStash.app
         self.damage_senders = set()
+        self.health = Game.get_health_max(Game.Mob.healthBase, Game.EnvStats.get_any_attr())
+        self.max_health = self.health
 
     def set_animation_state(self, state: str) -> None:
         self.currentAnimationState = state
@@ -104,6 +107,14 @@ class Entity(Label):
     def update(self) -> None:
         if self.out_of_screen():
             self.kill()
+
+    def blit_image_by_health(self):
+
+        image = Scripts.blit_color_by_precent(self.get_image(), 1 - (self.health / self.max_health))
+        # костыль
+        if self.get_state_by_name("direction") == "left":
+            image = pygame.transform.flip(image, True, False)
+        self.set_image(image)
 
     def out_of_screen(self):
         return self.position[0] + self.dims[0] + 1 < 0

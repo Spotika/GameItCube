@@ -3,6 +3,7 @@ from App import App
 import importlib
 import pygame
 import math
+from Colors import Colors
 
 
 def link_apps_to_app():
@@ -42,3 +43,23 @@ def get_angle_between_points(pos1: tuple[float, float], pos2: tuple[float, float
     elif a < 0:
         alpha += math.pi * 2
     return alpha
+
+
+def blit_color_by_precent(surface: pygame.Surface, precent: float, color=Colors.RED, opacity=100) -> pygame.Surface:
+    """Заливает поверхность цветом на определённый процент"""
+
+    y = (1 - precent) * surface.get_height()
+
+    chopRect = pygame.Rect((0, y), (surface.get_width(), surface.get_height() - y))
+    # chopSurface = pygame.transform.chop(surface, chopRect)
+
+    tSurface = surface.subsurface(chopRect).copy()
+    tSurface.fill(color)
+    tSurface.set_alpha(opacity)
+    tSurface.convert_alpha()
+
+    resSurface = surface.copy()
+    resSurface.blit(tSurface, (0, y))
+    resSurface.set_colorkey(color)
+
+    return resSurface
