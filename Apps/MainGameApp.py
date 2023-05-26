@@ -7,6 +7,7 @@ from Sprites.Money import MoneyGenerator
 from Sprites.MobGenerator import MobGenerator
 from Abilities.ShurikenAttack import ShurikenAttack
 from Abilities.DodgeSpell import DodgeSpell
+from Bosses.BossGenerator import BossGenerator
 
 
 class MainGameApp(App, MainGameDesign):
@@ -44,6 +45,10 @@ class MainGameApp(App, MainGameDesign):
 
         EventHandler.DataStash.mobGenerator = cls.mobGenerator
 
+        cls.bossGenerator = BossGenerator()
+
+        EventHandler.DataStash.bossGenerator = cls.bossGenerator
+
         # подключение трекеров
         cls.get_element("HUD").get_design("healthTracker").add_state(cls.player.get_health)
         cls.get_element("HUD").get_design("manaTracker").add_state(cls.player.get_mana)
@@ -78,6 +83,8 @@ class MainGameApp(App, MainGameDesign):
             cls.moneyGenerator.update()
 
             cls.mobGenerator.update()
+
+            cls.bossGenerator.update()
 
             cls.check_events()
 

@@ -27,6 +27,8 @@ class WildBoarMob(Entity):
 
     PLATFORM_BORDER_OFFSET = Game.Mob.diff
 
+    currentAnimationState = "casual"
+
     speedRight: int
     speedLeft: int
 
@@ -80,3 +82,6 @@ class WildBoarMob(Entity):
                                                                              Game.EnvStats.get_any_attr()))
             EventHandler.DataStash.player.playerSpeedVector = push
             EventHandler.DataStash.player.damage(Game.get_damage(Game.Mob.damage, Game.EnvStats.get_any_attr()))
+
+    def __str__(self):
+        return "Boar"

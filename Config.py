@@ -134,3 +134,35 @@ DODGE_SPELL_TEXTURE_PATH = "media/img/spells/dodgeSpell.png"
 SHURIKEN_DIMS = (18 * 2, 17 * 2)
 
 DEXT_FOR_JUMP = (1 / 150)
+
+
+class Boss:
+    class PoisonBoss:
+        IDLING_TESTURES = [
+            "media/img/animations/PoisonBoss/idling/0.png",
+            "media/img/animations/PoisonBoss/idling/1.png",
+            "media/img/animations/PoisonBoss/idling/2.png",
+            "media/img/animations/PoisonBoss/idling/3.png",
+        ]
+        PREPARING_TEXTURES = [
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-1.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-2.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-3.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-4.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-5.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-6.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-7.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-8.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-9.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-10.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-11.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-12.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-13.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-14.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-15.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-16.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-17.png",
+            "media/img/animations/PoisonBoss/preparing/pixil-frame-18.png",
+        ]
+        IDLING_DIMS = (55 * 3, 50 * 3)
+        PREPARING_DIMS = (300, 300)

@@ -23,11 +23,10 @@ class Player(pygame.sprite.Sprite):
 
     BASE_MANA: int = 0
     BASE_HEALTH: int = 100
-    MAX_LEVEL: int = 30
     BASE_MANA_REGEN: int = 0.5
     BASE_HEALTH_REGEN: int = 0.1
     experience_for_next: int = Config.BASE_EXP_FOR_NEXT
-    money: int = 0
+    money: int = 50
 
     dexterity: int = 13
     strength: int = 11
@@ -40,7 +39,7 @@ class Player(pygame.sprite.Sprite):
     mana: int = BASE_MANA
     health: int = 1
     level: int = 1
-    experience: int = 0
+    experience: int = 50
 
     def get_max_jumps(self):
         return self.get_dexterity() * Config.DEXT_FOR_JUMP
@@ -176,6 +175,7 @@ class Player(pygame.sprite.Sprite):
         self.add_speed("platform")
 
     def increase_level(self):
+        EventHandler.push_to_stream("Player", "level_up", self.level + 1)
         self.level += 1
 
     def add_exp(self, exp):
@@ -507,7 +507,7 @@ class Player(pygame.sprite.Sprite):
 
     def damage(self, value) -> None:
         """Наносит урон игроку"""
-        if (ticks := EventHandler.get_ticks()) - self.damageTimer > self.DAMAGE_DELAY:
+        if (ticks := EventHandler.get_ticks()) - self.damageTimer > self.get_damage_delay():
             self.health = max(0, self.health - value)
             self.damageTimer = ticks
 
@@ -519,3 +519,6 @@ class Player(pygame.sprite.Sprite):
             return False
         self.mana -= mana
         return True
+
+    def get_damage_delay(self):
+        return round(self.DAMAGE_DELAY * self.level * 2)

@@ -97,8 +97,8 @@ class MoneyGenerator:
     def update(self) -> None:
         """Обновляет генератор"""
 
-        platform = EventHandler.get_from_stream("Platform")
+        platform = EventHandler.get_from_stream("Platform", "generate")
         if platform is None:
             return
 
-        self.generate(platform[1])
+        self.generate(platform)

@@ -26,13 +26,14 @@ class Game:
 
     @staticmethod
     def get_speed(speed, dexterity):
-        return speed + dexterity * 5
+        return speed + dexterity * 2
 
     @classmethod
-    def get_damage(cls, damage, strength):
+    def get_damage(cls, damage, strength, increase=1):
         d = damage + 2 * strength
         r = random.randint(round(d - d * cls.damageDiff), round(d + d * cls.damageDiff))
-        return r
+
+        return r * (abs(increase) ** 0.5)
 
     @staticmethod
     def get_delay(delay, intelligence):
@@ -47,6 +48,10 @@ class Game:
         """Возвращает кол-во опыта для следующего уровня по хитрой формуле"""
         l, m = EventHandler.DataStash.player.get_level(), EventHandler.DataStash.player.get_money()
         return round(Config.BASE_EXP_FOR_NEXT * math.sqrt(15 * l / (m + 1)))
+
+    @classmethod
+    def get_chance(cls, chance):
+        return chance + cls.EnvStats.get_any_attr() * 0.005
 
     class EnvStats:
         BASE_HEALTH = 20
@@ -82,5 +87,34 @@ class Game:
         delay = 1000
         damage_diff = 0.15
         damage = 20
+
+    class Boss:
+        chanceToSpawn = 0.2  # FIXME
+        _attackForBeat = 10
+        _maxBosses = 1
+        showingSpeed = 100
+        speed = 200
+        money_for_up = 250
+
+        @classmethod
+        @property
+        def max_casts(cls):
+            return 1 + EventHandler.DataStash.player.get_money() // cls.money_for_up
+
+        @classmethod
+        @property
+        def max_bosses(cls):
+            # return 1 + EventHandler.DataStash.player.get_money() // cls.money_for_up
+            return 1
+
+        @classmethod
+        @property
+        def attack_for_beat(cls):
+            return cls._attackForBeat + (EventHandler.DataStash.player.get_money() // cls.money_for_up) * 5
+
+        @classmethod
+        def get_time_wait(cls, time):
+            """За каждые n монет время ожидания уменьшается в money // n раз"""
+            return time / (EventHandler.DataStash.player.get_money() // (cls.money_for_up) + 1)
 
     damageDiff = 0.2

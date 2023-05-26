@@ -36,19 +36,28 @@ class Shuriken(Label):
     def update(self) -> None:
         self.set_image(self.animation.next_sprite())
 
-
-        self.move(x=self.d * EventHandler.get_dt() * (Game.get_speed(Game.Shuriken.speed,
-                                                                EventHandler.DataStash.player.get_dexterity()) + \
-                                                 self.d * self.added_speed) / 1000)
+        speed = (Game.get_speed(Game.Shuriken.speed, EventHandler.DataStash.player.get_dexterity()) + \
+                 self.d * self.added_speed)
+        self.move(x=self.d * EventHandler.get_dt() * speed / 1000)
         self.update_rect_by_pos()
 
         # коллизия с мобами
         collide = pygame.sprite.spritecollide(self, EventHandler.DataStash.mobGenerator.mobGroup, False)
         for mob in collide:
-            mob.damage_from(self, Game.get_damage(Game.Shuriken.damage, EventHandler.DataStash.player.get_strength()))
+            mob.damage_from(self, Game.get_damage(
+                Game.Shuriken.damage, EventHandler.DataStash.player.get_strength(),
+                increase=speed / Game.get_speed(Game.Shuriken.speed,
+                                                EventHandler.DataStash.player.get_dexterity())))
 
-        if self.out_of_screen():
-            self.kill()
+        bossCollide = pygame.sprite.spritecollide(self, EventHandler.DataStash.bossGenerator.bossGroup, False)
+        for boss in bossCollide:
+            boss.damage_from(self, Game.get_damage(
+                Game.Shuriken.damage, EventHandler.DataStash.player.get_strength(),
+                increase=speed / Game.get_speed(Game.Shuriken.speed,
+                                                EventHandler.DataStash.player.get_dexterity())))
+
+            if self.out_of_screen():
+                self.kill()
 
     def out_of_screen(self):
         return self.position[0] + self.dims[0] + 1 < 0 or self.position[0] >= Screen.displayWidth
