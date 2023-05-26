@@ -151,6 +151,5 @@ class Entity(Label):
 
     def damage_from(self, sender, damage):
         if sender not in self.damage_senders:
-            print(damage, self)
             self.damage(damage)
             self.damage_senders.add(sender)

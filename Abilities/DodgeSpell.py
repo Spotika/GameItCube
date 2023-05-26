@@ -16,8 +16,9 @@ class DodgeSpell(Ability):
 
     @classmethod
     def call(cls):
-        if super().call():
-            if EventHandler.DataStash.player.check_mana(Game.DodgeSpell.mana):
+        if EventHandler.DataStash.player.check_mana(Game.DodgeSpell.mana):
+            if super().call():
+                EventHandler.DataStash.player.decrease_mana(Game.DodgeSpell.mana)
                 EventHandler.DataStash.player.playerSpeedVector *= EventHandler.DataStash.player.get_dexterity() * \
                                                                    Game.DodgeSpell.scale_by_dexterity
                 EventHandler.DataStash.player.playerSpeedVector.y = \

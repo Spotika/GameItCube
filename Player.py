@@ -32,17 +32,21 @@ class Player(pygame.sprite.Sprite):
     strength: int = 11
     intelligence: int = 25
 
-    dexterity_inc: int = 2
+    dexterity_inc: int = 3
     strength_inc: int = 2
-    intelligence_inc: int = 2
+    intelligence_inc: int = 4
 
     mana: int = BASE_MANA
     health: int = 1
     level: int = 1
-    experience: int = 50
+    experience: int = 0
+
+    def decrease_level(self):
+        self.level = max(1, self.level - 1)
+        self.experience_for_next = Game.get_next_exp_for_lvl()
 
     def get_max_jumps(self):
-        return self.get_dexterity() * Config.DEXT_FOR_JUMP
+        return self.get_dexterity() * Config.DEXT_FOR_JUMP + 1
 
     def update_stats(self):
         mm, mh = Game.get_mana_max(self.BASE_MANA, self.get_intelligence()), \
@@ -457,9 +461,9 @@ class Player(pygame.sprite.Sprite):
                 match event.key:
                     case pygame.K_UP:
                         if self.get_state_by_name("canJump") > 0:
-                            self.playerSpeedVector -= Vector2D(0, 2 * (min(Config.REALY_MAX_BASE_SPEED,
-                                                                           Game.get_speed(self.playerBaseSpeedModule,
-                                                                                          self.get_dexterity()))))
+                            self.playerSpeedVector -= Vector2D(0, (min(2 * Config.REALY_MAX_BASE_SPEED,
+                                                                       Game.get_speed(self.playerBaseSpeedModule,
+                                                                                      self.get_dexterity()))))
                             d = 1
                             if self.get_state_by_name("onPlatform"):
                                 d += 1
@@ -517,8 +521,17 @@ class Player(pygame.sprite.Sprite):
     def check_mana(self, mana):
         if self.mana < mana:
             return False
-        self.mana -= mana
         return True
 
+    def decrease_mana(self, mana):
+        self.mana -= mana
+
     def get_damage_delay(self):
-        return round(self.DAMAGE_DELAY * self.level * 2)
+        return round(self.DAMAGE_DELAY * self.level * 1.5)
+
+    def recover(self):
+        """Восстанавливает все ресурсы игрока"""
+        mm, mh = Game.get_mana_max(self.BASE_MANA, self.get_intelligence()), \
+            Game.get_health_max(self.BASE_HEALTH, self.get_strength())
+        self.mana = mm
+        self.health = mh

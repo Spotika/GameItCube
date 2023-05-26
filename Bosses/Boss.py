@@ -154,9 +154,8 @@ class Boss(Entity):
             self.set_animation_state("preparing")
         else:
             if (anim := self.get_animation_by_current_state()).is_end():
-                self.casted += 1
-                self.set_animation_state("idling")
                 self.cast()
+                self.set_animation_state("idling")
                 return True
             else:
                 anim.next_sprite()
@@ -164,7 +163,7 @@ class Boss(Entity):
 
     def cast(self):
         """Кастует заклинание"""
-        print("casted")
+        self.casted += 1
 
     def __str__(self):
         return "Boss"

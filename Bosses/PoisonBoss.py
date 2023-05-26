@@ -1,6 +1,8 @@
 from .Boss import Boss
 import Config
 from Animation import Animation
+from Sprites.PoisonAttack import PoisonAttackGenerator
+from EventHandler import EventHandler
 
 
 class PoisonBoss(Boss):
@@ -29,3 +31,18 @@ class PoisonBoss(Boss):
         self.animationFix["idling-preparing"] = (-23 * 3, -25 * 3)  # магические числа, они связаны с масштабом текстур
 
         self.set_animation_state("idling")
+
+        self.attackGenerator = PoisonAttackGenerator()
+
+        self.prev_level = EventHandler.DataStash.player.level
+
+    def cast(self):
+        super().cast()
+        self.attackGenerator.generate((self.position[0] + self.dims[0] / 2,
+                                       self.position[1] + self.dims[1] / 2))
+
+    def death(self):
+        super().death()
+        EventHandler.DataStash.player.level = self.prev_level
+        EventHandler.DataStash.app.refresh()
+        EventHandler.DataStash.player.recover()

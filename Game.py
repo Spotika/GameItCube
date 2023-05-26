@@ -41,13 +41,13 @@ class Game:
 
     @staticmethod
     def get_health_regen(health_regen, strength):
-        return health_regen + 0.05 * strength
+        return health_regen + 0.1 * strength
 
     @staticmethod
     def get_next_exp_for_lvl():
         """Возвращает кол-во опыта для следующего уровня по хитрой формуле"""
         l, m = EventHandler.DataStash.player.get_level(), EventHandler.DataStash.player.get_money()
-        return round(Config.BASE_EXP_FOR_NEXT * math.sqrt(15 * l / (m + 1)))
+        return round(Config.BASE_EXP_FOR_NEXT * math.sqrt(25 * l / (m + 1)))
 
     @classmethod
     def get_chance(cls, chance):
@@ -72,7 +72,7 @@ class Game:
         diff = 10
         healthBase = 100
 
-        damage = 30
+        damage = 20
         min_exp = 10
         max_exp = 40
 
@@ -95,6 +95,14 @@ class Game:
         showingSpeed = 100
         speed = 200
         money_for_up = 250
+        attack_speed = 250
+        pushing_speed = 1000
+        damage = 15
+
+        @classmethod
+        @property
+        def num_of_attacks(cls):
+            return round(16 * round(((EventHandler.DataStash.player.get_money() // (cls.money_for_up)) + 1) ** 0.5))
 
         @classmethod
         @property

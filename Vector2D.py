@@ -40,6 +40,7 @@ class Vector2D:
         return Vector2D(r * math.cos(teta), r * math.sin(teta))
 
     def zero(self):
+        """Обнуляет вектор"""
         self.x = 0
         self.y = 0
 

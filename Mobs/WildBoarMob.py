@@ -60,7 +60,7 @@ class WildBoarMob(Entity):
     def get_random_speed_right(self):
         s = random.randint(self.BASE_SPEED_MODULE_RIGHT * (1 - self.SPEED_MODULE_RIGHT_DIFF_PRECENT),
                            self.BASE_SPEED_MODULE_RIGHT * (1 + self.SPEED_MODULE_RIGHT_DIFF_PRECENT))
-        return Game.get_speed(s, Game.EnvStats.get_any_attr())
+        return Game.get_speed(s, Game.EnvStats.get_any_attr() // 3)
 
     def get_exp(self):
         return random.randint(Game.Mob.min_exp, Game.Mob.max_exp)

@@ -93,6 +93,12 @@ class MainGameApp(App, MainGameDesign):
         cls.end(*args, **kwargs)
 
     @classmethod
+    def refresh(cls):
+        cls.ability1.refresh()
+        cls.ability2.refresh()
+        cls.ability3.refresh()
+
+    @classmethod
     def check_events(cls):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:

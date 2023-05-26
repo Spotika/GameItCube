@@ -22,7 +22,7 @@ class Label(pygame.sprite.Sprite):
 
     def __init__(self, position, dims, layer=50):
         super().__init__()
-        self.position = position
+        self.position = list(position)
         self.dims = dims
         self.image = pygame.Surface(dims)
         self.rect = pygame.Rect(position, dims)

@@ -22,7 +22,7 @@ BACK_GROUND_SPRITE_LAYER = -50
 BUTTON_SPRITE_LAYER = 50
 MASK_LAYER = 100
 PLAYER_LAYER = 60
-PLAYER_DIFF_DIFF = 10
+PLAYER_DIFF_DIFF = 15
 HUD_LAYER = 99
 HUD_HEIGHT = 80
 HUD_BACK_TEXTURE = "media/img/interface/HudBack.png"
@@ -133,7 +133,7 @@ SHURIKEN_ATTACK_SPELL_TEXTURE_PATH = "media/img/spells/shurikenAttack.png"
 DODGE_SPELL_TEXTURE_PATH = "media/img/spells/dodgeSpell.png"
 SHURIKEN_DIMS = (18 * 2, 17 * 2)
 
-DEXT_FOR_JUMP = (1 / 150)
+DEXT_FOR_JUMP = (1 / 50)
 
 
 class Boss:
@@ -166,3 +166,5 @@ class Boss:
         ]
         IDLING_DIMS = (55 * 3, 50 * 3)
         PREPARING_DIMS = (300, 300)
+        ATTACK = ["media/img/animations/PoisonBoss/attack.png"]
+        ATTACK_DIMS = (6 * 3, 9 * 3)
