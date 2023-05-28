@@ -34,6 +34,9 @@ class Entity(Label):
     animations: dict[str, Animation] = None
     """анимации, присущие каждому состоянию"""
 
+    animationFix: dict[str, tuple[float, float]]
+    """Хранит поправки на координаты анимаций вида {'animationName1-animationName2' : (offsetX, offsetY)}"""
+
     speedVector: Vector2D
     """Вектор скорости"""
 
@@ -50,13 +53,26 @@ class Entity(Label):
         self.states = {}
         self.load_states_from_names()
         self.animations = {}
+        self.animationFix = {}
         self.app = EventHandler.DataStash.app
         self.damage_senders = set()
         self.health = Game.get_health_max(Game.Mob.healthBase, Game.EnvStats.get_any_attr())
         self.max_health = self.health
 
     def set_animation_state(self, state: str) -> None:
+        self.get_animation_by_current_state().reset()
+        # поправки в координатах между переходами
+        prev_state = self.get_animation_state()
+        if f"{prev_state}-{state}" in self.animationFix.keys():
+            offset = self.animationFix[f"{prev_state}-{state}"]
+            self.move(offset[0], offset[1])
+
+        elif f"{state}-{prev_state}" in self.animationFix.keys():
+            offset = self.animationFix[f"{state}-{prev_state}"]
+            self.move(-offset[0], -offset[1])
+
         self.currentAnimationState = state
+        self.set_dims(self.get_animation_by_current_state().dims)
 
     def get_animation_state(self) -> str:
         return self.currentAnimationState

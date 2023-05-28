@@ -31,7 +31,6 @@ class HeadUpDisplayModule(SpriteModule):
                 "dexterityTracker": StateTracker((553, 29), (39, 19), font=("Consolas", 50)),
                 "intelligenceTracker": StateTracker((553, 55), (39, 19), font=("Consolas", 50)),
 
-                # TODO: сделать новый класс под слоты
                 "ability1": AbilityModule((639, 8), (60, 60)),
                 "ability2": AbilityModule((744, 8), (60, 60)),
                 "ability3": AbilityModule((849, 8), (60, 60)),

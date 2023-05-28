@@ -35,7 +35,7 @@ class EventHandler:
         cls.eventStream[event_class].append((event_type, event_data))
 
     @classmethod
-    def get_from_stream(cls, event_class: str, delete: bool = True) -> tuple[str, Any] | None:
+    def get_from_stream(cls, event_class: str, event_name: str, delete: bool = True) -> tuple[str, Any] | None:
         """Возврашает первое в очереди событие и удаляет его если delete = True
         Если событий данного класса нет, то возвращает None.
         Если нет класса событий, то создает его
@@ -52,7 +52,9 @@ class EventHandler:
         else:
             data = cls.eventStream[event_class][0]
 
-        return data
+        if data[0] == event_name:
+            return data[1]
+        return None
 
     @classmethod
     def add_event_class(cls, event_class: str) -> None:

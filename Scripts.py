@@ -48,6 +48,8 @@ def get_angle_between_points(pos1: tuple[float, float], pos2: tuple[float, float
 def blit_color_by_precent(surface: pygame.Surface, precent: float, color=Colors.RED, opacity=100) -> pygame.Surface:
     """Заливает поверхность цветом на определённый процент"""
 
+    precent = min(precent, 1)
+
     y = (1 - precent) * surface.get_height()
 
     chopRect = pygame.Rect((0, y), (surface.get_width(), surface.get_height() - y))

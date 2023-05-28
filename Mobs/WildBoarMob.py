@@ -15,7 +15,9 @@ class WildBoarMob(Entity):
 
     @staticmethod
     def calculate_speed_left(speed_right):
-        return 2 * Game.get_speed(Game.Platforms.speed, Game.EnvStats.get_any_attr()) + speed_right
+        return 2 * max(Game.Platforms.speed,
+                       (Game.get_speed(Game.Platforms.speed,
+                                       Game.EnvStats.get_any_attr()))) + speed_right
 
     platform = None
 
@@ -26,6 +28,8 @@ class WildBoarMob(Entity):
     SPEED_MODULE_RIGHT_DIFF_PRECENT = 0.2
 
     PLATFORM_BORDER_OFFSET = Game.Mob.diff
+
+    currentAnimationState = "casual"
 
     speedRight: int
     speedLeft: int
@@ -58,25 +62,30 @@ class WildBoarMob(Entity):
     def get_random_speed_right(self):
         s = random.randint(self.BASE_SPEED_MODULE_RIGHT * (1 - self.SPEED_MODULE_RIGHT_DIFF_PRECENT),
                            self.BASE_SPEED_MODULE_RIGHT * (1 + self.SPEED_MODULE_RIGHT_DIFF_PRECENT))
-        return Game.get_speed(s, Game.EnvStats.get_any_attr())
+        return Game.get_speed(s, Game.EnvStats.get_any_attr() // 3)
 
     def get_exp(self):
         return random.randint(Game.Mob.min_exp, Game.Mob.max_exp)
 
     def update(self):
         super().update()
-        self.calculate_behavior()
+        # TODO: Добавить переворот кабанчиков
+        if not self.platform.destroyed:
+            self.calculate_behavior()
+        else:
+            self.kill()
         self.move_by_vector()
         self.update_rect_by_pos()
         self.render_image()
         self.blit_image_by_health()
 
-        # TODO сделать коллизии с кабанчиками и добавить урон
-
         if self.rect.colliderect(EventHandler.DataStash.player.rect):
             teta = Scripts.get_angle_between_points(self.rect.center, EventHandler.DataStash.player.rect.center)
 
-            push = Vector2D.from_polar(teta=math.pi - teta, r=Game.get_speed(self.pushing_speed_module,
-                                                                             Game.EnvStats.get_any_attr()))
+            push = Vector2D.from_polar(tetha=math.pi - teta, r=Game.get_speed(self.pushing_speed_module,
+                                                                              Game.EnvStats.get_any_attr()))
             EventHandler.DataStash.player.playerSpeedVector = push
             EventHandler.DataStash.player.damage(Game.get_damage(Game.Mob.damage, Game.EnvStats.get_any_attr()))
+
+    def __str__(self):
+        return "Boar"

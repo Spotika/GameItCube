@@ -34,6 +34,5 @@ class MobGenerator:
         return random.choice(self.mobTypeList)
 
     def update(self):
-        if (platform := EventHandler.get_from_stream("MoneyGenerator")) is not None:
-            if platform[0] == "platform_for_mob":
-                self.generate_mob(platform[1])
+        if (platform := EventHandler.get_from_stream("MoneyGenerator", "platform_for_mob")) is not None:
+            self.generate_mob(platform)

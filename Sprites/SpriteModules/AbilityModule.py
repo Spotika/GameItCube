@@ -42,3 +42,7 @@ class AbilityModule(SpriteModule):
         """Вызывает способоность"""
         if self.ability is not None:
             self.ability.call()
+
+    def refresh(self):
+        if self.ability is not None:
+            self.ability.refresh()

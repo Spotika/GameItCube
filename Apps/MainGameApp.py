@@ -7,6 +7,9 @@ from Sprites.Money import MoneyGenerator
 from Sprites.MobGenerator import MobGenerator
 from Abilities.ShurikenAttack import ShurikenAttack
 from Abilities.DodgeSpell import DodgeSpell
+from Abilities.MagicSpell import MagicSpell
+from Bosses.BossGenerator import BossGenerator
+from Game import Game
 
 
 class MainGameApp(App, MainGameDesign):
@@ -19,11 +22,14 @@ class MainGameApp(App, MainGameDesign):
 
     @classmethod
     def loop(cls, *args, **kwargs):
+        Game.init()
         cls.init_textures()
         cls.init_sprites_and_groups()
 
         # создание генератора платформ
         cls.platformGenerator = PlatformGenerator(cls.allSprites)
+
+        EventHandler.DataStash.platformGenerator = cls.platformGenerator
 
         # привязка класса к игроку
         cls.get_element("player").set_app(cls)
@@ -44,6 +50,10 @@ class MainGameApp(App, MainGameDesign):
 
         EventHandler.DataStash.mobGenerator = cls.mobGenerator
 
+        cls.bossGenerator = BossGenerator()
+
+        EventHandler.DataStash.bossGenerator = cls.bossGenerator
+
         # подключение трекеров
         cls.get_element("HUD").get_design("healthTracker").add_state(cls.player.get_health)
         cls.get_element("HUD").get_design("manaTracker").add_state(cls.player.get_mana)
@@ -61,6 +71,7 @@ class MainGameApp(App, MainGameDesign):
 
         cls.ability1.add_ability(ShurikenAttack, cls.player, cls)
         cls.ability2.add_ability(DodgeSpell, cls.player, cls)
+        cls.ability3.add_ability(MagicSpell, cls.player, cls)
 
         while cls.running:
             EventHandler.tick()
@@ -79,11 +90,19 @@ class MainGameApp(App, MainGameDesign):
 
             cls.mobGenerator.update()
 
+            cls.bossGenerator.update()
+
             cls.check_events()
 
             cls.render()
 
         cls.end(*args, **kwargs)
+
+    @classmethod
+    def refresh(cls):
+        cls.ability1.refresh()
+        cls.ability2.refresh()
+        cls.ability3.refresh()
 
     @classmethod
     def check_events(cls):
