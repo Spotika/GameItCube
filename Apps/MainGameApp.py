@@ -10,6 +10,7 @@ from Abilities.DodgeSpell import DodgeSpell
 from Abilities.MagicSpell import MagicSpell
 from Bosses.BossGenerator import BossGenerator
 from Game import Game
+from Screen import Screen
 
 
 class MainGameApp(App, MainGameDesign):
@@ -92,14 +93,15 @@ class MainGameApp(App, MainGameDesign):
 
             cls.bossGenerator.update()
 
-            cls.check_events()
-
             cls.render()
+
+            cls.check_events()
 
         cls.end(*args, **kwargs)
 
     @classmethod
     def refresh(cls):
+        """Перезарядка всех способностей"""
         cls.ability1.refresh()
         cls.ability2.refresh()
         cls.ability3.refresh()
@@ -109,8 +111,13 @@ class MainGameApp(App, MainGameDesign):
         for event in EventHandler.get_events():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    cls.redirect("MainMenuApp")
-                    cls.end()
+                    # Пауза
+                    cls.redirect("PauseApp", use_deque=False, image=Screen.display)
+
+                    # выход из игры в главное меню
+                    if EventHandler.get_from_stream("PauseApp", "exit") is not None:
+                        cls.end()
+                        cls.redirect("MainMenuApp")
 
                 match event.key:
 

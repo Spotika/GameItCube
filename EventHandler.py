@@ -26,7 +26,7 @@ class EventHandler:
         """Свалка для данных"""
 
     @classmethod
-    def push_to_stream(cls, event_class: str, event_type: str, event_data: Any) -> None:
+    def push_to_stream(cls, event_class: str, event_type: str, event_data: Any = "") -> None:
         """Создает событие по данным и добавляет в поток
             Если нет класса событий, то создает его"""
         if event_class not in cls.eventStream.keys():
