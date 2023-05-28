@@ -7,7 +7,9 @@ from Sprites.Money import MoneyGenerator
 from Sprites.MobGenerator import MobGenerator
 from Abilities.ShurikenAttack import ShurikenAttack
 from Abilities.DodgeSpell import DodgeSpell
+from Abilities.MagicSpell import MagicSpell
 from Bosses.BossGenerator import BossGenerator
+from Game import Game
 
 
 class MainGameApp(App, MainGameDesign):
@@ -20,11 +22,14 @@ class MainGameApp(App, MainGameDesign):
 
     @classmethod
     def loop(cls, *args, **kwargs):
+        Game.init()
         cls.init_textures()
         cls.init_sprites_and_groups()
 
         # создание генератора платформ
         cls.platformGenerator = PlatformGenerator(cls.allSprites)
+
+        EventHandler.DataStash.platformGenerator = cls.platformGenerator
 
         # привязка класса к игроку
         cls.get_element("player").set_app(cls)
@@ -66,6 +71,7 @@ class MainGameApp(App, MainGameDesign):
 
         cls.ability1.add_ability(ShurikenAttack, cls.player, cls)
         cls.ability2.add_ability(DodgeSpell, cls.player, cls)
+        cls.ability3.add_ability(MagicSpell, cls.player, cls)
 
         while cls.running:
             EventHandler.tick()

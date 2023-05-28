@@ -11,9 +11,10 @@ class Coin(ImageLabel):
     width = 24
     height = 27
 
-    def __init__(self, position, dims=(24, 27), texture_path=Config.COIN_IMAGE_PATH,
+    def __init__(self, position, platform, dims=(24, 27), texture_path=Config.COIN_IMAGE_PATH,
                  layer=40, player=None):
         self.player = player
+        self.platform = platform
         super().__init__(position, dims, texture_path=texture_path, layer=layer)
 
     def collision_function(self, position):
@@ -21,13 +22,16 @@ class Coin(ImageLabel):
 
     def update(self):
         # перемещение монеты
-        self.position[0] -= EventHandler.get_dt() * Game.get_speed(Game.Platforms.speed,
-                                                                   Game.EnvStats.get_any_attr()) / 1000
+        self.position[0] -= EventHandler.get_dt() * max(Game.Platforms.speed,
+                                                        (Game.get_speed(Game.Platforms.speed,
+                                                                        Game.EnvStats.get_any_attr()))) / 1000
+        if self.platform.destroyed:
+            self.kill()
 
         # коллизия с игроком
         if self.rect.colliderect(self.player.rect):
             self.kill()
-            self.player.money += 1
+            self.player.money += 1 * Game.MagicSpell.get_money_increase()
 
         if self.out_of_screen():
             self.kill()
@@ -51,7 +55,7 @@ class MoneyGenerator:
     GENERATE_COIN_GROUP_CHANCE = 0.6
     """Шанс на генерацию монет на платформе"""
 
-    GENERATE_NEXT_COIN_CHANCE = 0.7
+    GENERATE_NEXT_COIN_CHANCE = 0.8
     """Шанс сгенерировать следующую монету"""
 
     MAX_COINS_ON_DIST = 2
@@ -69,8 +73,8 @@ class MoneyGenerator:
     def add_coin_to_sprites(self, coin):
         self.allSprites.add(coin)
 
-    def generate_coin(self, position):
-        newCoin = Coin(position, player=self.player)
+    def generate_coin(self, position, platform):
+        newCoin = Coin(position, platform, player=self.player)
         self.add_coin_to_sprites(newCoin)
         self.add_coin_to_group(newCoin)
 
@@ -84,7 +88,7 @@ class MoneyGenerator:
         dx = platform.width / (numOfCoins + 1)
         xStart = platform.position[0] + dx
         for i in range(numOfCoins):
-            self.generate_coin([xStart, platform.position[1] - self.HEIGHT_ABOVE_PLATFORM - Coin.height])
+            self.generate_coin([xStart, platform.position[1] - self.HEIGHT_ABOVE_PLATFORM - Coin.height], platform)
             xStart += dx
 
     def get_num_of_coins(self, dist) -> int:

@@ -18,12 +18,11 @@ class PoisonAttack(Entity):
 
         self.speedVector = Vector2D.from_polar(r=Game.get_speed(
             Game.Boss.attack_speed, Game.EnvStats.get_any_attr()
-        ), teta=alpha)  # скорость под углом alpha
+        ), tetha=alpha)  # скорость под углом alpha
 
         self.animations["casual"] = Animation(textures_file_path=Config.Boss.PoisonBoss.ATTACK)
 
     def update(self) -> None:
-        # TODO: Добвить коллизию с игроком и эффект
         self.move_by_vector()
         self.update_rect_by_pos()
         self.render_image()
@@ -31,8 +30,8 @@ class PoisonAttack(Entity):
         if self.rect.colliderect(EventHandler.DataStash.player.rect):
             teta = Scripts.get_angle_between_points(self.rect.center, EventHandler.DataStash.player.rect.center)
 
-            push = Vector2D.from_polar(teta=math.pi - teta, r=Game.get_speed(Game.Boss.pushing_speed,
-                                                                             Game.EnvStats.get_any_attr()))
+            push = Vector2D.from_polar(tetha=math.pi - teta, r=Game.get_speed(Game.Boss.pushing_speed,
+                                                                              Game.EnvStats.get_any_attr()))
             EventHandler.DataStash.player.playerSpeedVector = push
             EventHandler.DataStash.player.damage(Game.get_damage(Game.Boss.damage, Game.EnvStats.get_any_attr()))
             EventHandler.DataStash.player.decrease_level()

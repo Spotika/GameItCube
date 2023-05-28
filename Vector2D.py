@@ -4,8 +4,30 @@ import math
 class Vector2D:
     """Двумерный радиус-вектор"""
 
-    x: float
-    y: float
+    _x: float
+    _y: float
+
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        if isinstance(value, (int, float)):
+            self._x = value
+        else:
+            raise ValueError
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, value):
+        if isinstance(value, (int, float)):
+            self._y = value
+        else:
+            raise ValueError
 
     def __init__(self, x: float = 0, y: float = 0):
         self.x = x
@@ -36,8 +58,8 @@ class Vector2D:
         return f"vector {self.x}, {self.y}"
 
     @classmethod
-    def from_polar(cls, teta: float, r: float):
-        return Vector2D(r * math.cos(teta), r * math.sin(teta))
+    def from_polar(cls, tetha: float, r: float):
+        return Vector2D(r * math.cos(tetha), r * math.sin(tetha))
 
     def zero(self):
         """Обнуляет вектор"""

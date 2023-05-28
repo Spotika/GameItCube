@@ -17,6 +17,11 @@ class Platform(Interface, pygame.sprite.Sprite):
     states: dict[str, Any]
     """Словарь состояний платформы"""
 
+    destroyed = False
+    isParent = False
+
+    stream = None
+
     def __init__(self, rand_pos: tuple[int, int], platform_rand_lentgh: int, textures: dict[str, pygame.Surface]):
         self.length = platform_rand_lentgh
         """кол во центральных элементов в платформе"""
@@ -29,6 +34,8 @@ class Platform(Interface, pygame.sprite.Sprite):
         self.image.set_colorkey(Colors.BLACK)  # важная штука, которая убирает черный фон у платформ
 
         self.states = {}
+
+        self._mask = pygame.mask.from_surface(self.image)
 
         super().__init__()
 
@@ -70,8 +77,9 @@ class Platform(Interface, pygame.sprite.Sprite):
 
     def update(self):
         """Перемещение платформы"""
-        self.position[0] -= EventHandler.get_dt() * Game.get_speed(Game.Platforms.speed,
-                                                                   Game.EnvStats.get_any_attr()) / 1000
+        self.position[0] -= EventHandler.get_dt() * max(Game.Platforms.speed,
+                                                        (Game.get_speed(Game.Platforms.speed,
+                                                                        Game.EnvStats.get_any_attr()))) / 1000
         self.rect.x, self.rect.y = self.position
 
     def out_of_screen(self) -> bool:
@@ -82,6 +90,16 @@ class Platform(Interface, pygame.sprite.Sprite):
         """Пересекает ли платформа левую границу экрана"""
         return self.position[0] + self.width > Screen.width
 
+    def destroy(self):
+        """Разрушает платформу если она не родительская"""
+        # Дебаг удаления платформ
+        if self.isParent:
+            return
+        if self.stream.check_last_in_deque(self):
+            return
+        self.kill()
+        self.destroyed = True
+
 
 class PlatformStream:
     nextPlatformDistance: int = 0
@@ -89,6 +107,9 @@ class PlatformStream:
 
     platformDeque: deque[Platform]
     parentPlatform: Platform
+
+    def check_last_in_deque(self, platform):
+        return self.platformDeque[-1] == platform
 
     def __init__(self, gen_instance) -> None:
         self.genInstance = gen_instance
@@ -104,6 +125,7 @@ class PlatformStream:
         self.genInstance.add_platform_to_sprites(platform)
         self.platformDeque.append(platform)
         self.parentPlatform = platform
+        self.parentPlatform.isParent = True
 
     def update_next_platform_distance(self) -> None:
         self.nextPlatformDistance = Screen.width - random.randint(self.genInstance.MIN_DIST_BETWEEN_PLATFORM_OX,
@@ -121,7 +143,9 @@ class PlatformStream:
         return self.parentPlatform
 
     def add_parent_platform(self, platform):
+        self.parentPlatform.isParent = False
         self.parentPlatform = platform
+        self.parentPlatform.isParent = True
 
     def generate(self) -> None:
         if not self.check_for_generate():
@@ -149,6 +173,8 @@ class PlatformStream:
 
             EventHandler.push_to_stream("Platform", "generate", platform)
             # отправка события о создании
+
+        platform.stream = self
 
         self.update_next_platform_distance()
 

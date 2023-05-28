@@ -3,6 +3,7 @@ import Config
 from Animation import Animation
 from Sprites.PoisonAttack import PoisonAttackGenerator
 from EventHandler import EventHandler
+from Game import Game
 
 
 class PoisonBoss(Boss):
@@ -26,7 +27,8 @@ class PoisonBoss(Boss):
                                               dims=self.IDLING_DIMS)
         self.animations["preparing"] = Animation(textures_file_path=self.preparing_textures,
                                                  frame_rate=70, dims=self.PREPARING_DIMS,
-                                                 animation_time=self.CASTING_TIME)
+                                                 animation_time=Game.get_delay(self.CASTING_TIME,
+                                                                               Game.EnvStats.get_any_attr()))
 
         self.animationFix["idling-preparing"] = (-23 * 3, -25 * 3)  # магические числа, они связаны с масштабом текстур
 

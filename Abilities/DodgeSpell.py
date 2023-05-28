@@ -3,6 +3,7 @@ import Config
 from EventHandler import EventHandler
 from Game import Game
 
+# TODO: добавить 100% уклонение во время этого скила
 
 class DodgeSpell(Ability):
     texture_path = Config.DODGE_SPELL_TEXTURE_PATH

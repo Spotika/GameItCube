@@ -15,7 +15,7 @@ from Game import Game
 class Player(pygame.sprite.Sprite):
     """Базовый класс игрока"""
 
-    DAMAGE_DELAY = 100
+    DAMAGE_DELAY = 500
     """Задержка между уроном"""
     damageTimer = 0
 
@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
     experience_for_next: int = Config.BASE_EXP_FOR_NEXT
     money: int = 50
 
-    dexterity: int = 13
+    dexterity: int = 12
     strength: int = 11
     intelligence: int = 25
 
@@ -39,7 +39,7 @@ class Player(pygame.sprite.Sprite):
     mana: int = BASE_MANA
     health: int = 1
     level: int = 1
-    experience: int = 0
+    experience: int = 50
 
     def decrease_level(self):
         self.level = max(1, self.level - 1)
@@ -177,6 +177,7 @@ class Player(pygame.sprite.Sprite):
         self.layer = Config.PLAYER_LAYER
         self.collisionEnvFunctions = []
         self.add_speed("platform")
+        self._mask = self.get_mask()
 
     def increase_level(self):
         EventHandler.push_to_stream("Player", "level_up", self.level + 1)
@@ -323,7 +324,6 @@ class Player(pygame.sprite.Sprite):
         должно быть < 1, так как могут появиться подёргивания) в противоположную от коллизий сторону. 
         Вроде работает
         """
-        # TODO если это будет лагать, то нужно переделать на бин поиск
         while any(collisions := self.check_env_collisions(self.position)):
             if collisions[0]:
                 self.move(y=0.2)
@@ -431,7 +431,9 @@ class Player(pygame.sprite.Sprite):
         # если перс на платформе, то в дополнительную скорость добавляется скорость платформ
         if self.get_state_by_name("onPlatform"):
             self.set_state_by_name("canJump", self.get_max_jumps())
-            self.add_speed("platform", x=-Game.get_speed(Game.Platforms.speed, Game.EnvStats.get_any_attr()))
+            self.add_speed("platform", x=-max(Game.Platforms.speed,
+                                              (Game.get_speed(Game.Platforms.speed,
+                                                              Game.EnvStats.get_any_attr()))))
         else:
             self.playerSpeedVector.x += self.get_speed_by_name("platform").x
             self.add_speed("platform")
@@ -519,15 +521,15 @@ class Player(pygame.sprite.Sprite):
         self.playerSpeedVector += speed
 
     def check_mana(self, mana):
-        if self.mana < mana:
+        if self.mana < mana * Game.MagicSpell.get_mana_increase():
             return False
         return True
 
     def decrease_mana(self, mana):
-        self.mana -= mana
+        self.mana -= mana * Game.MagicSpell.get_mana_increase()
 
     def get_damage_delay(self):
-        return round(self.DAMAGE_DELAY * self.level * 1.5)
+        return round(self.DAMAGE_DELAY / self.level)
 
     def recover(self):
         """Восстанавливает все ресурсы игрока"""
@@ -535,3 +537,10 @@ class Player(pygame.sprite.Sprite):
             Game.get_health_max(self.BASE_HEALTH, self.get_strength())
         self.mana = mm
         self.health = mh
+
+    def get_mask(self) -> pygame.mask:
+        """Возвращает маску игрока"""
+        return pygame.mask.from_surface(self.image)
+
+    def get_max_health(self):
+        return Game.get_health_max(self.BASE_HEALTH, self.get_strength())

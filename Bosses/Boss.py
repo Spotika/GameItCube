@@ -11,6 +11,7 @@ import Scripts
 from Vector2D import Vector2D
 
 
+# FIXME есть баг с боссом, который выходин за границы мира
 class Boss(Entity):
     idling_textures: str
     preparing_textures: str
@@ -27,8 +28,14 @@ class Boss(Entity):
 
         self.layer = 10000
 
-        self.health = Game.Boss.attack_for_beat * Game.get_damage(Game.Shuriken.damage,
-                                                                  EventHandler.DataStash.player.strength)
+        speed = (Game.get_speed(Game.Shuriken.speed, EventHandler.DataStash.player.get_dexterity()))
+        damage = Game.get_damage(
+            Game.Shuriken.damage, EventHandler.DataStash.player.get_strength(),
+            increase=speed / Game.get_speed(Game.Shuriken.speed,
+                                            EventHandler.DataStash.player.get_dexterity()))
+
+        self.health = Game.Boss.attack_for_beat * damage
+
         self.max_health = self.health
 
         self.casted = 0
@@ -135,8 +142,8 @@ class Boss(Entity):
             if self.alpha is None:
                 # Эта шляпа вроде работает и перемещает босса в целевую точку
                 self.alpha = Scripts.get_angle_between_points(self.targetPoint, self.position)
-                self.speedVector = Vector2D.from_polar(teta=self.alpha, r=Game.get_speed(Game.Boss.showingSpeed,
-                                                                                         Game.EnvStats.get_any_attr()))
+                self.speedVector = Vector2D.from_polar(tetha=self.alpha, r=Game.get_speed(Game.Boss.showingSpeed,
+                                                                                          Game.EnvStats.get_any_attr()))
                 self.speedVector.x = self.speedVector.x
 
     def wait(self, time):

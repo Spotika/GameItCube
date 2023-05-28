@@ -23,7 +23,7 @@ BUTTON_SPRITE_LAYER = 50
 MASK_LAYER = 100
 PLAYER_LAYER = 60
 PLAYER_DIFF_DIFF = 15
-HUD_LAYER = 99
+HUD_LAYER = 1000000
 HUD_HEIGHT = 80
 HUD_BACK_TEXTURE = "media/img/interface/HudBack.png"
 
@@ -86,7 +86,7 @@ MIN_SPEED_LIM: float = 20
 
 BASE_EXP_FOR_NEXT = 50
 
-STATE_BY_MONEY = 0.07
+STATE_BY_MONEY = 0.08
 """атрибут за монету"""
 
 
@@ -132,11 +132,22 @@ BOAR_DIMS = (73, 49)
 SHURIKEN_ATTACK_SPELL_TEXTURE_PATH = "media/img/spells/shurikenAttack.png"
 DODGE_SPELL_TEXTURE_PATH = "media/img/spells/dodgeSpell.png"
 SHURIKEN_DIMS = (18 * 2, 17 * 2)
-
+MAGIC_SPELL_TEXTURE = "media/img/spells/magicSpell.png"
 DEXT_FOR_JUMP = (1 / 50)
 
 
 class Boss:
+    class FireBoss:
+        IDLING_TESTURES = [
+            "media/img/animations/FireBoss/idling/pixil-frame-0.png",
+            "media/img/animations/FireBoss/idling/pixil-frame-1.png",
+        ]
+        PREPARING_TEXTURES = [
+            "media/img/animations/FireBoss/idling/pixil-frame-0.png",
+        ]
+        IDLING_DIMS = (73 * 3, 79 * 3)
+        PREPARING_DIMS = (73 * 3, 79 * 3)
+
     class PoisonBoss:
         IDLING_TESTURES = [
             "media/img/animations/PoisonBoss/idling/0.png",
@@ -167,4 +178,61 @@ class Boss:
         IDLING_DIMS = (55 * 3, 50 * 3)
         PREPARING_DIMS = (300, 300)
         ATTACK = ["media/img/animations/PoisonBoss/attack.png"]
-        ATTACK_DIMS = (6 * 3, 9 * 3)
+        ATTACK_DIMS = (6 * 5, 9 * 5)
+
+
+class Meteor:
+    METEOR_DIMS = (32 * 10, 32 * 10)
+    speed = 400
+    TYPE_TEXTURES = {
+        "LD": [
+            "media/img/animations/meteor/LD/_56.png",
+            "media/img/animations/meteor/LD/_57.png",
+            "media/img/animations/meteor/LD/_58.png",
+            "media/img/animations/meteor/LD/_59.png",
+            "media/img/animations/meteor/LD/_60.png",
+            "media/img/animations/meteor/LD/_61.png",
+            "media/img/animations/meteor/LD/_62.png",
+            "media/img/animations/meteor/LD/_63.png",
+        ],
+        "RD": [
+            "media/img/animations/meteor/RD/_40.png",
+            "media/img/animations/meteor/RD/_41.png",
+            "media/img/animations/meteor/RD/_42.png",
+            "media/img/animations/meteor/RD/_43.png",
+            "media/img/animations/meteor/RD/_44.png",
+            "media/img/animations/meteor/RD/_45.png",
+            "media/img/animations/meteor/RD/_46.png",
+            "media/img/animations/meteor/RD/_47.png",
+        ],
+        "D": [
+            "media/img/animations/meteor/D/_48.png",
+            "media/img/animations/meteor/D/_49.png",
+            "media/img/animations/meteor/D/_50.png",
+            "media/img/animations/meteor/D/_51.png",
+            "media/img/animations/meteor/D/_52.png",
+            "media/img/animations/meteor/D/_53.png",
+            "media/img/animations/meteor/D/_54.png",
+            "media/img/animations/meteor/D/_55.png",
+        ],
+        "R": [
+            "media/img/animations/meteor/R/_32.png",
+            "media/img/animations/meteor/R/_33.png",
+            "media/img/animations/meteor/R/_34.png",
+            "media/img/animations/meteor/R/_35.png",
+            "media/img/animations/meteor/R/_36.png",
+            "media/img/animations/meteor/R/_37.png",
+            "media/img/animations/meteor/R/_38.png",
+            "media/img/animations/meteor/R/_39.png",
+        ],
+        "L": [
+            "media/img/animations/meteor/L/_0.png",
+            "media/img/animations/meteor/L/_1.png",
+            "media/img/animations/meteor/L/_2.png",
+            "media/img/animations/meteor/L/_3.png",
+            "media/img/animations/meteor/L/_4.png",
+            "media/img/animations/meteor/L/_5.png",
+            "media/img/animations/meteor/L/_6.png",
+            "media/img/animations/meteor/L/_7.png",
+        ]
+    }

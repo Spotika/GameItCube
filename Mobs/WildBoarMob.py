@@ -15,7 +15,9 @@ class WildBoarMob(Entity):
 
     @staticmethod
     def calculate_speed_left(speed_right):
-        return 2 * Game.get_speed(Game.Platforms.speed, Game.EnvStats.get_any_attr()) + speed_right
+        return 2 * max(Game.Platforms.speed,
+                       (Game.get_speed(Game.Platforms.speed,
+                                       Game.EnvStats.get_any_attr()))) + speed_right
 
     platform = None
 
@@ -67,19 +69,21 @@ class WildBoarMob(Entity):
 
     def update(self):
         super().update()
-        self.calculate_behavior()
+        # TODO: Добавить переворот кабанчиков
+        if not self.platform.destroyed:
+            self.calculate_behavior()
+        else:
+            self.kill()
         self.move_by_vector()
         self.update_rect_by_pos()
         self.render_image()
         self.blit_image_by_health()
 
-        # TODO сделать коллизии с кабанчиками и добавить урон
-
         if self.rect.colliderect(EventHandler.DataStash.player.rect):
             teta = Scripts.get_angle_between_points(self.rect.center, EventHandler.DataStash.player.rect.center)
 
-            push = Vector2D.from_polar(teta=math.pi - teta, r=Game.get_speed(self.pushing_speed_module,
-                                                                             Game.EnvStats.get_any_attr()))
+            push = Vector2D.from_polar(tetha=math.pi - teta, r=Game.get_speed(self.pushing_speed_module,
+                                                                              Game.EnvStats.get_any_attr()))
             EventHandler.DataStash.player.playerSpeedVector = push
             EventHandler.DataStash.player.damage(Game.get_damage(Game.Mob.damage, Game.EnvStats.get_any_attr()))
 

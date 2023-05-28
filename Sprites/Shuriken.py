@@ -42,6 +42,7 @@ class Shuriken(Label):
         self.update_rect_by_pos()
 
         # коллизия с мобами
+        # TODO: сделать коллизию через 2 состояния
         collide = pygame.sprite.spritecollide(self, EventHandler.DataStash.mobGenerator.mobGroup, False)
         for mob in collide:
             mob.damage_from(self, Game.get_damage(
