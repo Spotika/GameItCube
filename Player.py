@@ -39,7 +39,7 @@ class Player(pygame.sprite.Sprite):
     mana: int = BASE_MANA
     health: int = 1
     level: int = 1
-    experience: int = 50
+    experience: int = 0
 
     def decrease_level(self):
         self.level = max(1, self.level - 1)

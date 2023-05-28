@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "Apps.MainGameApp",
     "Apps.MainMenuApp",
     "Apps.PauseApp",
+    "Apps.EndApp",
 ]
 """Добавбь сюда свое приложение и оно будет доступно для редиректа в него \n(!) сувать путь до модуля относительно
 main.py"""

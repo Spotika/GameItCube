@@ -10,5 +10,8 @@ class TextLabel(Label):
         self.font = pygame.font.SysFont(*font)
         self.color = color
 
-    def write(self, text) -> None:
-        self.set_image(self.font.render(str(text), True, self.color), transform=True)
+    def write(self, text):
+        text = self.font.render(str(text), True, self.color)
+        transform = True
+        self.set_image(text, transform=transform)
+        return self

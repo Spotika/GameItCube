@@ -79,12 +79,6 @@ class MainGameApp(App, MainGameDesign):
 
             EventHandler.update(cls)
 
-            if cls.player.get_state_by_name("isLiving") is False:
-                # TODO: сделать экран смерти
-                print("Вы проиграли")
-                cls.end()
-                cls.redirect("MainMenuApp")
-
             cls.platformGenerator.update()
 
             cls.moneyGenerator.update()
@@ -94,6 +88,12 @@ class MainGameApp(App, MainGameDesign):
             cls.bossGenerator.update()
 
             cls.render()
+
+            if cls.player.get_state_by_name("isLiving") is False:
+                # TODO: сделать экран смерти
+                image = Screen.display.copy()
+                cls.redirect("EndApp", image=image, score=cls.player.money)
+                cls.end()
 
             cls.check_events()
 
