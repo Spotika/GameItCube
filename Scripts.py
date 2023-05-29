@@ -19,6 +19,10 @@ def sign(num):
     return -1
 
 
+def scale_rect(rect: pygame.Rect, kx, ky) -> pygame.rect:
+    return pygame.Rect((rect.x * kx, rect.y * ky), (rect.width * kx, rect.height * ky))
+
+
 def merge_collisions(collision1: list[bool],
                      collision2: list[bool]) -> list[bool]:
     """Сливает два массива коллизий по принипу или"""

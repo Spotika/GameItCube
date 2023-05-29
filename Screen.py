@@ -40,6 +40,6 @@ class Screen:
         # FIXME
         cls.update_display_dims()
         cls.displayDisplay.fill((0, 0, 0))
-        cls.displayDisplay.blit(pygame.transform.scale(cls.display, (cls.displayWidth, cls.displayHeight)), (0, 0))
-        # cls.displayDisplay.blit(cls.display, (0, 0))
+        # cls.displayDisplay.blit(pygame.transform.scale(cls.display, (cls.displayWidth, cls.displayHeight)), (0, 0))
+        cls.displayDisplay.blit(cls.display, (0, 0))
         pygame.display.update()

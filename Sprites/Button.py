@@ -2,6 +2,7 @@ from Interface import *
 import pygame
 import Config
 from EventHandler import *
+import Scripts
 
 
 class Button(Interface, pygame.sprite.Sprite):
@@ -32,7 +33,10 @@ class Button(Interface, pygame.sprite.Sprite):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if EventHandler.get_mouse_pressed()[0]:
-                    if self.rect.collidepoint(*EventHandler.get_mouse_pos()):
+                    kx = Screen.displayWidth / Screen.width
+                    ky = Screen.displayHeight / Screen.height
+                    rectForCollide = Scripts.scale_rect(self.rect, kx, ky)
+                    if rectForCollide.collidepoint(*EventHandler.get_mouse_pos()):
                         self.play_sound()  # проигрование музыки
                         self.on_click()  # вызов целевой функции
 
