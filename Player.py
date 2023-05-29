@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
     experience_for_next: int = Config.BASE_EXP_FOR_NEXT
     money: int = 50
 
-    dexterity: int = 12
+    dexterity: int = 22
     strength: int = 11
     intelligence: int = 25
 

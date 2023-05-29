@@ -144,7 +144,6 @@ class Boss:
     class FireBoss:
         IDLING_TESTURES = [
             "media/img/animations/FireBoss/idling/pixil-frame-0.png",
-            "media/img/animations/FireBoss/idling/infoButton.png",
         ]
         PREPARING_TEXTURES = [
             "media/img/animations/FireBoss/idling/pixil-frame-0.png",

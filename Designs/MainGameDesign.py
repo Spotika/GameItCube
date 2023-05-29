@@ -18,7 +18,7 @@ class MainGameDesign(Design):
             "backGround": BackGroundParallaxSprite(Config.BackGroundTextures.BACKGROUND_JUNGLE_LAYERS,
                                                    speed_begin=100,
                                                    speed_difference=0.8),
-            "fps": FpsShow((0, Config.HUD_HEIGHT), (50, 50)),
+            # "fps": FpsShow((0, Config.HUD_HEIGHT), (50, 50)),
             "player": NinjaPlayer((Screen.width, 0)),
             "HUD": HeadUpDisplayModule((0, 0), (Screen.width, Config.HUD_HEIGHT))
         }
