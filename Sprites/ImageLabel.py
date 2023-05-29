@@ -10,7 +10,7 @@ class ImageLabel(Label):
     texture_path = None
 
     def __init__(self, position, dims=(0, 0), color=Colors.WHITE, opacity=255, texture_path=None,
-                 layer=Config.MASK_LAYER):
+                 layer=Config.MASK_LAYER, color_key=None):
         super().__init__(position, dims, layer)
 
         if texture_path is None and self.texture_path is None:
@@ -25,3 +25,6 @@ class ImageLabel(Label):
         self.get_image().convert_alpha()
 
         self.set_rect(pygame.Rect(self.position, self.dims))
+
+        if color_key is not None:
+            self.image.set_colorkey(color_key)

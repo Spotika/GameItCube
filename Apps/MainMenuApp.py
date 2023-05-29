@@ -32,6 +32,10 @@ class MainMenuApp(App, MainMenuDesign):
         webbrowser.open('https://github.com/Spotika/GameItCube', new=2)
 
     @classmethod
+    def info_button(cls):
+        cls.redirect("InfoApp", use_deque=False)
+
+    @classmethod
     def loop(cls, *args, **kwargs):
 
         cls.init_textures()
@@ -39,6 +43,7 @@ class MainMenuApp(App, MainMenuDesign):
         cls.link_function_to_button("exitButton", cls.exit_button)
         cls.link_function_to_button("enterButton", cls.enter_button)
         cls.link_function_to_button("gitInfoButton", cls.git_button)
+        cls.link_function_to_button("infoButton", cls.info_button)
 
         cls.init_sprites_and_groups()
 

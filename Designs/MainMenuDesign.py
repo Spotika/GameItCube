@@ -22,8 +22,8 @@ class MainMenuDesign(Design):
                                                    speed_begin=75,
                                                    speed_difference=0.8
                                                    ),
-            "settingsButton": Button((50, 66), (34 * 3, 22 * 3), group=cls.get_group("ButtonGroup"),
-                                     texture_path=Config.ButtonTextures.SETTINGS_BUTTON_IMG_FILE_PATH),
+            "infoButton": Button((50, 66), (34 * 3, 22 * 3), group=cls.get_group("ButtonGroup"),
+                                 texture_path=Config.ButtonTextures.INFO_BUTTON_FILE_PATH),
             "enterButton": Button((576, 253), (450, 111), group=cls.get_group("ButtonGroup"),
                                   texture_path=Config.ButtonTextures.START_BUTTON_IMG_FILE_PATH),
             "exitButton": Button((576, 436), (450, 111), group=cls.get_group("ButtonGroup"),

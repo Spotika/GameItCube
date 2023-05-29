@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "Apps.MainMenuApp",
     "Apps.PauseApp",
     "Apps.EndApp",
+    "Apps.InfoApp",
 ]
 """Добавбь сюда свое приложение и оно будет доступно для редиректа в него \n(!) сувать путь до модуля относительно
 main.py"""
@@ -99,8 +100,9 @@ class Audio:
 class ButtonTextures:
     START_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/startButton.png"
     EXIT_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/exitButton.png"
-    SETTINGS_BUTTON_IMG_FILE_PATH = "media/img/buttonTextures/settingsButton.png"
+    INFO_BUTTON_FILE_PATH = "media/img/buttonTextures/infoButton.png"
     GIT_BUTTON = "media/img/buttonTextures/gitButton.png"
+    BACK_BUTTON_FILE_PATH = "media/img/buttonTextures/backButton.png"
 
 
 class PlayerTextures:
@@ -142,7 +144,7 @@ class Boss:
     class FireBoss:
         IDLING_TESTURES = [
             "media/img/animations/FireBoss/idling/pixil-frame-0.png",
-            "media/img/animations/FireBoss/idling/pixil-frame-1.png",
+            "media/img/animations/FireBoss/idling/infoButton.png",
         ]
         PREPARING_TEXTURES = [
             "media/img/animations/FireBoss/idling/pixil-frame-0.png",
@@ -158,7 +160,7 @@ class Boss:
             "media/img/animations/PoisonBoss/idling/3.png",
         ]
         PREPARING_TEXTURES = [
-            "media/img/animations/PoisonBoss/preparing/pixil-frame-1.png",
+            "media/img/animations/PoisonBoss/preparing/infoButton.png",
             "media/img/animations/PoisonBoss/preparing/pixil-frame-2.png",
             "media/img/animations/PoisonBoss/preparing/pixil-frame-3.png",
             "media/img/animations/PoisonBoss/preparing/pixil-frame-4.png",
@@ -238,3 +240,6 @@ class Meteor:
             "media/img/animations/meteor/L/_7.png",
         ]
     }
+
+
+INFO_IMAGE = "media/img/info.png"
