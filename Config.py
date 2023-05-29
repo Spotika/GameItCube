@@ -160,7 +160,6 @@ class Boss:
             "media/img/animations/PoisonBoss/idling/3.png",
         ]
         PREPARING_TEXTURES = [
-            "media/img/animations/PoisonBoss/preparing/infoButton.png",
             "media/img/animations/PoisonBoss/preparing/pixil-frame-2.png",
             "media/img/animations/PoisonBoss/preparing/pixil-frame-3.png",
             "media/img/animations/PoisonBoss/preparing/pixil-frame-4.png",

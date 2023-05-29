@@ -11,6 +11,7 @@ class InfoApp(App, InfoDesign):
     @classmethod
     def back_button(cls):
         """Выход из экрана"""
+        EventHandler.update(cls)  # events and groups update
         cls.end()
 
     @classmethod
@@ -29,9 +30,10 @@ class InfoApp(App, InfoDesign):
 
             EventHandler.update(cls)  # events and groups update
 
+            cls.check_events()  # local events check
+
             cls.render()
 
-            cls.check_events()  # local events check
 
     @classmethod
     def check_events(cls):
