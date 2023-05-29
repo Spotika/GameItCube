@@ -22,6 +22,8 @@ class Platform(Interface, pygame.sprite.Sprite):
 
     stream = None
 
+    save = False
+
     def __init__(self, rand_pos: tuple[int, int], platform_rand_lentgh: int, textures: dict[str, pygame.Surface]):
         self.length = platform_rand_lentgh
         """кол во центральных элементов в платформе"""
@@ -99,6 +101,12 @@ class Platform(Interface, pygame.sprite.Sprite):
             return
         self.kill()
         self.destroyed = True
+
+    def set_save(self):
+        self.save = True
+
+    def get_save(self):
+        return self.save
 
 
 class PlatformStream:

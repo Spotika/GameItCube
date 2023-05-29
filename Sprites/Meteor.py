@@ -41,6 +41,8 @@ class Meteor(Entity):
 
         self._mask = pygame.mask.from_surface(self.image, threshold=200)
 
+        self.t = 0
+
     def update(self) -> None:
         self.check_delete()
         self.check_collide()
@@ -56,18 +58,23 @@ class Meteor(Entity):
                 player = EventHandler.DataStash.player
                 player.damage(player.get_max_health() * (Game.Meteor.damage_precent))
                 self.did_damage = True
-
+        self.t += 1
         # столкновение с платформой
         # TODO: оптимизировать проверку коллизий. Слишком долго работает
+        if self.t % 5 != 0:
+            return
         platformGroup = EventHandler.DataStash.platformGenerator.platformGroup
         for platform in platformGroup:
-            if pygame.sprite.collide_mask(self, platform):
-                if random.random() < Game.get_chance(Game.Meteor.chance_to_destroy):
-                    # Уничтожение
-                    if not random.random() < Game.get_chance(Game.Meteor.chance_to_save):
-                        self.kill()
-                    # Уничтожение платформы
-                    platform.destroy()
+            if not platform.get_save():
+                if pygame.sprite.collide_rect(self, platform):
+                    if random.random() < Game.get_chance(Game.Meteor.chance_to_destroy):
+                        # Уничтожение
+                        if not random.random() < Game.get_chance(Game.Meteor.chance_to_save):
+                            self.kill()
+                        # Уничтожение платформы
+                        platform.destroy()
+                    else:
+                        platform.set_save()
 
     def check_delete(self):
         delete = False
